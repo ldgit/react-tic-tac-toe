@@ -1,11 +1,12 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
     main: './src/index.js',
   },
   output: {
-    path: path.resolve(__dirname, 'web/build'),
+    path: path.resolve(__dirname, 'web'),
     filename: '[name].js',
   },
   devtool: 'inline-source-map',
@@ -24,4 +25,9 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Tic-Tac-Toe',
+    }),
+  ],
 };
