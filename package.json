@@ -1,0 +1,16 @@
+{
+  "name": "tic-tac-toe-react",
+  "version": "1.0.0",
+  "description": "React intro tutorial (https://reactjs.org/tutorial/tutorial.html)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "webpack": "^3.10.0"
+  }
+}
