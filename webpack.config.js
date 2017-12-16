@@ -11,19 +11,22 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: './web'
+    contentBase: './web',
+  },
+  resolve: {
+    extensions: ['.js', '.json', '.jsx'],
   },
   module: {
     rules: [
-      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
+      { test: /\.(jsx|js)$/, exclude: /node_modules/, loader: 'babel-loader' },
       {
         test: /\.css$/,
         use: [
           'style-loader',
           'css-loader',
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
