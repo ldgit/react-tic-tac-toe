@@ -8,6 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, 'web/build'),
     filename: '[name].js',
   },
+  devtool: 'inline-source-map',
   devServer: {
     contentBase: './web'
   },
