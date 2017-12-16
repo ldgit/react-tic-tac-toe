@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
+    "build:prod": "webpack -p",
     "start": "webpack-dev-server --open",
     "lint": "eslint --ext .jsx,.js ./"
   },
