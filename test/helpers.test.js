@@ -66,7 +66,7 @@ describe('calculateWinner', () => {
       newSquares[4] = squareValue;
       newSquares[8] = squareValue;
     }
-console.log(newSquares);
+
     return newSquares;
   }
 
