@@ -1,5 +1,6 @@
 import React from 'react';
 import Square from './Square';
+import calculateWinner from './../helpers';
 
 export default class Board extends React.Component {
   constructor(props) {
@@ -28,7 +29,8 @@ export default class Board extends React.Component {
   }
 
   render() {
-    const status = `Next player: ${this.getNextValue()}`;
+    const winner = calculateWinner(this.state.squares);
+    const status = winner ? `Winner: ${winner}` : `Next player: ${this.getNextValue()}`;
 
     return (
       <div>
