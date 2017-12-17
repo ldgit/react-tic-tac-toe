@@ -16,6 +16,10 @@ export default class Board extends React.Component {
   }
 
   handleClick(i) {
+    if (calculateWinner(this.state.squares) || this.state.squares[i]) {
+      return;
+    }
+
     const squares = this.state.squares.slice();
     squares[i] = this.getNextValue();
     this.setState({

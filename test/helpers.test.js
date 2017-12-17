@@ -36,10 +36,13 @@ describe('calculateWinner', () => {
   });
 
   [
-    { winner: 'X', squares: threeInRow(0, 'X') },
-    { winner: 'O', squares: threeInRow(1, 'O') },
+    { winner: 'X', squares: threeInDiagonal('X') },
+    { winner: 'O', squares: threeInDiagonal('O') },
+    { winner: 'O', squares: threeInDiagonal('O', 'reverse') },
   ].forEach((fixture) => {
-    it(`should declare ${fixture.winner} the winner when winner ${fixture.winner} has diagonal of three`);
+    it(`should declare ${fixture.winner} the winner when winner ${fixture.winner} has diagonal of three`, () => {
+      assert.strictEqual(calculateWinner(fixture.squares), fixture.winner);
+    });
   });
 
   it('should throw error for invalid squares configuration');
@@ -50,6 +53,21 @@ describe('calculateWinner', () => {
 
   function threeInRow(row, squareValue) {
     return squaresWithRow(row, Array(3).fill(squareValue));
+  }
+
+  function threeInDiagonal(squareValue, diagonal) {
+    const newSquares = initialSquares.slice();
+    if (diagonal === 'reverse') {
+      newSquares[2] = squareValue;
+      newSquares[4] = squareValue;
+      newSquares[6] = squareValue;
+    } else {
+      newSquares[0] = squareValue;
+      newSquares[4] = squareValue;
+      newSquares[8] = squareValue;
+    }
+console.log(newSquares);
+    return newSquares;
   }
 
   function squaresWithLine(line, lineSquares) {
