@@ -18,14 +18,13 @@ export default class Game extends React.Component {
     return this.state.xIsNext ? 'X' : 'O';
   }
 
-  getLastPlayedSquares() {
-    const { squares } = this.state.history[this.state.history.length - 1];
-
-    return squares;
+  getLastPlayedSquares(history) {
+    return history[this.state.history.length - 1].squares;
   }
 
   handleClick(i) {
-    const squares = this.getLastPlayedSquares();
+    const { history } = this.state;
+    const squares = this.getLastPlayedSquares(history);
 
     if (calculateWinner(squares) || squares[i]) {
       return;
@@ -33,16 +32,15 @@ export default class Game extends React.Component {
 
     const newSquares = squares.slice();
     newSquares[i] = this.getNextValue();
-    this.state.history.push({ squares: newSquares });
 
     this.setState({
-      history: this.state.history,
+      history: history.concat([{ squares: newSquares }]),
       xIsNext: !this.state.xIsNext,
     });
   }
 
   render() {
-    const squares = this.getLastPlayedSquares();
+    const squares = this.getLastPlayedSquares(this.state.history);
     const winner = calculateWinner(squares);
     const status = winner ? `Winner: ${winner}` : `Next player: ${this.getNextValue()}`;
 
