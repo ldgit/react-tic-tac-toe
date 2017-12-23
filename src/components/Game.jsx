@@ -51,12 +51,12 @@ export default class Game extends React.Component {
         <Title name="React" />
         <div className="game">
           <div className="game-board">
-            <Board status={status} squares={squares} onClick={i => this.handleClick(i)} />
+            <Board squares={squares} onClick={i => this.handleClick(i)} />
           </div>
-        </div>
-        <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
+          <div className="game-info">
+            <div>{status}</div>
+            <ol>{/* TODO */}</ol>
+          </div>
         </div>
       </div>
     );
