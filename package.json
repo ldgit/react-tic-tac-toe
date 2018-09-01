@@ -4,7 +4,7 @@
   "description": "React intro tutorial (https://reactjs.org/tutorial/tutorial.html)",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require babel-core/register",
+    "test": "mocha --require @babel/register",
     "test:watch": "argus",
     "build": "webpack --mode=development",
     "build:prod": "webpack --mode=production",
@@ -21,6 +21,7 @@
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "babel-loader": "^8.0.0",
     "css-loader": "^1.0.0",
     "dom-testing-library": "^3.4.0",
