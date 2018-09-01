@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --require babel-core/register",
+    "test:watch": "argus",
     "build": "webpack --mode=development",
     "build:prod": "webpack --mode=production",
     "start": "webpack-dev-server --open --mode=development",
