@@ -26,6 +26,15 @@ describe('Tic-tac-toe game', () => {
   });
 
   context('standard tic-tac-toe', () => {
+    it('clicking on already played square does nothing', () => {
+      clickEmptySquare(sel(app, 'centerMiddleSquare'));
+
+      click(sel(app, 'centerMiddleSquare'));
+
+      assert.equal(sel(app, 'gameStatus').textContent, 'Next player: O');
+      assert.equal(sel(app, 'centerMiddleSquare').textContent, 'X');
+    });
+
     it('play a game where X wins', () => {
       // Final board
       // X O O
@@ -38,29 +47,82 @@ describe('Tic-tac-toe game', () => {
       clickEmptySquare(sel(app, 'topLeftSquare')).assertIsFilledWith('X');
       clickEmptySquare(sel(app, 'centerLeftSquare')).assertIsFilledWith('O');
       clickEmptySquare(sel(app, 'bottomRightSquare')).assertIsFilledWith('X');
-
-      assert.equal(sel(app, 'gameStatus').textContent, 'Winner: X');
     });
 
     it('should update game status with next player info after each move', () => {
-      assert.equal(sel(app, 'gameStatus').textContent, 'Next player: X');
+      assertGameStatus('Next player', 'X');
       clickEmptySquare(sel(app, 'centerMiddleSquare'));
-      assert.equal(sel(app, 'gameStatus').textContent, 'Next player: O');
+      assertGameStatus('Next player', 'O');
       clickEmptySquare(sel(app, 'topRightSquare'));
-      assert.equal(sel(app, 'gameStatus').textContent, 'Next player: X');
+      assertGameStatus('Next player', 'X');
     });
 
-    it('horizontal O win');
-    it('vertical X win');
+    it('horizontal O win', () => {
+      // Final board
+      // O O O
+      //   X
+      // X   X
+      clickEmptySquare(sel(app, 'centerMiddleSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(app, 'topMiddleSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(app, 'bottomRightSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(app, 'topRightSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(app, 'bottomLeftSquare')).assertIsFilledWith('X');
 
-    it('click on already played square does nothing', () => {
-      clickEmptySquare(sel(app, 'centerMiddleSquare'));
-
-      click(sel(app, 'centerMiddleSquare'));
-
-      assert.equal(sel(app, 'gameStatus').textContent, 'Next player: O');
-      assert.equal(sel(app, 'centerMiddleSquare').textContent, 'X');
+      assertGameStatus('Next player', 'O');
+      clickEmptySquare(sel(app, 'topLeftSquare')).assertIsFilledWith('O');
+      assertGameStatus('Winner', 'O');
     });
+
+    it('middle vertical X win', () => {
+      playMiddleVerticalXWin();
+      assertGameStatus('Winner', 'X');
+    });
+
+    it('clicking on empty square after winning move does nothing', () => {
+      // Final board
+      // O O O
+      //   X
+      // X   X
+      clickEmptySquare(sel(app, 'centerMiddleSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(app, 'topMiddleSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(app, 'bottomRightSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(app, 'topRightSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(app, 'bottomLeftSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(app, 'topLeftSquare')).assertIsFilledWith('O');
+
+      clickEmptySquare(sel(app, 'centerLeftSquare')).assertIsFilledWith('');
+      clickEmptySquare(sel(app, 'bottomMiddleSquare')).assertIsFilledWith('');
+    });
+
+    it('time travel: X wins, then time travel two moves back, then O wins', () => {
+      playMiddleVerticalXWin();
+      assertGameStatus('Winner', 'X');
+
+      click(selectByText(app, 'button', 'Go to move 3'));
+      assertGameStatus('Next player', 'O');
+      // Board now:
+      // O X
+      //   X
+      //
+      clickEmptySquare(sel(app, 'centerLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(app, 'topRightSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(app, 'bottomLeftSquare')).assertIsFilledWith('O');
+      assertGameStatus('Winner', 'O');
+    });
+
+    function playMiddleVerticalXWin() {
+      // Final board
+      // O X
+      //   X
+      // O X
+      clickEmptySquare(sel(app, 'centerMiddleSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(app, 'topLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(app, 'topMiddleSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(app, 'bottomLeftSquare')).assertIsFilledWith('O');
+
+      assertGameStatus('Next player', 'X');
+      clickEmptySquare(sel(app, 'bottomMiddleSquare')).assertIsFilledWith('X');
+    }
   });
 
   context('ultimate tic-tac-toe', () => {
@@ -76,12 +138,20 @@ describe('Tic-tac-toe game', () => {
   });
 
   function clickEmptySquare(square) {
-    assert.equal(square.textContent, '');
+    assert.equal(square.textContent, '', 'square that should be empty is not');
     click(square);
 
     return {
-      assertIsFilledWith: symbol => assert.equal(square.textContent, symbol),
+      assertIsFilledWith: symbol => assert.equal(
+        square.textContent, symbol, `square not filled with expected symbol "${symbol}"`,
+      ),
     };
+  }
+
+  function selectByText(container, selector, text) {
+    const elements = Array.from(container.querySelectorAll(selector)).filter(element => element.textContent === text);
+
+    return elements.length > 0 ? elements[0] : null;
   }
 
   function click(element) {
@@ -91,6 +161,10 @@ describe('Tic-tac-toe game', () => {
       cancelable: true,
     });
     element.dispatchEvent(event);
+  }
+
+  function assertGameStatus(statusType, player) {
+    assert.equal(sel(app, 'gameStatus').textContent, `${statusType}: ${player}`);
   }
 });
 

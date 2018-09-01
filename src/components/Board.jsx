@@ -20,7 +20,7 @@ export default function Board({ squares, onClick }) {
       </div>
       <div className="board-row">
         {renderSquare('6', 'bottomLeftSquare')}
-        {renderSquare('7')}
+        {renderSquare('7', 'bottomMiddleSquare')}
         {renderSquare('8', 'bottomRightSquare')}
       </div>
     </div>
