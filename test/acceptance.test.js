@@ -21,17 +21,16 @@ describe('Tic-tac-toe game', () => {
     ({ document } = window);
     app = document.createElement('div');
     document.body.appendChild(app);
+    // eslint-disable-next-line react/jsx-filename-extension
+    ReactDom.render(<Game />, app);
   });
 
   context('standard tic-tac-toe', () => {
     it('play a game where X wins', () => {
-      ReactDom.render(<Game />, app);
-
       // Final board
       // X O O
       // O X
       // X   X
-
       clickEmptySquare(sel(app, 'centerMiddleSquare')).assertIsFilledWith('X');
       clickEmptySquare(sel(app, 'topMiddleSquare')).assertIsFilledWith('O');
       clickEmptySquare(sel(app, 'bottomLeftSquare')).assertIsFilledWith('X');
@@ -44,11 +43,8 @@ describe('Tic-tac-toe game', () => {
     });
 
     it('should update game status with next player info after each move', () => {
-      ReactDom.render(<Game />, app);
       assert.equal(sel(app, 'gameStatus').textContent, 'Next player: X');
       clickEmptySquare(sel(app, 'centerMiddleSquare'));
-      assert.equal(sel(app, 'gameStatus').textContent, 'Next player: O');
-      click(sel(app, 'centerMiddleSquare'));
       assert.equal(sel(app, 'gameStatus').textContent, 'Next player: O');
       clickEmptySquare(sel(app, 'topRightSquare'));
       assert.equal(sel(app, 'gameStatus').textContent, 'Next player: X');
@@ -56,7 +52,27 @@ describe('Tic-tac-toe game', () => {
 
     it('horizontal O win');
     it('vertical X win');
-    it('click on already played square does nothing');
+
+    it('click on already played square does nothing', () => {
+      clickEmptySquare(sel(app, 'centerMiddleSquare'));
+
+      click(sel(app, 'centerMiddleSquare'));
+
+      assert.equal(sel(app, 'gameStatus').textContent, 'Next player: O');
+      assert.equal(sel(app, 'centerMiddleSquare').textContent, 'X');
+    });
+  });
+
+  context('ultimate tic-tac-toe', () => {
+    it.skip('simple X win', () => {});
+    it('simple O win');
+    it('simple draw');
+    it('simple time travel (X wins, then back three turns, then O wins)');
+    it('complex X win (with O winning two boards)');
+    it('when a local board is won, disable further input on it');
+    it('time travel re-enables previously won local-board');
+    it('when game is won, disable further inputs on all local boards');
+    it('time travel after game was won reenables relevant local boards');
   });
 
   function clickEmptySquare(square) {
@@ -76,18 +92,6 @@ describe('Tic-tac-toe game', () => {
     });
     element.dispatchEvent(event);
   }
-
-  context('ultimate tic-tac-toe', () => {
-    it.skip('simple X win', () => {});
-    it('simple O win');
-    it('simple draw');
-    it('simple time travel (X wins, then back three turns, then O wins)');
-    it('complex X win (with O winning two boards)');
-    it('when a local board is won, disable further input on it');
-    it('time travel re-enables previously won local-board');
-    it('when game is won, disable further inputs on all local boards');
-    it('time travel after game was won reenables relevant local boards');
-  });
 });
 
 function sel(container, testId) {

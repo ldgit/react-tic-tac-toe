@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import calculateWinner from './../src/helpers';
+import calculateWinner from '../src/helpers';
 
 describe('calculateWinner', () => {
   const initialSquares = Array(9).fill(null);
