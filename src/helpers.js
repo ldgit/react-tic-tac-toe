@@ -1,4 +1,4 @@
-export default function calculateWinner(squares) {
+export function calculateWinner(squares) {
   let winner = null;
 
   for (let i = 0; i < 3; i += 1) {
@@ -28,4 +28,11 @@ function getPlayerThatFilledTheLine(line) {
   }
 
   return null;
+}
+
+export function markInactiveBoards(boards, squareIndex) {
+  return boards.map((board, index) => (index !== parseInt(squareIndex, 10)
+    ? Object.assign(board, { isActive: false })
+    : Object.assign(board, { isActive: true })
+  ));
 }

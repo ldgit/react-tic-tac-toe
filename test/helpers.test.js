@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import calculateWinner from '../src/helpers';
+import { calculateWinner, markInactiveBoards } from '../src/helpers';
 
 describe('calculateWinner', () => {
   const initialSquares = Array(9).fill(null);
@@ -99,4 +99,31 @@ describe('calculateWinner', () => {
 
     return newSquares;
   }
+});
+
+describe('Ultimate tic-tac-toe: markInactiveBoards', () => {
+  it('should mark all boards inactive except one with given squareIndex', () => {
+    const boards = Array(9).fill().map(() => ({ isActive: true }));
+
+    const markedBoards = markInactiveBoards(boards, 5);
+
+    assert.strictEqual(markedBoards[5].isActive, true);
+    markedBoards
+      .filter((board, index) => index !== 5)
+      .map((board, index) => assert.strictEqual(board.isActive, false, `Board with index ${index} should not be active`));
+  });
+
+  it('should activate board with given squareIndex if it was inactive', () => {
+    const boards = Array(9).fill().map(() => ({ isActive: false }));
+
+    const markedBoards = markInactiveBoards(boards, 2);
+
+    assert.strictEqual(markedBoards[2].isActive, true, 'Board on given squareIndex must be active');
+    markedBoards
+      .filter((board, index) => index !== 2)
+      .map((board, index) => assert.strictEqual(board.isActive, false, `Board with index ${index} should not be active`));
+  });
+
+  it('if board that should be active was won, mark it inactive and all others active');
+  it('if board that should be active was won, mark it inactive and all others not also won active');
 });

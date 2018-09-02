@@ -1,7 +1,8 @@
 import React from 'react';
 import Title from './Title';
 import Board from './Board';
-import calculateWinner from '../helpers';
+import Status from './Status';
+import { calculateWinner } from '../helpers';
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -67,7 +68,7 @@ export default class Game extends React.Component {
             <Board squares={squares} onClick={i => this.handleClick(i)} />
           </div>
           <div className="game-info">
-            <div className="game-status" data-testid="gameStatus">{status}</div>
+            <Status gameInfo={status} />
             <ol>{moves}</ol>
           </div>
         </div>
