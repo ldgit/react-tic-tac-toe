@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { calculateWinner, markInactiveBoards } from '../src/helpers';
+import { calculateWinner, markInactiveAndInactiveBoards } from '../src/helpers';
 
 describe('calculateWinner', () => {
   const initialSquares = Array(9).fill(null);
@@ -101,11 +101,17 @@ describe('calculateWinner', () => {
   }
 });
 
-describe('Ultimate tic-tac-toe: markInactiveBoards', () => {
-  it('should mark all boards inactive except one with given squareIndex', () => {
-    const boards = Array(9).fill().map(() => ({ isActive: true }));
+describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
+  let emptySquares;
 
-    const markedBoards = markInactiveBoards(boards, 5);
+  beforeEach(() => {
+    emptySquares = Array(9).fill(null);
+  });
+
+  it('should mark all boards inactive except one that is next to play', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares, isActive: true }));
+
+    const markedBoards = markInactiveAndInactiveBoards(boards, 5);
 
     assert.strictEqual(markedBoards[5].isActive, true);
     markedBoards
@@ -113,17 +119,66 @@ describe('Ultimate tic-tac-toe: markInactiveBoards', () => {
       .map((board, index) => assert.strictEqual(board.isActive, false, `Board with index ${index} should not be active`));
   });
 
-  it('should activate board with given squareIndex if it was inactive', () => {
-    const boards = Array(9).fill().map(() => ({ isActive: false }));
+  it('should activate board that should be played next if it was inactive', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares, isActive: false }));
 
-    const markedBoards = markInactiveBoards(boards, 2);
+    const markedBoards = markInactiveAndInactiveBoards(boards, 2);
 
-    assert.strictEqual(markedBoards[2].isActive, true, 'Board on given squareIndex must be active');
+    assert.strictEqual(markedBoards[2].isActive, true, 'Board that should be played next must be active');
     markedBoards
       .filter((board, index) => index !== 2)
       .map((board, index) => assert.strictEqual(board.isActive, false, `Board with index ${index} should not be active`));
   });
 
-  it('if board that should be active was won, mark it inactive and all others active');
-  it('if board that should be active was won, mark it inactive and all others not also won active');
+  it('if board that should should be next to play was won, mark it inactive and all others active', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares, isActive: false }));
+    const wonBoard = ['O', 'O', 'O', ...Array(6).fill(null)];
+    boards[6].squares = wonBoard;
+
+    const markedBoards = markInactiveAndInactiveBoards(boards, 6);
+
+    assert.strictEqual(markedBoards[6].isActive, false, 'Won board must not be active');
+    assert.deepEqual(markedBoards[6].squares, boards[6].squares, 'Board 6 squares must be preserved');
+    markedBoards
+      .filter((board, index) => index !== 6)
+      .map(board => assert.strictEqual(board.isActive, true, 'Every board except board 6 must be active'));
+  });
+
+  it('if board that should be next to play was won, mark it and other won boards as inactive, and the rest active', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares, isActive: false }));
+    boards[1].squares = ['O', 'O', 'O', ...Array(6).fill(null)];
+    boards[3].squares = [...Array(6).fill(null), 'X', 'X', 'X'];
+
+    const markedBoards = markInactiveAndInactiveBoards(boards, 3);
+
+    assert.strictEqual(markedBoards[3].isActive, false, 'Won board 3 must not be active');
+    assert.deepEqual(markedBoards[3].squares, boards[3].squares, 'Board 3 squares must be preserved');
+    assert.strictEqual(markedBoards[1].isActive, false, 'Won board 1 must not be active');
+    assert.deepEqual(markedBoards[1].squares, boards[1].squares, 'Board 1 squares must be preserved');
+    markedBoards
+      .filter((board, index) => ![1, 3].includes(index))
+      .map(board => assert.strictEqual(board.isActive, true, 'Every board except boards 1 and 3 must be active'));
+  });
+
+  it('if boards that were won are not the one that should be next to play, mark next to play one as active, and the rest inactive', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares, isActive: false }));
+    boards[1].squares = ['O', 'O', 'O', ...Array(6).fill(null)];
+    boards[3].squares = [...Array(6).fill(null), 'X', 'X', 'X'];
+
+    const markedBoards = markInactiveAndInactiveBoards(boards, 8);
+
+    assert.strictEqual(markedBoards[8].isActive, true, 'Board 8 was not won and therefore must be active');
+    markedBoards
+      .filter((board, index) => ![8].includes(index))
+      .map(board => assert.strictEqual(board.isActive, false, 'Every board except boards 8 must be inactive'));
+  });
+});
+
+describe('calculateUltimateWinner', () => {
+  it('should return null for initial empty boards');
+  it('should return null if ony two boards won');
+  it('should return X if X won top row of boards');
+  it('should return O if O won left column of boards');
+  it('should return X if X won diagonal boards');
+  it('should return O if O won reverse diagonal boards');
 });
