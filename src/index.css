@@ -7,10 +7,13 @@ ol, ul {
   padding-left: 30px;
 }
 
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
+.board-row {
+  display: table-row;
+}
+
+.board-cell {
+  border: 2px solid #fff;
+  display: table-cell;
 }
 
 .status {
@@ -47,4 +50,28 @@ ol, ul {
 
 .game-info {
   margin-left: 20px;
+}
+
+.red-font {
+  color: red
+}
+
+.blue-font {
+  color: blue
+}
+
+.green-font {
+  color: green
+}
+
+.yellow-font {
+  color: yellow
+}
+
+.purple-font {
+  color: purple
+}
+
+.orange-font {
+  color: orange
 }
