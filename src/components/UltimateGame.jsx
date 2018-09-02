@@ -27,6 +27,10 @@ export default class UltimateGame extends React.Component {
     const { xIsNext, history } = this.state;
     const { boards } = history[0];
 
+    if (calculateUltimateWinner(boards)) {
+      return;
+    }
+
     if (!boards[boardIndex].isActive) {
       return;
     }

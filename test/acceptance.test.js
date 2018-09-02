@@ -192,49 +192,12 @@ describe('Tic-tac-toe game', () => {
     });
 
     it('play a game, X wins', () => {
-      const topLeftBoard = sel(app, 'topLeftBoard');
-      const topMiddleBoard = sel(app, 'topMiddleBoard');
-      const topRightBoard = sel(app, 'topRightBoard');
-      const centerLeftBoard = sel(app, 'centerLeftBoard');
-      const centerMiddleBoard = sel(app, 'centerMiddleBoard');
-      const centerRightBoard = sel(app, 'centerRightBoard');
-      const bottomLeftBoard = sel(app, 'bottomLeftBoard');
-      const bottomMiddleBoard = sel(app, 'bottomMiddleBoard');
-      const bottomRightBoard = sel(app, 'bottomRightBoard');
+      playGameWhereXWins();
+    });
 
-      // X wins top left board (top horizontal)
-      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(topLeftBoard, 'centerLeftSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(centerLeftBoard, 'bottomLeftSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(bottomLeftBoard, 'topLeftSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith('X');
-
-      // X wins center middle board (middle vertical)
-      clickEmptySquare(sel(topMiddleBoard, 'centerMiddleSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(centerMiddleBoard, 'topMiddleSquare')).assertIsFilledWith('X'); // W
-      clickEmptySquare(sel(topMiddleBoard, 'bottomMiddleSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(bottomMiddleBoard, 'bottomMiddleSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(bottomMiddleBoard, 'centerMiddleSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(centerMiddleBoard, 'bottomMiddleSquare')).assertIsFilledWith('X'); // W
-      clickEmptySquare(sel(bottomMiddleBoard, 'bottomLeftSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(bottomLeftBoard, 'bottomLeftSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(bottomLeftBoard, 'centerMiddleSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(centerMiddleBoard, 'centerMiddleSquare')).assertIsFilledWith('X'); // W
-
-      // X wins bottom right board (reverse diagonal) and the game
-      clickEmptySquare(sel(centerRightBoard, 'bottomRightSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(bottomRightBoard, 'bottomLeftSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(bottomLeftBoard, 'bottomRightSquare')).assertIsFilledWith('O');
-      // bottomLeftBoard is won by O, so X can play any board
-      clickEmptySquare(sel(bottomRightBoard, 'topRightSquare')).assertIsFilledWith('X');
-      // centerMiddleBoard is won by X, so O can play any board
-      assertGameStatus('Next player', 'O');
-      clickEmptySquare(sel(topRightBoard, 'bottomRightSquare')).assertIsFilledWith('O');
-      assertGameStatus('Next player', 'X');
-      clickEmptySquare(sel(bottomRightBoard, 'centerMiddleSquare')).assertIsFilledWith('X');
-      assertGameStatus('Winner', 'X');
+    it('Allow no more play after someone wins', () => {
+      playGameWhereXWins();
+      clickEmptySquare(sel(sel(app, 'topMiddleBoard'), 'topLeftSquare')).assertIsFilledWith('');
     });
 
     it('when a local board is won, disable further input on it', () => {
@@ -311,6 +274,53 @@ describe('Tic-tac-toe game', () => {
     it('when game is won, disable further inputs on all local boards');
     it('time travel after game was won reenables relevant local boards');
   });
+
+  function playGameWhereXWins() {
+    const topLeftBoard = sel(app, 'topLeftBoard');
+    const topMiddleBoard = sel(app, 'topMiddleBoard');
+    const topRightBoard = sel(app, 'topRightBoard');
+    const centerLeftBoard = sel(app, 'centerLeftBoard');
+    const centerMiddleBoard = sel(app, 'centerMiddleBoard');
+    const centerRightBoard = sel(app, 'centerRightBoard');
+    const bottomLeftBoard = sel(app, 'bottomLeftBoard');
+    const bottomMiddleBoard = sel(app, 'bottomMiddleBoard');
+    const bottomRightBoard = sel(app, 'bottomRightBoard');
+
+    // X wins top left board (top horizontal)
+    clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith('X');
+    clickEmptySquare(sel(topLeftBoard, 'centerLeftSquare')).assertIsFilledWith('O');
+    clickEmptySquare(sel(centerLeftBoard, 'bottomLeftSquare')).assertIsFilledWith('X');
+    clickEmptySquare(sel(bottomLeftBoard, 'topLeftSquare')).assertIsFilledWith('O');
+    clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith('X');
+    clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith('O');
+    clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+
+    // X wins center middle board (middle vertical)
+    clickEmptySquare(sel(topMiddleBoard, 'centerMiddleSquare')).assertIsFilledWith('O');
+    clickEmptySquare(sel(centerMiddleBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+    clickEmptySquare(sel(topMiddleBoard, 'bottomMiddleSquare')).assertIsFilledWith('O');
+    clickEmptySquare(sel(bottomMiddleBoard, 'bottomMiddleSquare')).assertIsFilledWith('X');
+    clickEmptySquare(sel(bottomMiddleBoard, 'centerMiddleSquare')).assertIsFilledWith('O');
+    clickEmptySquare(sel(centerMiddleBoard, 'bottomMiddleSquare')).assertIsFilledWith('X');
+    clickEmptySquare(sel(bottomMiddleBoard, 'bottomLeftSquare')).assertIsFilledWith('O');
+    clickEmptySquare(sel(bottomLeftBoard, 'bottomLeftSquare')).assertIsFilledWith('X');
+    clickEmptySquare(sel(bottomLeftBoard, 'centerMiddleSquare')).assertIsFilledWith('O');
+    clickEmptySquare(sel(centerMiddleBoard, 'centerMiddleSquare')).assertIsFilledWith('X');
+
+    // X wins bottom right board (reverse diagonal) and the game
+    clickEmptySquare(sel(centerRightBoard, 'bottomRightSquare')).assertIsFilledWith('O');
+    clickEmptySquare(sel(bottomRightBoard, 'bottomLeftSquare')).assertIsFilledWith('X');
+    clickEmptySquare(sel(bottomLeftBoard, 'bottomRightSquare')).assertIsFilledWith('O');
+    // bottomLeftBoard is won by O, so X can play any board
+    clickEmptySquare(sel(bottomRightBoard, 'topRightSquare')).assertIsFilledWith('X');
+    // centerMiddleBoard is won by X, so O can play any board
+    assertGameStatus('Next player', 'O');
+    clickEmptySquare(sel(topRightBoard, 'bottomRightSquare')).assertIsFilledWith('O');
+    assertGameStatus('Next player', 'X');
+    clickEmptySquare(sel(bottomRightBoard, 'centerMiddleSquare')).assertIsFilledWith('X');
+
+    assertGameStatus('Winner', 'X');
+  }
 
   function clickEmptySquare(square) {
     assert.equal(square.textContent, '', 'square that should be empty is not');
