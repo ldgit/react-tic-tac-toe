@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { calculateWinner, markInactiveAndInactiveBoards } from '../src/helpers';
+import { calculateWinner, markInactiveAndInactiveBoards, calculateUltimateWinner } from '../src/helpers';
 
 describe('calculateWinner', () => {
   const initialSquares = Array(9).fill(null);
@@ -102,14 +102,8 @@ describe('calculateWinner', () => {
 });
 
 describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
-  let emptySquares;
-
-  beforeEach(() => {
-    emptySquares = Array(9).fill(null);
-  });
-
   it('should mark all boards inactive except one that is next to play', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares, isActive: true }));
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: true }));
 
     const markedBoards = markInactiveAndInactiveBoards(boards, 5);
 
@@ -120,7 +114,7 @@ describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
   });
 
   it('should activate board that should be played next if it was inactive', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares, isActive: false }));
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
 
     const markedBoards = markInactiveAndInactiveBoards(boards, 2);
 
@@ -131,7 +125,7 @@ describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
   });
 
   it('if board that should should be next to play was won, mark it inactive and all others active', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares, isActive: false }));
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
     const wonBoard = ['O', 'O', 'O', ...Array(6).fill(null)];
     boards[6].squares = wonBoard;
 
@@ -145,7 +139,7 @@ describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
   });
 
   it('if board that should be next to play was won, mark it and other won boards as inactive, and the rest active', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares, isActive: false }));
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
     boards[1].squares = ['O', 'O', 'O', ...Array(6).fill(null)];
     boards[3].squares = [...Array(6).fill(null), 'X', 'X', 'X'];
 
@@ -161,7 +155,7 @@ describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
   });
 
   it('if boards that were won are not the one that should be next to play, mark next to play one as active, and the rest inactive', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares, isActive: false }));
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
     boards[1].squares = ['O', 'O', 'O', ...Array(6).fill(null)];
     boards[3].squares = [...Array(6).fill(null), 'X', 'X', 'X'];
 
@@ -175,10 +169,65 @@ describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
 });
 
 describe('calculateUltimateWinner', () => {
-  it('should return null for initial empty boards');
-  it('should return null if ony two boards won');
-  it('should return X if X won top row of boards');
-  it('should return O if O won left column of boards');
-  it('should return X if X won diagonal boards');
-  it('should return O if O won reverse diagonal boards');
+  it('should return null for initial empty boards', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
+    assert.strictEqual(calculateUltimateWinner(boards), null);
+  });
+
+  it('should return null if ony two boards won', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
+    boards[1].squares = ['O', 'O', 'O', ...Array(6).fill(null)];
+    boards[3].squares = [...Array(6).fill(null), 'O', 'O', 'O'];
+
+    assert.strictEqual(calculateUltimateWinner(boards), null);
+  });
+
+  it('should return null if top row of boards won, but by different players', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
+    boards[0].squares = ['X', 'X', 'X', ...Array(6).fill(null)];
+    boards[1].squares = [...Array(6).fill(null), 'O', 'O', 'O'];
+    boards[2].squares = ['X', null, null, null, 'X', null, null, null, 'X'];
+
+    assert.strictEqual(calculateUltimateWinner(boards), null);
+  });
+
+  it('should return X if X won top row of boards', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
+    boards[0].squares = ['X', 'X', 'X', ...Array(6).fill(null)];
+    boards[1].squares = [...Array(6).fill(null), 'X', 'X', 'X'];
+    boards[2].squares = ['X', null, null, null, 'X', null, null, null, 'X'];
+
+    assert.strictEqual(calculateUltimateWinner(boards), 'X');
+  });
+
+  it('should return O if O won left column of boards', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
+    boards[0].squares = ['O', null, null, 'O', null, null, 'O', null, null];
+    boards[3].squares = [null, null, 'O', null, 'O', null, 'O', null, null];
+    boards[6].squares = [null, 'O', null, null, 'O', null, null, 'O', null];
+
+    assert.strictEqual(calculateUltimateWinner(boards), 'O');
+  });
+
+  it('should return X if X won diagonal boards', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
+    boards[0].squares = ['X', null, null, 'X', null, null, 'X', null, null];
+    boards[4].squares = [null, null, 'X', null, 'X', null, 'X', null, null];
+    boards[8].squares = [null, 'X', null, null, 'X', null, null, 'X', null];
+
+    assert.strictEqual(calculateUltimateWinner(boards), 'X');
+  });
+
+  it('should return O if O won reverse diagonal boards', () => {
+    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
+    boards[2].squares = ['O', null, null, 'O', null, null, 'O', null, null];
+    boards[4].squares = [null, null, 'O', null, 'O', null, 'O', null, null];
+    boards[6].squares = [null, 'O', null, null, 'O', null, null, 'O', null];
+
+    assert.strictEqual(calculateUltimateWinner(boards), 'O');
+  });
 });
+
+function emptySquares() {
+  return Array(9).fill(null);
+}

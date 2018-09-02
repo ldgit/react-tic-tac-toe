@@ -42,5 +42,7 @@ export function markInactiveAndInactiveBoards(boards, nextBoardToPlay) {
 }
 
 export function calculateUltimateWinner(boards) {
+  const ultimateBoard = boards.map(board => calculateWinner(board.squares));
 
+  return calculateWinner(ultimateBoard);
 }
