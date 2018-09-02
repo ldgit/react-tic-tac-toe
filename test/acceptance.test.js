@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { JSDOM } from 'jsdom';
 import Game from '../src/components/Game';
+import UltimateGame from '../src/components/UltimateGame';
 
 describe('Tic-tac-toe game', () => {
   let document;
@@ -21,11 +22,14 @@ describe('Tic-tac-toe game', () => {
     ({ document } = window);
     app = document.createElement('div');
     document.body.appendChild(app);
-    // eslint-disable-next-line react/jsx-filename-extension
-    ReactDom.render(<Game />, app);
   });
 
   context('standard tic-tac-toe', () => {
+    beforeEach(() => {
+      // eslint-disable-next-line react/jsx-filename-extension
+      ReactDom.render(<Game />, app);
+    });
+
     it('clicking on already played square does nothing', () => {
       clickEmptySquare(sel(app, 'centerMiddleSquare'));
 
@@ -126,13 +130,184 @@ describe('Tic-tac-toe game', () => {
   });
 
   context('ultimate tic-tac-toe', () => {
-    it.skip('simple X win', () => {});
-    it('simple O win');
-    it('simple draw');
+    beforeEach(() => {
+      // eslint-disable-next-line react/jsx-filename-extension
+      ReactDom.render(<UltimateGame />, app);
+    });
+
+    it('player can\'t play on already played square', () => {
+      const centerMiddleBoard = sel(app, 'centerMiddleBoard');
+      clickEmptySquare(sel(centerMiddleBoard, 'centerMiddleSquare')).assertIsFilledWith('X');
+      clickSquare(sel(centerMiddleBoard, 'centerMiddleSquare')).assertIsNotFilledWith('O');
+      clickSquare(sel(centerMiddleBoard, 'centerMiddleSquare')).assertIsNotFilledWith('');
+    });
+
+    getAllBoardTestIds().forEach(({ boardTestId }) => {
+      it(`player O has to play in top left board if player X played in top left square of ${boardTestId} board`, () => {
+        const boardToPlay = sel(app, boardTestId);
+        clickEmptySquare(sel(boardToPlay, 'topLeftSquare')).assertIsFilledWith('X');
+
+        selectAllBoardsExcept(['topLeftBoard'])
+          .map(board => clickEmptySquare(sel(board, 'bottomLeftSquare')).assertIsFilledWith(''));
+      });
+    });
+
+    getAllBoardTestIds().forEach(({ boardTestId }) => {
+      it(`player O has to play in center middle board if player X played in center middle square of ${boardTestId} board`, () => {
+        const boardToPlay = sel(app, boardTestId);
+        clickEmptySquare(sel(boardToPlay, 'centerMiddleSquare')).assertIsFilledWith('X');
+
+        selectAllBoardsExcept(['centerMiddleBoard'])
+          .map(board => clickEmptySquare(sel(board, 'topLeftSquare')).assertIsFilledWith(''));
+
+        const centerMiddleBoard = sel(app, 'centerMiddleBoard');
+        clickEmptySquare(sel(centerMiddleBoard, 'bottomRightSquare')).assertIsFilledWith('O');
+      });
+    });
+
+    [
+      { squareTestId: 'topLeftSquare', boardOPlayerMustPlay: 'topLeftBoard' },
+      { squareTestId: 'topMiddleSquare', boardOPlayerMustPlay: 'topMiddleBoard' },
+      { squareTestId: 'topRightSquare', boardOPlayerMustPlay: 'topRightBoard' },
+      { squareTestId: 'centerLeftSquare', boardOPlayerMustPlay: 'centerLeftBoard' },
+      { squareTestId: 'centerMiddleSquare', boardOPlayerMustPlay: 'centerMiddleBoard' },
+      { squareTestId: 'centerRightSquare', boardOPlayerMustPlay: 'centerRightBoard' },
+      { squareTestId: 'bottomLeftSquare', boardOPlayerMustPlay: 'bottomLeftBoard' },
+      { squareTestId: 'bottomMiddleSquare', boardOPlayerMustPlay: 'bottomMiddleBoard' },
+      { squareTestId: 'bottomRightSquare', boardOPlayerMustPlay: 'bottomRightBoard' },
+    ].forEach(({ squareTestId, boardOPlayerMustPlay }) => {
+      it(`player X has to play in bottom right board if player O played in bottom right square of ${boardOPlayerMustPlay} board
+        (first played square ${squareTestId} of centerMiddleBoard)`, () => {
+        const boardToPlay = sel(app, 'centerMiddleBoard');
+        clickEmptySquare(sel(boardToPlay, squareTestId)).assertIsFilledWith('X');
+
+        selectAllBoardsExcept([boardOPlayerMustPlay])
+          .map(board => clickSquare(sel(board, 'bottomRightSquare')).assertIsNotFilledWith('O'));
+        clickEmptySquare(sel(sel(app, boardOPlayerMustPlay), 'bottomRightSquare')).assertIsFilledWith('O');
+
+        selectAllBoardsExcept(squareTestId !== 'bottomRightSquare' ? ['bottomRightBoard'] : ['bottomRightBoard', 'centerMiddleBoard'])
+          .map(board => clickSquare(sel(board, 'bottomRightSquare')).assertIsNotFilledWith('X'));
+        clickEmptySquare(sel(sel(app, 'bottomRightBoard'), 'centerLeftSquare')).assertIsFilledWith('X');
+      });
+    });
+
+    it('play a game, X wins', () => {
+      const topLeftBoard = sel(app, 'topLeftBoard');
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      const topRightBoard = sel(app, 'topRightBoard');
+      const centerLeftBoard = sel(app, 'centerLeftBoard');
+      const centerMiddleBoard = sel(app, 'centerMiddleBoard');
+      const centerRightBoard = sel(app, 'centerRightBoard');
+      const bottomLeftBoard = sel(app, 'bottomLeftBoard');
+      const bottomMiddleBoard = sel(app, 'bottomMiddleBoard');
+      const bottomRightBoard = sel(app, 'bottomRightBoard');
+
+      // X wins top left board (top horizontal)
+      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(topLeftBoard, 'centerLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(centerLeftBoard, 'bottomLeftSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(bottomLeftBoard, 'topLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+
+      // X wins center middle board (middle vertical)
+      clickEmptySquare(sel(topMiddleBoard, 'centerMiddleSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(centerMiddleBoard, 'topMiddleSquare')).assertIsFilledWith('X'); // W
+      clickEmptySquare(sel(topMiddleBoard, 'bottomMiddleSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(bottomMiddleBoard, 'bottomMiddleSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(bottomMiddleBoard, 'centerMiddleSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(centerMiddleBoard, 'bottomMiddleSquare')).assertIsFilledWith('X'); // W
+      clickEmptySquare(sel(bottomMiddleBoard, 'bottomLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(bottomLeftBoard, 'bottomLeftSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(bottomLeftBoard, 'centerMiddleSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(centerMiddleBoard, 'centerMiddleSquare')).assertIsFilledWith('X'); // W
+
+      // X wins bottom right board (reverse diagonal) and the game
+      clickEmptySquare(sel(centerRightBoard, 'bottomRightSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(bottomRightBoard, 'bottomLeftSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(bottomLeftBoard, 'bottomRightSquare')).assertIsFilledWith('O');
+      // bottomLeftBoard is won by O, so X can play any board
+      clickEmptySquare(sel(bottomRightBoard, 'topRightSquare')).assertIsFilledWith('X');
+      // centerMiddleBoard is won by X, so O can play any board
+      assertGameStatus('Next player', 'O');
+      clickEmptySquare(sel(topRightBoard, 'bottomRightSquare')).assertIsFilledWith('O');
+      assertGameStatus('Next player', 'X');
+      clickEmptySquare(sel(bottomRightBoard, 'centerMiddleSquare')).assertIsFilledWith('X');
+      assertGameStatus('Winner', 'X');
+    });
+
+    it('when a local board is won, disable further input on it', () => {
+      const topLeftBoard = sel(app, 'topLeftBoard');
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      const topRightBoard = sel(app, 'topRightBoard');
+      const centerLeftBoard = sel(app, 'centerLeftBoard');
+
+      // X wins top left board (top horizontal) so that O is sent to that board
+      clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith('X');
+
+      // O can't play top left board anymore
+      clickEmptySquare(sel(topLeftBoard, 'centerLeftSquare')).assertIsFilledWith('');
+      clickEmptySquare(sel(topLeftBoard, 'centerMiddleSquare')).assertIsFilledWith('');
+
+      clickEmptySquare(sel(centerLeftBoard, 'topLeftSquare')).assertIsFilledWith('O');
+
+      // X can't play top left board anymore
+      clickEmptySquare(sel(topLeftBoard, 'centerLeftSquare')).assertIsFilledWith('');
+      clickEmptySquare(sel(topLeftBoard, 'centerMiddleSquare')).assertIsFilledWith('');
+    });
+
+    getAllBoardTestIds()
+      .filter(({ boardTestId }) => boardTestId !== 'topLeftBoard')
+      .forEach(({ boardTestId }) => {
+        it(
+          `when a board is won and next player is sent to that board, that player can play any board except the won one (played ${boardTestId})`,
+          () => {
+            const topLeftBoard = sel(app, 'topLeftBoard');
+            const topMiddleBoard = sel(app, 'topMiddleBoard');
+            const topRightBoard = sel(app, 'topRightBoard');
+
+            // X wins top left board (top horizontal) so that O is sent to that board
+            clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+            clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith('O');
+            clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith('X');
+            clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith('O');
+            clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith('X');
+
+            const anyBoardButTopLeft = sel(app, boardTestId);
+            clickEmptySquare(sel(anyBoardButTopLeft, 'centerMiddleSquare')).assertIsFilledWith('O');
+          },
+        );
+      });
+
+    it('when sent to board that was already won, that player can play any other board', () => {
+      const topLeftBoard = sel(app, 'topLeftBoard');
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      const topRightBoard = sel(app, 'topRightBoard');
+      const centerMiddleBoard = sel(app, 'centerMiddleBoard');
+      const centerLeftBoard = sel(app, 'centerLeftBoard');
+      const bottomLeftBoard = sel(app, 'bottomLeftBoard');
+
+      // X wins top left board (top horizontal) so that O is sent to that board
+      clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(centerLeftBoard, 'bottomLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(bottomLeftBoard, 'topLeftSquare')).assertIsFilledWith('X');
+
+      // Top left board was already won, so O can play any other board
+      clickEmptySquare(sel(centerMiddleBoard, 'bottomRightSquare')).assertIsFilledWith('O');
+    });
+
     it('simple time travel (X wins, then back three turns, then O wins)');
-    it('complex X win (with O winning two boards)');
-    it('when a local board is won, disable further input on it');
     it('time travel re-enables previously won local-board');
+    it('complex X win (with O winning two boards)');
     it('when game is won, disable further inputs on all local boards');
     it('time travel after game was won reenables relevant local boards');
   });
@@ -146,6 +321,22 @@ describe('Tic-tac-toe game', () => {
         square.textContent, symbol, `square not filled with expected symbol "${symbol}"`,
       ),
     };
+  }
+
+  function clickSquare(square) {
+    click(square);
+
+    return {
+      assertIsNotFilledWith: symbol => assert.notEqual(
+        square.textContent, symbol, `square filled with unexpected symbol "${symbol}"`,
+      ),
+    };
+  }
+
+  function selectAllBoardsExcept(boardTestIds) {
+    return getAllBoardTestIds()
+      .filter(data => !boardTestIds.includes(data.boardTestId))
+      .map(data => sel(app, data.boardTestId));
   }
 
   function selectByText(container, selector, text) {
@@ -173,4 +364,18 @@ function sel(container, testId) {
   assert.ok(element, `element with data-testid "${testId}" not found`);
 
   return element;
+}
+
+function getAllBoardTestIds() {
+  return [
+    { boardTestId: 'topLeftBoard' },
+    { boardTestId: 'topMiddleBoard' },
+    { boardTestId: 'topRightBoard' },
+    { boardTestId: 'centerLeftBoard' },
+    { boardTestId: 'centerMiddleBoard' },
+    { boardTestId: 'centerRightBoard' },
+    { boardTestId: 'bottomLeftBoard' },
+    { boardTestId: 'bottomMiddleBoard' },
+    { boardTestId: 'bottomRightBoard' },
+  ];
 }
