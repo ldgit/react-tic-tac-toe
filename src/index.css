@@ -3,6 +3,14 @@ body {
   margin: 20px;
 }
 
+.lightgreen-board button {
+  background-color: #e6ffe6;
+}
+
+.lightred-board button {
+  background-color: MistyRose;
+}
+
 ol, ul {
   padding-left: 30px;
 }

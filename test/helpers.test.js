@@ -1,5 +1,10 @@
 import * as assert from 'assert';
-import { calculateWinner, markInactiveAndInactiveBoards, calculateUltimateWinner } from '../src/helpers';
+import {
+  calculateWinner,
+  markInactiveAndInactiveBoards,
+  calculateUltimateWinner,
+  getColorClass,
+} from '../src/helpers';
 
 describe('calculateWinner', () => {
   const initialSquares = Array(9).fill(null);
@@ -227,6 +232,29 @@ describe('calculateUltimateWinner', () => {
     assert.strictEqual(calculateUltimateWinner(boards), 'O');
   });
 });
+
+describe('getColorClass', () => {
+  it('should return nothing if board is active and not won', () => {
+    const board = { squares: emptySquares(), isActive: true };
+    assert.strictEqual(getColorClass(board), '');
+  });
+
+  it('should return "lightred-board" if board is not active and not won', () => {
+    const board = { squares: emptySquares(), isActive: false };
+    assert.strictEqual(getColorClass(board), 'lightred-board');
+  });
+
+  it('should return "lightgreen-board" if board is won', () => {
+    const inactiveBoard = { squares: winningSquares(), isActive: false };
+    const activeBoard = { squares: winningSquares(), isActive: true };
+    assert.strictEqual(getColorClass(inactiveBoard), 'lightgreen-board');
+    assert.strictEqual(getColorClass(activeBoard), 'lightgreen-board');
+  });
+});
+
+function winningSquares() {
+  return ['O', null, null, 'O', null, null, 'O', null, null];
+}
 
 function emptySquares() {
   return Array(9).fill(null);

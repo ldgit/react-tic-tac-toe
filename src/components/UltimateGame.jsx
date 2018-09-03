@@ -1,7 +1,12 @@
 import React from 'react';
 import Board from './Board';
 import Status from './Status';
-import { calculateWinner, calculateUltimateWinner, markInactiveAndInactiveBoards } from '../helpers';
+import {
+  calculateWinner,
+  calculateUltimateWinner,
+  markInactiveAndInactiveBoards,
+  getColorClass,
+} from '../helpers';
 
 export default class UltimateGame extends React.Component {
   constructor(props) {
@@ -53,10 +58,13 @@ export default class UltimateGame extends React.Component {
   }
 
   renderBoard(boardIndex, boards, testId) {
+    const currentBoard = boards[boardIndex];
+    const boardClass = `board-cell ${getColorClass(currentBoard)}`;
+
     return (
       <Board
-        className="board-cell"
-        squares={boards[boardIndex].squares}
+        className={boardClass}
+        squares={currentBoard.squares}
         testId={testId}
         onClick={squareIndex => this.handleClick(boardIndex, squareIndex)}
       />

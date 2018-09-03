@@ -46,3 +46,11 @@ export function calculateUltimateWinner(boards) {
 
   return calculateWinner(ultimateBoard);
 }
+
+export function getColorClass(board) {
+  if (calculateWinner(board.squares)) {
+    return 'lightgreen-board';
+  }
+
+  return board.isActive ? '' : 'lightred-board';
+}
