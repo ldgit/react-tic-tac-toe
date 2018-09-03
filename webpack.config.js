@@ -6,12 +6,12 @@ module.exports = {
     main: './src/index.jsx',
   },
   output: {
-    path: path.resolve(__dirname, 'web'),
+    path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
   },
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: './web',
+    contentBase: './dist',
   },
   resolve: {
     extensions: ['.js', '.json', '.jsx'],
