@@ -1,4 +1,4 @@
-export default function calculateWinner(squares) {
+export function calculateWinner(squares) {
   let winner = null;
 
   for (let i = 0; i < 3; i += 1) {
@@ -28,4 +28,29 @@ function getPlayerThatFilledTheLine(line) {
   }
 
   return null;
+}
+
+export function markInactiveAndInactiveBoards(boards, nextBoardToPlay) {
+  if (calculateWinner(boards[nextBoardToPlay].squares)) {
+    return boards.map(board => Object.assign(board, { isActive: !calculateWinner(board.squares) }));
+  }
+
+  return boards.map((board, index) => (index !== parseInt(nextBoardToPlay, 10)
+    ? Object.assign(board, { isActive: false })
+    : Object.assign(board, { isActive: true })
+  ));
+}
+
+export function calculateUltimateWinner(boards) {
+  const ultimateBoard = boards.map(board => calculateWinner(board.squares));
+
+  return calculateWinner(ultimateBoard);
+}
+
+export function getColorClass(board) {
+  if (calculateWinner(board.squares)) {
+    return 'lightgreen-board';
+  }
+
+  return board.isActive ? '' : 'lightred-board';
 }
