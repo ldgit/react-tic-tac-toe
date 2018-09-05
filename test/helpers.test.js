@@ -1,9 +1,11 @@
 import * as assert from 'assert';
+import { expect } from 'chai';
 import {
   calculateWinner,
   markInactiveAndInactiveBoards,
   calculateUltimateWinner,
   getColorClass,
+  jumpToPointInHistory,
 } from '../src/helpers';
 
 describe('calculateWinner', () => {
@@ -116,6 +118,8 @@ describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
     markedBoards
       .filter((board, index) => index !== 5)
       .map((board, index) => assert.strictEqual(board.isActive, false, `Board with index ${index} should not be active`));
+
+    assertBoardsAreDeepCopied(boards, markedBoards);
   });
 
   it('should activate board that should be played next if it was inactive', () => {
@@ -127,6 +131,8 @@ describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
     markedBoards
       .filter((board, index) => index !== 2)
       .map((board, index) => assert.strictEqual(board.isActive, false, `Board with index ${index} should not be active`));
+
+    assertBoardsAreDeepCopied(boards, markedBoards);
   });
 
   it('if board that should should be next to play was won, mark it inactive and all others active', () => {
@@ -141,6 +147,8 @@ describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
     markedBoards
       .filter((board, index) => index !== 6)
       .map(board => assert.strictEqual(board.isActive, true, 'Every board except board 6 must be active'));
+
+    assertBoardsAreDeepCopied(boards, markedBoards);
   });
 
   it('if board that should be next to play was won, mark it and other won boards as inactive, and the rest active', () => {
@@ -157,6 +165,8 @@ describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
     markedBoards
       .filter((board, index) => ![1, 3].includes(index))
       .map(board => assert.strictEqual(board.isActive, true, 'Every board except boards 1 and 3 must be active'));
+
+    assertBoardsAreDeepCopied(boards, markedBoards);
   });
 
   it('if boards that were won are not the one that should be next to play, mark next to play one as active, and the rest inactive', () => {
@@ -170,7 +180,15 @@ describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
     markedBoards
       .filter((board, index) => ![8].includes(index))
       .map(board => assert.strictEqual(board.isActive, false, 'Every board except boards 8 must be inactive'));
+
+    assertBoardsAreDeepCopied(boards, markedBoards);
   });
+
+  function assertBoardsAreDeepCopied(originalBoards, markedBoards) {
+    // eslint-disable-next-line no-param-reassign
+    markedBoards[0].squares[5] = 'X';
+    assert.notEqual(originalBoards[0].squares[5], 'X', 'Modifying marked boards squares should not modify original board squares');
+  }
 });
 
 describe('calculateUltimateWinner', () => {
@@ -251,6 +269,75 @@ describe('getColorClass', () => {
     assert.strictEqual(getColorClass(activeBoard), 'lightgreen-board');
   });
 });
+
+describe('jumpToPointInHistory', () => {
+  let initialGameState;
+
+  beforeEach(() => {
+    initialGameState = {
+      history: [
+        { boards: 'initial boards state' },
+      ],
+      moveNumber: 0,
+      xIsNext: true,
+    };
+  });
+
+  it('should not change anything if given initial game state and ordered to jump to game start', () => {
+    assert.deepEqual(jumpToPointInHistory(initialGameState, 0), initialGameState);
+  });
+
+  [-1, -5, '0', null, undefined].forEach((pointToJumpTo) => {
+    it(`should throw exception if ordered to jump to ${JSON.stringify(pointToJumpTo)} move index`, () => {
+      expect(() => jumpToPointInHistory(initialGameState, pointToJumpTo)).to.throw(TypeError, 'Invalid jump point:');
+    });
+  });
+
+  [1, 2, 1000].forEach((pointToJumpTo) => {
+    it(`should throw exception if ordered to jump to point forward in time (${JSON.stringify(pointToJumpTo)})`, () => {
+      expect(() => jumpToPointInHistory(initialGameState, pointToJumpTo)).to.throw(TypeError, 'Attempted to jump forward in time');
+    });
+  });
+
+  it('should jump to initial state but preserve first move in history', () => {
+    initialGameState.history.push({ boards: 'boards state after first move' });
+
+    const newGameState = jumpToPointInHistory(initialGameState, 0);
+
+    assert.equal(newGameState.history.length, 2);
+    assert.deepEqual(newGameState.history, initialGameState.history);
+    assert.strictEqual(newGameState.moveNumber, 0);
+    assert.strictEqual(newGameState.xIsNext, true, 'X player should be next');
+  });
+
+  it('should jump to first move state but preserve the second move in history', () => {
+    initialGameState.history.push({ boards: 'boards state after first move' });
+    initialGameState.history.push({ boards: 'boards state after second move' });
+
+    const newGameState = jumpToPointInHistory(initialGameState, 1);
+
+    assert.equal(newGameState.history.length, 3);
+    assert.deepEqual(newGameState.history, initialGameState.history);
+    assert.strictEqual(newGameState.moveNumber, 1, 'wrong move number');
+    assert.strictEqual(newGameState.xIsNext, false, 'O player should be next');
+  });
+
+  it('should jump to second move state but also preserve all moves after that one', () => {
+    initialGameState.history.push({ boards: 'boards state after first move' });
+    initialGameState.history.push({ boards: 'boards state after second move' });
+    initialGameState.history.push({ boards: 'boards state after third move' });
+    initialGameState.history.push({ boards: 'boards state after fourth move' });
+    initialGameState.history.push({ boards: 'boards state after fifth move' });
+
+    const newGameState = jumpToPointInHistory(initialGameState, 2);
+
+    assert.equal(newGameState.history.length, 6);
+    assert.deepEqual(newGameState.history, initialGameState.history);
+    assert.strictEqual(newGameState.moveNumber, 2, 'wrong move number');
+    assert.strictEqual(newGameState.xIsNext, true, 'X player should be next');
+  });
+});
+
 
 function winningSquares() {
   return ['O', null, null, 'O', null, null, 'O', null, null];

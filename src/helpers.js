@@ -32,12 +32,14 @@ function getPlayerThatFilledTheLine(line) {
 
 export function markInactiveAndInactiveBoards(boards, nextBoardToPlay) {
   if (calculateWinner(boards[nextBoardToPlay].squares)) {
-    return boards.map(board => Object.assign(board, { isActive: !calculateWinner(board.squares) }));
+    return boards.map(
+      board => Object.assign({}, board, { isActive: !calculateWinner(board.squares), squares: board.squares.slice() }),
+    );
   }
 
   return boards.map((board, index) => (index !== parseInt(nextBoardToPlay, 10)
-    ? Object.assign(board, { isActive: false })
-    : Object.assign(board, { isActive: true })
+    ? Object.assign({}, board, { isActive: false, squares: board.squares.slice() })
+    : Object.assign({}, board, { isActive: true, squares: board.squares.slice() })
   ));
 }
 
@@ -53,4 +55,23 @@ export function getColorClass(board) {
   }
 
   return board.isActive ? '' : 'lightred-board';
+}
+
+export function jumpToPointInHistory(gameState, moveToJumpTo) {
+  if (typeof moveToJumpTo !== 'number' || moveToJumpTo < 0) {
+    throw new TypeError('Invalid jump point: -1');
+  }
+
+  if (moveToJumpTo > gameState.history.length - 1) {
+    throw new TypeError('Attempted to jump forward in time');
+  }
+
+  if (gameState.history.length === 1) {
+    return gameState;
+  }
+
+  return Object.assign(gameState, {
+    moveNumber: moveToJumpTo,
+    xIsNext: moveToJumpTo % 2 === 0,
+  });
 }
