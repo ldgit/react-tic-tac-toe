@@ -2,7 +2,6 @@ import * as assert from 'assert';
 import { expect } from 'chai';
 import {
   calculateWinner,
-  markInactiveAndInactiveBoards,
   calculateUltimateWinner,
   getColorClass,
   jumpToPointInHistory,
@@ -105,89 +104,6 @@ describe('calculateWinner', () => {
     ] = rowSquares;
 
     return newSquares;
-  }
-});
-
-describe('Ultimate tic-tac-toe: markInactiveAndInactiveBoards', () => {
-  it('should mark all boards inactive except one that is next to play', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: true }));
-
-    const markedBoards = markInactiveAndInactiveBoards(boards, 5);
-
-    assert.strictEqual(markedBoards[5].isActive, true);
-    markedBoards
-      .filter((board, index) => index !== 5)
-      .map((board, index) => assert.strictEqual(board.isActive, false, `Board with index ${index} should not be active`));
-
-    assertBoardsAreDeepCopied(boards, markedBoards);
-  });
-
-  it('should activate board that should be played next if it was inactive', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
-
-    const markedBoards = markInactiveAndInactiveBoards(boards, 2);
-
-    assert.strictEqual(markedBoards[2].isActive, true, 'Board that should be played next must be active');
-    markedBoards
-      .filter((board, index) => index !== 2)
-      .map((board, index) => assert.strictEqual(board.isActive, false, `Board with index ${index} should not be active`));
-
-    assertBoardsAreDeepCopied(boards, markedBoards);
-  });
-
-  it('if board that should should be next to play was won, mark it inactive and all others active', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
-    const wonBoard = ['O', 'O', 'O', ...Array(6).fill(null)];
-    boards[6].squares = wonBoard;
-
-    const markedBoards = markInactiveAndInactiveBoards(boards, 6);
-
-    assert.strictEqual(markedBoards[6].isActive, false, 'Won board must not be active');
-    assert.deepEqual(markedBoards[6].squares, boards[6].squares, 'Board 6 squares must be preserved');
-    markedBoards
-      .filter((board, index) => index !== 6)
-      .map(board => assert.strictEqual(board.isActive, true, 'Every board except board 6 must be active'));
-
-    assertBoardsAreDeepCopied(boards, markedBoards);
-  });
-
-  it('if board that should be next to play was won, mark it and other won boards as inactive, and the rest active', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
-    boards[1].squares = ['O', 'O', 'O', ...Array(6).fill(null)];
-    boards[3].squares = [...Array(6).fill(null), 'X', 'X', 'X'];
-
-    const markedBoards = markInactiveAndInactiveBoards(boards, 3);
-
-    assert.strictEqual(markedBoards[3].isActive, false, 'Won board 3 must not be active');
-    assert.deepEqual(markedBoards[3].squares, boards[3].squares, 'Board 3 squares must be preserved');
-    assert.strictEqual(markedBoards[1].isActive, false, 'Won board 1 must not be active');
-    assert.deepEqual(markedBoards[1].squares, boards[1].squares, 'Board 1 squares must be preserved');
-    markedBoards
-      .filter((board, index) => ![1, 3].includes(index))
-      .map(board => assert.strictEqual(board.isActive, true, 'Every board except boards 1 and 3 must be active'));
-
-    assertBoardsAreDeepCopied(boards, markedBoards);
-  });
-
-  it('if boards that were won are not the one that should be next to play, mark next to play one as active, and the rest inactive', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
-    boards[1].squares = ['O', 'O', 'O', ...Array(6).fill(null)];
-    boards[3].squares = [...Array(6).fill(null), 'X', 'X', 'X'];
-
-    const markedBoards = markInactiveAndInactiveBoards(boards, 8);
-
-    assert.strictEqual(markedBoards[8].isActive, true, 'Board 8 was not won and therefore must be active');
-    markedBoards
-      .filter((board, index) => ![8].includes(index))
-      .map(board => assert.strictEqual(board.isActive, false, 'Every board except boards 8 must be inactive'));
-
-    assertBoardsAreDeepCopied(boards, markedBoards);
-  });
-
-  function assertBoardsAreDeepCopied(originalBoards, markedBoards) {
-    // eslint-disable-next-line no-param-reassign
-    markedBoards[0].squares[5] = 'X';
-    assert.notEqual(originalBoards[0].squares[5], 'X', 'Modifying marked boards squares should not modify original board squares');
   }
 });
 

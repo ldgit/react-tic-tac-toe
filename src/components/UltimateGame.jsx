@@ -2,70 +2,26 @@ import React from 'react';
 import Board from './Board';
 import Status from './Status';
 import {
-  calculateWinner,
   calculateUltimateWinner,
-  markInactiveAndInactiveBoards,
   getColorClass,
   jumpToPointInHistory,
 } from '../helpers';
+import Ultimate from '../game';
 
 export default class UltimateGame extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      history: [
-        {
-          // What's with the map? See https://stackoverflow.com/a/35578536
-          boards: Array(9).fill().map(() => ({ squares: Array(9).fill(null), isActive: true })),
-        },
-      ],
-      moveNumber: 0,
-      xIsNext: true,
-    };
+    this.state = Ultimate.getInitialState();
   }
 
   getCurrentPlayer() {
-    const { xIsNext } = this.state;
+    const { nextPlayer } = this.state;
 
-    return xIsNext ? 'X' : 'O';
+    return nextPlayer;
   }
 
   handleClick(boardIndex, squareIndex) {
-    const { xIsNext, history, moveNumber } = this.state;
-    const gameHistory = history.slice(0, moveNumber + 1);
-    const { boards } = gameHistory[gameHistory.length - 1];
-
-    if (calculateUltimateWinner(boards)) {
-      return;
-    }
-
-    if (!boards[boardIndex].isActive) {
-      return;
-    }
-
-    const newBoards = boards.slice();
-    if (newBoards[boardIndex].squares[squareIndex]) {
-      return;
-    }
-
-    if (calculateWinner(newBoards[boardIndex].squares)) {
-      return;
-    }
-
-    const squares = newBoards[boardIndex].squares.slice();
-    squares[squareIndex] = this.getCurrentPlayer();
-
-    // BUG: Modifies state of the previous original history element
-    console.error('before', gameHistory[gameHistory.length - 1].boards[boardIndex].squares);
-    newBoards[boardIndex].squares = squares;
-    console.error('after', gameHistory[gameHistory.length - 1].boards[boardIndex].squares);
-
-
-    this.setState({
-      history: gameHistory.concat([{ boards: markInactiveAndInactiveBoards(newBoards, squareIndex) }]),
-      moveNumber: gameHistory.length,
-      xIsNext: !xIsNext,
-    });
+    this.setState(previousState => Ultimate.playSquare(previousState, { boardIndex, squareIndex }));
   }
 
   jumpTo(moveNumber) {
@@ -87,10 +43,9 @@ export default class UltimateGame extends React.Component {
   }
 
   render() {
-    const { history, xIsNext, moveNumber } = this.state;
-    const { boards } = history[moveNumber];
+    const { boards, nextPlayer } = this.state;
     const winner = calculateUltimateWinner(boards);
-    const status = winner ? `Winner: ${winner}` : `Next player: ${xIsNext ? 'X' : 'O'}`;
+    const status = winner ? `Winner: ${winner}` : `Next player: ${nextPlayer}`;
 
     return (
       <div>
@@ -111,16 +66,13 @@ export default class UltimateGame extends React.Component {
         </div>
         <div className="game-info">
           <Status gameInfo={status} />
-          <ol>
-            {history.map(renderTimeTravelButton.bind(null, this.jumpTo.bind(this)))}
-          </ol>
         </div>
       </div>
     );
   }
 }
 
-
+// eslint-disable-next-line no-unused-vars
 function renderTimeTravelButton(onClickHandler, boards, moveNumber) {
   const description = moveNumber === 0 ? 'Go to game start' : `Go to move ${moveNumber}`;
   return (
