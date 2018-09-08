@@ -4,7 +4,6 @@ import Status from './Status';
 import {
   calculateUltimateWinner,
   getColorClass,
-  jumpToPointInHistory,
 } from '../helpers';
 import Ultimate from '../game';
 
@@ -12,6 +11,7 @@ export default class UltimateGame extends React.Component {
   constructor(props) {
     super(props);
     this.state = Ultimate.getInitialState();
+    this.jumpTo = this.jumpTo.bind(this);
   }
 
   getCurrentPlayer() {
@@ -24,8 +24,8 @@ export default class UltimateGame extends React.Component {
     this.setState(previousState => Ultimate.playSquare(previousState, { boardIndex, squareIndex }));
   }
 
-  jumpTo(moveNumber) {
-    this.setState(previousState => jumpToPointInHistory(previousState, moveNumber));
+  jumpTo(pointInHistory) {
+    this.setState(previousState => Ultimate.timeTravel(previousState, { pointInHistory }));
   }
 
   renderBoard(boardIndex, boards, testId) {
@@ -43,7 +43,8 @@ export default class UltimateGame extends React.Component {
   }
 
   render() {
-    const { boards, nextPlayer } = this.state;
+    const { nextPlayer, history } = this.state;
+    const { boards } = history[history.length - 1];
     const winner = calculateUltimateWinner(boards);
     const status = winner ? `Winner: ${winner}` : `Next player: ${nextPlayer}`;
 
@@ -66,18 +67,22 @@ export default class UltimateGame extends React.Component {
         </div>
         <div className="game-info">
           <Status gameInfo={status} />
+          <ol>
+            {renderTimeTravelButton(this.jumpTo, this.boards, -1)}
+            {history.map(renderTimeTravelButton.bind(null, this.jumpTo))}
+          </ol>
         </div>
       </div>
     );
   }
 }
 
-// eslint-disable-next-line no-unused-vars
 function renderTimeTravelButton(onClickHandler, boards, moveNumber) {
-  const description = moveNumber === 0 ? 'Go to game start' : `Go to move ${moveNumber}`;
+  const pointInHistory = moveNumber + 1;
+  const description = moveNumber === -1 ? 'Go to game start' : `Go to move ${pointInHistory}`;
   return (
     <li>
-      <button type="button" onClick={() => onClickHandler(moveNumber)}>{description}</button>
+      <button type="button" onClick={() => onClickHandler(pointInHistory)}>{description}</button>
     </li>
   );
 }

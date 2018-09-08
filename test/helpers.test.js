@@ -186,7 +186,7 @@ describe('getColorClass', () => {
   });
 });
 
-describe('jumpToPointInHistory', () => {
+describe('jumpToPointInHistory (todo move to game.test)', () => {
   let initialGameState;
 
   beforeEach(() => {
@@ -199,59 +199,19 @@ describe('jumpToPointInHistory', () => {
     };
   });
 
-  it('should not change anything if given initial game state and ordered to jump to game start', () => {
-    assert.deepEqual(jumpToPointInHistory(initialGameState, 0), initialGameState);
-  });
+  it('should not change anything if given initial game state and ordered to jump to game start');
 
   [-1, -5, '0', null, undefined].forEach((pointToJumpTo) => {
-    it(`should throw exception if ordered to jump to ${JSON.stringify(pointToJumpTo)} move index`, () => {
-      expect(() => jumpToPointInHistory(initialGameState, pointToJumpTo)).to.throw(TypeError, 'Invalid jump point:');
-    });
+    it(`should throw exception if ordered to jump to ${JSON.stringify(pointToJumpTo)} move index`);
   });
 
   [1, 2, 1000].forEach((pointToJumpTo) => {
-    it(`should throw exception if ordered to jump to point forward in time (${JSON.stringify(pointToJumpTo)})`, () => {
-      expect(() => jumpToPointInHistory(initialGameState, pointToJumpTo)).to.throw(TypeError, 'Attempted to jump forward in time');
-    });
+    it(`should throw exception if ordered to jump to point forward in time (${JSON.stringify(pointToJumpTo)})`);
   });
 
-  it('should jump to initial state but preserve first move in history', () => {
-    initialGameState.history.push({ boards: 'boards state after first move' });
-
-    const newGameState = jumpToPointInHistory(initialGameState, 0);
-
-    assert.equal(newGameState.history.length, 2);
-    assert.deepEqual(newGameState.history, initialGameState.history);
-    assert.strictEqual(newGameState.moveNumber, 0);
-    assert.strictEqual(newGameState.xIsNext, true, 'X player should be next');
-  });
-
-  it('should jump to first move state but preserve the second move in history', () => {
-    initialGameState.history.push({ boards: 'boards state after first move' });
-    initialGameState.history.push({ boards: 'boards state after second move' });
-
-    const newGameState = jumpToPointInHistory(initialGameState, 1);
-
-    assert.equal(newGameState.history.length, 3);
-    assert.deepEqual(newGameState.history, initialGameState.history);
-    assert.strictEqual(newGameState.moveNumber, 1, 'wrong move number');
-    assert.strictEqual(newGameState.xIsNext, false, 'O player should be next');
-  });
-
-  it('should jump to second move state but also preserve all moves after that one', () => {
-    initialGameState.history.push({ boards: 'boards state after first move' });
-    initialGameState.history.push({ boards: 'boards state after second move' });
-    initialGameState.history.push({ boards: 'boards state after third move' });
-    initialGameState.history.push({ boards: 'boards state after fourth move' });
-    initialGameState.history.push({ boards: 'boards state after fifth move' });
-
-    const newGameState = jumpToPointInHistory(initialGameState, 2);
-
-    assert.equal(newGameState.history.length, 6);
-    assert.deepEqual(newGameState.history, initialGameState.history);
-    assert.strictEqual(newGameState.moveNumber, 2, 'wrong move number');
-    assert.strictEqual(newGameState.xIsNext, true, 'X player should be next');
-  });
+  it('should jump to initial state but preserve first move in history');
+  it('should jump to first move state but preserve the second move in history');
+  it('should jump to second move state but also preserve all moves after that one');
 });
 
 
