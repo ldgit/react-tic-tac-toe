@@ -12,17 +12,17 @@ function playSquare(oldState, { boardIndex, squareIndex }) {
     return newState;
   }
 
-  let aSquareWasPlayed = false;
   const boardToPlay = currentBoards[boardIndex];
-  if (boardToPlay.isActive && boardToPlay.squares[squareIndex] === null && !calculateWinner(boardToPlay.squares)) {
-    aSquareWasPlayed = true;
-    boardToPlay.squares[squareIndex] = newState.nextPlayer;
-  }
+  const aValidSquareWasPlayed = boardToPlay.isActive
+    && boardToPlay.squares[squareIndex] === null
+    && !calculateWinner(boardToPlay.squares);
 
-  if (!aSquareWasPlayed) {
+  if (!aValidSquareWasPlayed) {
     // Nothing changes in this case
     return newState;
   }
+
+  boardToPlay.squares[squareIndex] = newState.nextPlayer;
 
   const boardsWithUpdatedActiveStatus = currentBoards.map((board, index) => {
     const isBoardActive = index === parseInt(squareIndex, 10);
@@ -36,11 +36,9 @@ function playSquare(oldState, { boardIndex, squareIndex }) {
   newState.history.push({ boards: boardsWithUpdatedActiveStatus });
 
   newState.nextPlayer = getNextPlayer({ boardIndex, squareIndex }, currentBoards, oldState);
-  if (aSquareWasPlayed) {
-    newState.history = newState.history.slice(0, oldState.pointInHistory);
-    newState.history.push({ boards: currentBoards });
-    newState.pointInHistory += 1;
-  }
+  newState.history = newState.history.slice(0, oldState.pointInHistory);
+  newState.history.push({ boards: currentBoards });
+  newState.pointInHistory += 1;
 
   return newState;
 }
