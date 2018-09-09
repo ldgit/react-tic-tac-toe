@@ -79,7 +79,7 @@ export default class UltimateGame extends React.Component {
 function renderTimeTravelButton(onClickHandler, boardsObject, moveNumber) {
   const description = moveNumber === 0 ? 'Go to game start' : `Go to move ${moveNumber}`;
   return (
-    <li>
+    <li key={moveNumber}>
       <button type="button" onClick={() => onClickHandler(moveNumber)}>{description}</button>
     </li>
   );
