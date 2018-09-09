@@ -289,10 +289,19 @@ describe('Tic-tac-toe game', () => {
       assertBoardIsGreen(centerMiddleBoard);
     });
 
-    it.skip('simple time travel: X wins, then back three turns, then continue playing', () => {
+    it('simple time travel: play one move, then go to game start, then play a different move', () => {
+      const topLeftBoard = sel(app, 'topLeftBoard');
+      clickEmptySquare(sel(topLeftBoard, 'bottomRightSquare'));
+      click(selectByText(app, 'button', 'Go to game start'));
+      clickEmptySquare(sel(topLeftBoard, 'bottomRightSquare')).assertIsFilledWith('X');
+    });
+
+    it('time travel: X wins, then back three turns, then continue playing', () => {
       const bottomLeftBoard = sel(app, 'bottomLeftBoard');
       const bottomRightBoard = sel(app, 'bottomRightBoard');
       const topRightBoard = sel(app, 'topRightBoard');
+      const centerMiddleBoard = sel(app, 'centerMiddleBoard');
+      const centerLeftBoard = sel(app, 'centerLeftBoard');
 
       XWinsIn23Moves();
       assertGameStatus('Winner', 'X');
@@ -302,29 +311,33 @@ describe('Tic-tac-toe game', () => {
       assert.strictEqual(sel(bottomRightBoard, 'centerMiddleSquare').textContent, '', 'Square filled in 23. move must not be filled');
       assert.strictEqual(sel(topRightBoard, 'bottomRightSquare').textContent, '', 'Square filled in 22. move must not be filled');
       assert.strictEqual(sel(bottomRightBoard, 'topRightSquare').textContent, '', 'Square filled in 21. move must not be filled');
+
       assertGameStatus('Next player', 'X');
 
-      clickEmptySquare(sel(topRightBoard, 'bottomRightSquare')).assertIsFilledWith('X');
-      assertGameStatus('Next player', 'Y');
-      clickEmptySquare(sel(bottomRightBoard, 'centerMiddleSquare')).assertIsFilledWith('Y');
-      // clickSquare(sel(bottomLeftBoard, 'bottomRightSquare')).
+      clickEmptySquare(sel(bottomRightBoard, 'centerMiddleSquare')).assertIsFilledWith('X');
+      // Center middle board already won by X, so O can play any active board
+      assertGameStatus('Next player', 'O');
+      clickEmptySquare(sel(centerMiddleBoard, 'bottomRightSquare')).assertIsFilledWith('');
+      assertGameStatus('Next player', 'O', 'Next player is still "O" because center middle board is won');
+      clickEmptySquare(sel(centerLeftBoard, 'bottomRightSquare')).assertIsFilledWith('O');
     });
 
-    it.skip('time travel: X wins in 23. moves, go to game start, Y wins in 24 moves', () => {
+    it('time travel: X wins in 23. moves, go to game start, Y wins in 24 moves', () => {
       playGameWhereXWins();
       click(selectByText(app, 'button', 'Go to game start'));
       playGameWhereOWins();
     });
 
-    it.skip('time travel: all time travel buttons must be preserved after they are clicked until next move is played', () => {
+    // eslint-disable-next-line max-len
+    it('time travel: all time travel buttons must be preserved after they are clicked until next move is played', () => {
       playGameWhereXWins();
       click(selectByText(app, 'button', 'Go to game start'));
       click(selectByText(app, 'button', 'Go to move 20'));
       click(selectByText(app, 'button', 'Go to move 18'));
       click(selectByText(app, 'button', 'Go to game start'));
-      clickEmptySquare(sel(app, 'centerMiddleBoard'), 'centerMiddleSquare').assertIsFilledWith('X');
-      assert.strictEqual(selectByText(app, 'button', 'Go to move 20'), null, 'Button "Go to move 20" should no longer exist');
-      assert.strictEqual(selectByText(app, 'button', 'Go to move 1'), null, 'Button "Go to move 1" should no longer exist');
+      clickEmptySquare(sel(sel(app, 'centerMiddleBoard'), 'centerMiddleSquare')).assertIsFilledWith('X');
+      assert.strictEqual(selectByText(app, 'button', 'Go to move 20'), null, 'Button "Go to move 20" should not render');
+      assert.strictEqual(selectByText(app, 'button', 'Go to move 2'), null, 'Button "Go to move 2" should not render');
     });
 
     it('time travel re-enables previously won local-board');

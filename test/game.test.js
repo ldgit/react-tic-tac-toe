@@ -180,17 +180,13 @@ describe('Ultimate.playSquare', () => {
     assert.deepEqual(fourthXMoveState, thirdOMoveState);
   });
 
-  describe.skip('history and time travel', () => {
-    it('initial state should have current boards as first history element', () => {
-      assert.deepEqual(initialState.history[0], getCurrentBoards(initialState));
-    });
-
-    it('valid move should push previous board state to history', () => {
+  describe('history and time travel', () => {
+    it('valid move should push new board state to history', () => {
       const newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: 8 });
-      assert.deepEqual(newState.history[0], getCurrentBoards(initialState));
 
+      assert.deepEqual(newState.history[0].boards, getCurrentBoards(initialState), 'initial boards are not the first element in history, did you deep copy the boards (and their squares) when creating latest history entry?');
       assert.deepEqual(newState.history.length, 2, 'new state boards missing from history');
-      assert.deepEqual(newState.history[1], getCurrentBoards(newState));
+      assert.deepEqual(newState.history[1].boards, getCurrentBoards(newState));
     });
 
     it('valid move should increment pointInHistory in state', () => {
@@ -202,66 +198,77 @@ describe('Ultimate.playSquare', () => {
       assert.equal(currentState.pointInHistory, 2);
     });
 
-    it('invalid move should not add more entries to history');
+    it('invalid move should not add more entries to history', () => {
+      const stateBeforeInvalidMove = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: 8 });
+      const stateAfterInvalidMove = Ultimate.playSquare(stateBeforeInvalidMove, { boardIndex: 7, squareIndex: 4 });
 
-    // it('history entries must remain unchanged throughout play');
+      assert.equal(stateAfterInvalidMove.history.length, 2, 'expecting no new entries in history');
+      assert.deepEqual(getCurrentBoards(stateAfterInvalidMove), getCurrentBoards(stateBeforeInvalidMove));
+    });
+
+    it('changing one history entry should not change any others');
 
     describe('jump to a point in history', () => {
-      it('should set boards to that history state', () => {
+      it('should change pointInHistory property', () => {
         const newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: 8 });
         const stateAfterTimeTravel = Ultimate.timeTravel(newState, { pointInHistory: 0 });
-
-        assert.deepEqual(getCurrentBoards(stateAfterTimeTravel), getCurrentBoards(initialState));
+        assert.strictEqual(stateAfterTimeTravel.pointInHistory, 0);
       });
 
-      it('when jumping to present point in history, should leave boards unchanged', () => {
+      it('should change next player accordingly', () => {
+        const firstMoveState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: 8 });
+        const secondMoveState = Ultimate.playSquare(firstMoveState, { boardIndex: 1, squareIndex: 8 });
+
+        assert.equal(Ultimate.timeTravel(secondMoveState, { pointInHistory: 0 }).nextPlayer, 'X');
+        assert.equal(Ultimate.timeTravel(secondMoveState, { pointInHistory: 1 }).nextPlayer, 'O');
+      });
+
+      it('should return a deep copy of input state', () => {
         const newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: 8 });
-        const stateAfterTimeTravel = Ultimate.timeTravel(newState, { pointInHistory: 1 });
 
-        assert.deepEqual(getCurrentBoards(stateAfterTimeTravel), getCurrentBoards(newState));
-
-        assertImutability(stateAfterTimeTravel, newState);
-      });
-
-
-      it.skip('when jumping back to future point in history, should set boards to that point', () => {
-        let newState;
-        newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: '8' });
-        newState = Ultimate.playSquare(newState, { boardIndex: 8, squareIndex: '7' });
-        const lastStateBeforeTimeTravel = Ultimate.playSquare(newState, { boardIndex: 7, squareIndex: '0' });
-
-        const stateAfterTimeTravelToPast = Ultimate.timeTravel(lastStateBeforeTimeTravel, { pointInHistory: 1 });
-        const stateAfterTimeTravelBackToFuture = Ultimate.timeTravel(stateAfterTimeTravelToPast, { pointInHistory: 3 });
-
-        assert.deepEqual(getCurrentBoards(lastStateBeforeTimeTravel), getCurrentBoards(stateAfterTimeTravelBackToFuture));
-      });
-
-      it('should set correct next player', () => {
-        const newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: 8 });
         const stateAfterTimeTravel = Ultimate.timeTravel(newState, { pointInHistory: 0 });
 
-        assert.deepEqual(stateAfterTimeTravel.nextPlayer, 'X');
-
-        const stateAfterTimeTravelingToLastMove = Ultimate.timeTravel(newState, { pointInHistory: 1 });
-        assert.deepEqual(stateAfterTimeTravelingToLastMove.nextPlayer, 'O');
+        stateAfterTimeTravel.pointInHistory = 1984;
+        stateAfterTimeTravel.history[0].boards[4].squares[1] = 'modified in state returned by time travel, should not be in previus state';
+        assert.strictEqual(newState.pointInHistory, 1, 'time travel must return a *copy* of input state');
+        expect(newState.history[0].boards[4].squares[1]).to.equal(null, 'time travel must return a *deep copy* of input state');
       });
 
-      it('should save current pointInHistory in state', () => {
-        const newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: 8 });
-        const stateAfterTimeTravel = Ultimate.timeTravel(newState, { pointInHistory: 0 });
+      it(
+        'when time traveling to past and then playing a move, should discard all history after that time travel point',
+        () => {
+          const moveOneState = Ultimate.playSquare(initialState, { boardIndex: 4, squareIndex: 0 });
+          const moveTwoState = Ultimate.playSquare(moveOneState, { boardIndex: 0, squareIndex: 2 });
+          const moveThreeState = Ultimate.playSquare(moveTwoState, { boardIndex: 2, squareIndex: 3 });
 
-        assert.deepEqual(stateAfterTimeTravel.pointInHistory, 0);
+          const stateAfterTimeTravelToMoveOne = Ultimate.timeTravel(moveThreeState, { pointInHistory: 1 });
+          const finalState = Ultimate.playSquare(stateAfterTimeTravelToMoveOne, { boardIndex: 0, squareIndex: 3 });
+
+          assert.deepEqual(finalState.history.slice(0, 2), moveOneState.history, 'First to history entries equal to move one state');
+          assert.deepEqual(finalState.history.length, 3, 'History after time travel and one move should have only three entries');
+        },
+      );
+
+      it('when time traveling to past, all rules related to that move apply', () => {
+        const moveOneState = Ultimate.playSquare(initialState, { boardIndex: 4, squareIndex: 0 });
+        const moveTwoState = Ultimate.playSquare(moveOneState, { boardIndex: 0, squareIndex: 2 });
+        const moveThreeState = Ultimate.playSquare(moveTwoState, { boardIndex: 2, squareIndex: 3 });
+
+        const stateAfterTimeTravelToMoveOne = Ultimate.timeTravel(moveThreeState, { pointInHistory: 1 });
+        const invalidMoveState = Ultimate.playSquare(stateAfterTimeTravelToMoveOne, { boardIndex: 1, squareIndex: 3 });
+
+        assert.deepEqual(invalidMoveState, stateAfterTimeTravelToMoveOne, 'nothing must change after time travel followed by invalid move');
       });
 
-      it('modifying time traveled board state does not change history', () => {
-        const newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: 8 });
-        const stateAfterTimeTravel = Ultimate.timeTravel(newState, { pointInHistory: 0 });
+      it('Play one move, then back to game start, then repeat the move. Next player should be O.', () => {
+        const moveOneState = Ultimate.playSquare(initialState, { boardIndex: 4, squareIndex: 0 });
+        const backToGameStart = Ultimate.timeTravel(moveOneState, { pointInHistory: 0 });
+        const repeatedMoveOneState = Ultimate.playSquare(backToGameStart, { boardIndex: 4, squareIndex: 0 });
 
-        assertImutability(initialState, stateAfterTimeTravel);
-        assertImutability(newState, stateAfterTimeTravel);
+        assert.equal(repeatedMoveOneState.nextPlayer, 'O');
       });
 
-      it('should not delete history entries', () => {
+      it.skip('should not delete history entries', () => {
         const midState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: '8' });
         const stateBeforeTimeTravel = Ultimate.playSquare(midState, { boardIndex: 8, squareIndex: '5' });
         const stateAfterTimeTravel = Ultimate.timeTravel(stateBeforeTimeTravel, { pointInHistory: 0 });
@@ -270,7 +277,7 @@ describe('Ultimate.playSquare', () => {
         assert.deepEqual(stateAfterTimeTravel.history, stateBeforeTimeTravel.history);
       });
 
-      it('after playing a new valid move, all history after that move is discarded', () => {
+      it.skip('after playing a new valid move, all history after that move is discarded', () => {
         const midState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: '8' });
         const stateBeforeTimeTravel = Ultimate.playSquare(midState, { boardIndex: 8, squareIndex: '5' });
 
@@ -283,10 +290,6 @@ describe('Ultimate.playSquare', () => {
       it('playing an invalid move, history is unchanged (already tested in tests marked with *)', () => {});
     });
   });
-
-  function assertHistoryImmutability(oldBoards, newBoards) {
-
-  }
 
   function assertImutability(oldState, newState) {
     /* eslint-disable no-param-reassign */

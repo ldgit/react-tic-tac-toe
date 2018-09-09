@@ -43,8 +43,8 @@ export default class UltimateGame extends React.Component {
   }
 
   render() {
-    const { nextPlayer, history } = this.state;
-    const { boards } = history[history.length - 1];
+    const { nextPlayer, history, pointInHistory } = this.state;
+    const { boards } = history[pointInHistory];
     const winner = calculateUltimateWinner(boards);
     const status = winner ? `Winner: ${winner}` : `Next player: ${nextPlayer}`;
 
@@ -68,7 +68,6 @@ export default class UltimateGame extends React.Component {
         <div className="game-info">
           <Status gameInfo={status} />
           <ol>
-            {renderTimeTravelButton(this.jumpTo, this.boards, -1)}
             {history.map(renderTimeTravelButton.bind(null, this.jumpTo))}
           </ol>
         </div>
@@ -77,12 +76,11 @@ export default class UltimateGame extends React.Component {
   }
 }
 
-function renderTimeTravelButton(onClickHandler, boards, moveNumber) {
-  const pointInHistory = moveNumber + 1;
-  const description = moveNumber === -1 ? 'Go to game start' : `Go to move ${pointInHistory}`;
+function renderTimeTravelButton(onClickHandler, boardsObject, moveNumber) {
+  const description = moveNumber === 0 ? 'Go to game start' : `Go to move ${moveNumber}`;
   return (
     <li>
-      <button type="button" onClick={() => onClickHandler(pointInHistory)}>{description}</button>
+      <button type="button" onClick={() => onClickHandler(moveNumber)}>{description}</button>
     </li>
   );
 }

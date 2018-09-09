@@ -1,10 +1,8 @@
 import * as assert from 'assert';
-import { expect } from 'chai';
 import {
   calculateWinner,
   calculateUltimateWinner,
   getColorClass,
-  jumpToPointInHistory,
 } from '../src/helpers';
 
 describe('calculateWinner', () => {
