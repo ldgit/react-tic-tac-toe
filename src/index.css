@@ -15,13 +15,28 @@ ol, ul {
   padding-left: 30px;
 }
 
-.board-row {
+.table {
+  display: table;
+}
+
+.table-row {
   display: table-row;
 }
 
-.board-cell {
-  border: 2px solid #fff;
+.table-column {
+  display: table-column;
+}
+
+.table-cell {
   display: table-cell;
+}
+
+.table-large-padding {
+  padding-left: 50px;
+}
+
+.table-board-border {
+  border: 2px solid #fff;
 }
 
 .status {

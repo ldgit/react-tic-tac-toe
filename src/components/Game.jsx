@@ -1,5 +1,4 @@
 import React from 'react';
-import Title from './Title';
 import Board from './Board';
 import Status from './Status';
 import { calculateWinner } from '../helpers';
@@ -61,16 +60,13 @@ export default class Game extends React.Component {
     });
 
     return (
-      <div>
-        <Title name="React" />
-        <div className="game">
-          <div className="game-board">
-            <Board squares={squares} onClick={i => this.handleClick(i)} />
-          </div>
-          <div className="game-info">
-            <Status gameInfo={status} />
-            <ol>{moves}</ol>
-          </div>
+      <div className="game">
+        <div className="game-board">
+          <Board squares={squares} onClick={i => this.handleClick(i)} />
+        </div>
+        <div className="game-info">
+          <Status gameInfo={status} />
+          <ol>{moves}</ol>
         </div>
       </div>
     );

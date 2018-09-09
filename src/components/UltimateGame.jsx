@@ -30,7 +30,7 @@ export default class UltimateGame extends React.Component {
 
   renderBoard(boardIndex, boards, testId) {
     const currentBoard = boards[boardIndex];
-    const boardClass = `board-cell ${getColorClass(currentBoard)}`;
+    const boardClass = `table-cell table-board-border ${getColorClass(currentBoard)}`;
 
     return (
       <Board
