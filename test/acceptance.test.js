@@ -275,7 +275,7 @@ describe('Tic-tac-toe game', () => {
       clickEmptySquare(sel(centerMiddleBoard, 'bottomRightSquare')).assertIsFilledWith('O');
     });
 
-    it('should color all non-playable boards light red, all won boards green, and current board white', () => {
+    it('should color all non-playable boards light red, all won boards green, and playable boards white', () => {
       const allBoards = getAllBoardTestIds().map(data => sel(app, data.boardTestId));
       allBoards.forEach(assertBoardIsWhite);
 
@@ -347,8 +347,14 @@ describe('Tic-tac-toe game', () => {
       assert.strictEqual(selectByText(app, 'button', 'Go to move 2'), null, 'Button "Go to move 2" should not render');
     });
 
+    it('when game is won, disable further inputs on all local boards', () => {
+      playGameWherePlayerOneWins({});
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith('');
+      assertGameStatus('Winner', 'X');
+    });
+
     it('time travel re-enables previously won local-board');
-    it('when game is won, disable further inputs on all local boards');
   });
 
   function XWinsIn23Moves() {
