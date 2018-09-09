@@ -10,6 +10,11 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[chunkhash].js',
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist',
