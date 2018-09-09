@@ -180,7 +180,7 @@ describe('Ultimate.playSquare', () => {
     assert.deepEqual(fourthXMoveState, thirdOMoveState);
   });
 
-  describe('history and time travel', () => {
+  context('history and time travel', () => {
     it('valid move should push new board state to history', () => {
       const newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: 8 });
 
@@ -208,7 +208,7 @@ describe('Ultimate.playSquare', () => {
 
     it('changing one history entry should not change any others');
 
-    describe('jump to a point in history', () => {
+    context('jump to a point in history', () => {
       it('should change pointInHistory property', () => {
         const newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: 8 });
         const stateAfterTimeTravel = Ultimate.timeTravel(newState, { pointInHistory: 0 });

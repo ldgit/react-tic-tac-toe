@@ -9,6 +9,7 @@ describe('Tic-tac-toe game', () => {
   let document;
   let app;
   let window;
+  let originalGlobalWindow;
 
   beforeEach(() => {
     ({ window } = new JSDOM(`<!DOCTYPE html>
@@ -22,6 +23,12 @@ describe('Tic-tac-toe game', () => {
     ({ document } = window);
     app = document.createElement('div');
     document.body.appendChild(app);
+    originalGlobalWindow = global.window;
+    global.window = window;
+  });
+
+  afterEach(() => {
+    global.window = originalGlobalWindow;
   });
 
   context('standard tic-tac-toe', () => {
