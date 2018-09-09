@@ -15,12 +15,6 @@ export default class UltimateGame extends React.Component {
     this.jumpTo = this.jumpTo.bind(this);
   }
 
-  getCurrentPlayer() {
-    const { nextPlayer } = this.state;
-
-    return nextPlayer;
-  }
-
   handleClick(boardIndex, squareIndex) {
     this.setState(previousState => Ultimate.playSquare(previousState, { boardIndex, squareIndex }));
   }

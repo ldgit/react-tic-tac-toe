@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-module.exports = {
+module.exports = (env, argv) => ({
   entry: {
     main: './src/index.jsx',
   },
@@ -15,7 +15,7 @@ module.exports = {
       chunks: 'all',
     },
   },
-  devtool: 'inline-source-map',
+  devtool: argv.mode === 'development' ? 'inline-source-map' : 'none',
   devServer: {
     contentBase: './dist',
   },
@@ -46,4 +46,4 @@ module.exports = {
       title: 'Tic-Tac-Toe',
     }),
   ],
-};
+});
