@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "React intro tutorial (https://reactjs.org/tutorial/tutorial.html)",
   "main": "index.js",
+  "homepage": "https://ldgit.github.io/react-tic-tac-toe/",
   "scripts": {
     "test": "mocha --require @babel/register",
     "test:watch": "argus",
@@ -10,7 +11,8 @@
     "build:prod": "webpack --mode=production",
     "start": "webpack-dev-server --open --mode=development",
     "lint": "eslint --ext .jsx,.js ./",
-    "test:all": "npm run lint &&  npm t"
+    "test:all": "npm run lint &&  npm t",
+    "deploy": "npm run test:all && npm run build:prod && rm -rf docs/* && cp -R dist/. docs/"
   },
   "author": "Danko Lučić",
   "license": "MIT",
