@@ -184,35 +184,6 @@ describe('getColorClass', () => {
   });
 });
 
-describe('jumpToPointInHistory (todo move to game.test)', () => {
-  let initialGameState;
-
-  beforeEach(() => {
-    initialGameState = {
-      history: [
-        { boards: 'initial boards state' },
-      ],
-      moveNumber: 0,
-      xIsNext: true,
-    };
-  });
-
-  it('should not change anything if given initial game state and ordered to jump to game start');
-
-  [-1, -5, '0', null, undefined].forEach((pointToJumpTo) => {
-    it(`should throw exception if ordered to jump to ${JSON.stringify(pointToJumpTo)} move index`);
-  });
-
-  [1, 2, 1000].forEach((pointToJumpTo) => {
-    it(`should throw exception if ordered to jump to point forward in time (${JSON.stringify(pointToJumpTo)})`);
-  });
-
-  it('should jump to initial state but preserve first move in history');
-  it('should jump to first move state but preserve the second move in history');
-  it('should jump to second move state but also preserve all moves after that one');
-});
-
-
 function winningSquares() {
   return ['O', null, null, 'O', null, null, 'O', null, null];
 }
