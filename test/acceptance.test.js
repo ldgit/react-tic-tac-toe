@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { expect } from 'chai';
 import React from 'react';
 import ReactDom from 'react-dom';
 import { JSDOM } from 'jsdom';
@@ -103,6 +104,17 @@ describe('Tic-tac-toe game', () => {
 
       clickEmptySquare(sel(app, 'centerLeftSquare')).assertIsFilledWith('');
       clickEmptySquare(sel(app, 'bottomMiddleSquare')).assertIsFilledWith('');
+    });
+
+    it('time travel: highlight time travel button for current move', () => {
+      expect(selectByText(app, 'button', 'Go to game start').className).to.have.string('current-move-button');
+      clickEmptySquare(sel(app, 'centerMiddleSquare')).assertIsFilledWith('X');
+      expect(selectByText(app, 'button', 'Go to game start').className).to.not.have.string('current-move-button');
+      expect(selectByText(app, 'button', 'Go to move 1').className).to.have.string('current-move-button');
+
+      click(selectByText(app, 'button', 'Go to game start'));
+      expect(selectByText(app, 'button', 'Go to game start').className).to.have.string('current-move-button');
+      expect(selectByText(app, 'button', 'Go to move 1').className).to.not.have.string('current-move-button');
     });
 
     it('time travel: X wins, then time travel two moves back, then O wins', () => {
@@ -345,6 +357,18 @@ describe('Tic-tac-toe game', () => {
       clickEmptySquare(sel(sel(app, 'centerMiddleBoard'), 'centerMiddleSquare')).assertIsFilledWith('X');
       assert.strictEqual(selectByText(app, 'button', 'Go to move 20'), null, 'Button "Go to move 20" should not render');
       assert.strictEqual(selectByText(app, 'button', 'Go to move 2'), null, 'Button "Go to move 2" should not render');
+    });
+
+    it('time travel: highlight time travel button for current move', () => {
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      expect(selectByText(app, 'button', 'Go to game start').className).to.have.string('current-move-button');
+      clickEmptySquare(sel(topMiddleBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+      expect(selectByText(app, 'button', 'Go to game start').className).to.not.have.string('current-move-button');
+      expect(selectByText(app, 'button', 'Go to move 1').className).to.have.string('current-move-button');
+
+      click(selectByText(app, 'button', 'Go to game start'));
+      expect(selectByText(app, 'button', 'Go to game start').className).to.have.string('current-move-button');
+      expect(selectByText(app, 'button', 'Go to move 1').className).to.not.have.string('current-move-button');
     });
 
     it('when game is won, disable further inputs on all local boards', () => {

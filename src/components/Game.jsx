@@ -1,6 +1,7 @@
 import React from 'react';
 import Board from './Board';
 import Status from './Status';
+import TimeTravelButton from './TimeTravelButton';
 import { calculateWinner } from '../helpers';
 
 export default class Game extends React.Component {
@@ -51,10 +52,13 @@ export default class Game extends React.Component {
     const status = winner ? `Winner: ${winner}` : `Next player: ${this.getNextValue()}`;
     const moves = history.map((step, moveIndex) => {
       const description = moveIndex ? `Go to move ${moveIndex}` : 'Go to game start';
+
       return (
         // eslint-disable-next-line react/no-array-index-key
         <li key={moveIndex}>
-          <button type="button" onClick={() => { this.jumpTo(moveIndex); }}>{description}</button>
+          <TimeTravelButton highlight={stepNumber === moveIndex} onClick={() => { this.jumpTo(moveIndex); }}>
+            {description}
+          </TimeTravelButton>
         </li>
       );
     });

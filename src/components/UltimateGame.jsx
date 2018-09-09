@@ -1,6 +1,7 @@
 import React from 'react';
 import Board from './Board';
 import Status from './Status';
+import TimeTravelButton from './TimeTravelButton';
 import {
   calculateUltimateWinner,
   getColorClass,
@@ -68,7 +69,7 @@ export default class UltimateGame extends React.Component {
         <div className="game-info">
           <Status gameInfo={status} />
           <ol>
-            {history.map(renderTimeTravelButton.bind(null, this.jumpTo))}
+            {history.map(renderTimeTravelButton.bind(null, this.jumpTo, pointInHistory))}
           </ol>
         </div>
       </div>
@@ -76,11 +77,14 @@ export default class UltimateGame extends React.Component {
   }
 }
 
-function renderTimeTravelButton(onClickHandler, boardsObject, moveNumber) {
+function renderTimeTravelButton(onClickHandler, pointInHistory, boardsObject, moveNumber) {
   const description = moveNumber === 0 ? 'Go to game start' : `Go to move ${moveNumber}`;
+
   return (
     <li key={moveNumber}>
-      <button type="button" onClick={() => onClickHandler(moveNumber)}>{description}</button>
+      <TimeTravelButton onClick={() => onClickHandler(moveNumber)} highlight={pointInHistory === moveNumber}>
+        {description}
+      </TimeTravelButton>
     </li>
   );
 }

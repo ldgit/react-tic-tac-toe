@@ -15,6 +15,38 @@ ol, ul {
   padding-left: 30px;
 }
 
+.move-button {
+  background-color: white;
+  border-color: #AAAAAA;
+  border: solid 1px;
+  color: #AAAAAA;
+  padding: 3px 30px;
+  margin-bottom: 3px;
+  text-align: center;
+  box-shadow: none;
+}
+
+.current-move-button {
+  background-color: white;
+  color: #111111;
+  border: solid 1px;
+  border-color: #111111;
+  padding: 3px 30px;
+  margin-bottom: 3px;
+  text-align: center;
+  box-shadow: none;
+}
+
+.current-move-button:hover {
+  background-color: #111111;
+  color: white;
+}
+
+.move-button:hover {
+  background-color: #AAAAAA;
+  color: white;
+}
+
 .table {
   display: table;
 }
