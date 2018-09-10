@@ -43,7 +43,7 @@ describe('Tic-tac-toe game', () => {
 
       click(sel(app, 'centerMiddleSquare'));
 
-      assert.equal(sel(app, 'gameStatus').textContent, 'Next player: O');
+      assertGameStatus('Next player', 'O');
       assert.equal(sel(app, 'centerMiddleSquare').textContent, 'X');
     });
 
@@ -512,7 +512,8 @@ describe('Tic-tac-toe game', () => {
   }
 
   function assertGameStatus(statusType, player) {
-    assert.equal(sel(app, 'gameStatus').textContent, `${statusType}: ${player}`);
+    expect(sel(app, 'gameStatus').textContent).to.have.string(statusType);
+    expect(sel(app, 'gameStatus').querySelector('button').textContent).to.equal(player);
   }
 
   function assertBoardIsWhite(board) {

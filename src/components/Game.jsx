@@ -49,7 +49,6 @@ export default class Game extends React.Component {
     const { history, stepNumber } = this.state;
     const { squares } = history[stepNumber];
     const winner = calculateWinner(squares);
-    const status = winner ? `Winner: ${winner}` : `Next player: ${this.getNextValue()}`;
     const moves = history.map((step, moveIndex) => {
       const description = moveIndex ? `Go to move ${moveIndex}` : 'Go to game start';
 
@@ -69,7 +68,7 @@ export default class Game extends React.Component {
           <Board squares={squares} onClick={i => this.handleClick(i)} />
         </div>
         <div className="game-info">
-          <Status gameInfo={status} />
+          <Status description={winner ? 'Winner' : 'Next player'} player={winner || this.getNextValue()} />
           <ol>{moves}</ol>
         </div>
       </div>

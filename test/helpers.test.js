@@ -4,6 +4,7 @@ import {
   calculateUltimateWinner,
   getColorClass,
   getSquareClasses,
+  getPlayerEmblemClasses,
 } from '../src/helpers';
 
 describe('calculateWinner', () => {
@@ -197,6 +198,21 @@ describe('getSquareClasses', () => {
 
   it('should return square-vue-icon and square classes if given value of X and specialIcons true', () => {
     assert.equal(getSquareClasses({ value: 'O', specialIcons: true }), 'square-react-icon square');
+  });
+});
+
+describe('getPlayerEmblemClasses', () => {
+  it('should return empty string if given value of X or O and specialIcons false', () => {
+    assert.strictEqual(getPlayerEmblemClasses({ value: 'X', specialIcons: false }), 'no-icon');
+    assert.strictEqual(getPlayerEmblemClasses({ value: 'O', specialIcons: false }), 'no-icon');
+  });
+
+  it('should return square-vue-icon and square classes if given value of X and specialIcons true', () => {
+    assert.equal(getPlayerEmblemClasses({ value: 'X', specialIcons: true }), 'vue-icon');
+  });
+
+  it('should return square-vue-icon and square classes if given value of X and specialIcons true', () => {
+    assert.equal(getPlayerEmblemClasses({ value: 'O', specialIcons: true }), 'react-icon');
   });
 });
 

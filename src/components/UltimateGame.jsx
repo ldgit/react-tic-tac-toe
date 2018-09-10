@@ -47,10 +47,11 @@ export default class UltimateGame extends React.Component {
   }
 
   render() {
-    const { nextPlayer, history, pointInHistory } = this.state;
+    const {
+      nextPlayer, history, pointInHistory, specialIcons,
+    } = this.state;
     const { boards } = history[pointInHistory];
     const winner = calculateUltimateWinner(boards);
-    const status = winner ? `Winner: ${winner}` : `Next player: ${nextPlayer}`;
 
     return (
       <div className="table">
@@ -72,7 +73,11 @@ export default class UltimateGame extends React.Component {
           </div>
         </div>
         <div className="game-info table-cell table-large-padding">
-          <Status gameInfo={status} />
+          <Status
+            description={winner ? 'Winner' : 'Next player'}
+            player={winner || nextPlayer}
+            specialIcons={specialIcons}
+          />
           <br />
           <button type="button" onClick={this.toggleSpecialIcons}>Vue vs. React?</button>
           <br />

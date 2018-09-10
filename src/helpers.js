@@ -68,3 +68,15 @@ export function getSquareClasses({ value, specialIcons }) {
 
   return 'square';
 }
+
+export function getPlayerEmblemClasses({ value, specialIcons }) {
+  if (value === 'X' && specialIcons) {
+    return 'vue-icon';
+  }
+
+  if (value === 'O' && specialIcons) {
+    return 'react-icon';
+  }
+
+  return 'no-icon';
+}
