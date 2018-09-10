@@ -379,6 +379,27 @@ describe('Tic-tac-toe game', () => {
     });
 
     it('time travel re-enables previously won local-board');
+
+    it('clicking on "Vue vs. React?" button toggles special mode', () => {
+      const specialModeToggle = selectByText(app, 'button', 'Vue vs. React?');
+      const topMiddleBoardCenterMiddleSquare = sel(sel(app, 'topMiddleBoard'), 'centerMiddleSquare');
+      const topMiddleBoardBottomMiddleSquare = sel(sel(app, 'centerMiddleBoard'), 'bottomMiddleSquare');
+      const unoccupiedSquare = sel(sel(app, 'bottomMiddleBoard'), 'centerMiddleSquare');
+      clickEmptySquare(topMiddleBoardCenterMiddleSquare).assertIsFilledWith('X');
+      clickEmptySquare(topMiddleBoardBottomMiddleSquare).assertIsFilledWith('O');
+      expect(topMiddleBoardCenterMiddleSquare.className).to.not.have.string('square-vue-icon', 'No icons shows up until user clicks "Vue vs. React?" button');
+      expect(topMiddleBoardCenterMiddleSquare.className).to.not.have.string('square-react-icon', 'No icons shows up until user clicks "Vue vs. React?" button');
+      expect(topMiddleBoardBottomMiddleSquare.className).to.not.have.string('square-vue-icon');
+      expect(topMiddleBoardBottomMiddleSquare.className).to.not.have.string('square-react-icon');
+      expect(unoccupiedSquare.className).to.not.have.string('square-vue-icon');
+      expect(unoccupiedSquare.className).to.not.have.string('square-react-icon');
+
+      click(specialModeToggle);
+      expect(topMiddleBoardCenterMiddleSquare.className).to.have.string('square-vue-icon', 'X player has Vue icon');
+      expect(topMiddleBoardBottomMiddleSquare.className).to.have.string('square-react-icon', 'O player has React icon');
+      expect(unoccupiedSquare.className).to.not.have.string('square-vue-icon');
+      expect(unoccupiedSquare.className).to.not.have.string('square-react-icon');
+    });
   });
 
   function XWinsIn23Moves() {

@@ -56,3 +56,15 @@ export function getColorClass(board) {
 
   return board.isActive ? '' : 'lightred-board';
 }
+
+export function getSquareClasses({ value, specialIcons }) {
+  if (value === 'X' && specialIcons) {
+    return 'square-vue-icon square';
+  }
+
+  if (value === 'O' && specialIcons) {
+    return 'square-react-icon square';
+  }
+
+  return 'square';
+}

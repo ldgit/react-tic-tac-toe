@@ -38,6 +38,12 @@ module.exports = (env, argv) => ({
           'css-loader',
         ],
       },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          'file-loader',
+        ],
+      },
     ],
   },
   plugins: [

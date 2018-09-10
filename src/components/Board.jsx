@@ -2,10 +2,10 @@ import React from 'react';
 import Square from './Square';
 
 export default function Board({
-  squares, onClick, testId, className,
+  squares, onClick, testId, className, specialIcons = false,
 }) {
   function renderSquare(i, squareTestId) {
-    return <Square value={squares[i]} onClick={() => onClick(i)} squareTestId={squareTestId} />;
+    return <Square value={squares[i]} onClick={() => onClick(i)} squareTestId={squareTestId} specialIcons={specialIcons} />;
   }
 
   return (

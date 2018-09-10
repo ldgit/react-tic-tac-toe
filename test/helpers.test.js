@@ -3,6 +3,7 @@ import {
   calculateWinner,
   calculateUltimateWinner,
   getColorClass,
+  getSquareClasses,
 } from '../src/helpers';
 
 describe('calculateWinner', () => {
@@ -181,6 +182,21 @@ describe('getColorClass', () => {
     const activeBoard = { squares: winningSquares(), isActive: true };
     assert.strictEqual(getColorClass(inactiveBoard), 'lightgreen-board');
     assert.strictEqual(getColorClass(activeBoard), 'lightgreen-board');
+  });
+});
+
+describe('getSquareClasses', () => {
+  it('should just return square if given value of X or O and specialIcons false', () => {
+    assert.equal(getSquareClasses({ value: 'X', specialIcons: false }), 'square');
+    assert.equal(getSquareClasses({ value: 'O', specialIcons: false }), 'square');
+  });
+
+  it('should return square-vue-icon and square classes if given value of X and specialIcons true', () => {
+    assert.equal(getSquareClasses({ value: 'X', specialIcons: true }), 'square-vue-icon square');
+  });
+
+  it('should return square-vue-icon and square classes if given value of X and specialIcons true', () => {
+    assert.equal(getSquareClasses({ value: 'O', specialIcons: true }), 'square-react-icon square');
   });
 });
 

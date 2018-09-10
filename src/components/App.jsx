@@ -5,15 +5,14 @@ import UltimateGame from './UltimateGame';
 
 export default function App() {
   return (
-    <div>
-      <Title name="React" />
-      <div className="table">
-        <div className="table-cell">
-          <UltimateGame />
-        </div>
-        <div className="table-cell table-large-padding">
-          <Game />
-        </div>
+    <div className="table">
+      <div className="table-cell table-small-padding">
+        <Title name="React" />
+        <UltimateGame />
+      </div>
+      <div className="table-cell table-large-padding">
+        <h2>The classic!</h2>
+        <Game />
       </div>
     </div>
   );

@@ -52,6 +52,7 @@ function getInitialState() {
     nextPlayer: 'X',
     history: [{ boards }],
     pointInHistory: 0,
+    specialIcons: false,
   };
 }
 
