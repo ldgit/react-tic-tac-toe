@@ -378,7 +378,24 @@ describe('Tic-tac-toe game', () => {
       assertGameStatus('Winner', 'X');
     });
 
-    it('time travel re-enables previously won local-board');
+    it('time travel re-enables previously won local-board', () => {
+      const topLeftBoard = sel(app, 'topLeftBoard');
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      const topRightBoard = sel(app, 'topRightBoard');
+
+      // X wins top left board (top horizontal) so that O is sent to that board
+      clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith('X');
+      clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith('O');
+      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith('X');
+
+      click(selectByText(app, 'button', 'Go to move 4'));
+      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith('X');
+
+      click(selectByText(app, 'button', 'Go to game start'));
+      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith('X');
+    });
 
     it('clicking on "Vue vs. React?" button toggles special mode on and off', () => {
       const specialModeToggle = selectByText(app, 'button', 'Vue vs. React?');
