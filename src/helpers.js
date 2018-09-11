@@ -50,13 +50,13 @@ export function calculateUltimateWinner(boards) {
 }
 
 export function getColorClass(board) {
-  let winner = calculateWinner(board.squares);
-  
-  if ('X' === winner) {
+  const winner = calculateWinner(board.squares);
+
+  if (winner === 'X') {
     return 'x-won-board';
   }
 
-  if ('O' === winner) {
+  if (winner === 'O') {
     return 'o-won-board';
   }
 
