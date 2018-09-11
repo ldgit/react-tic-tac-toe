@@ -12,6 +12,14 @@ body {
   background-color: MistyRose;
 }
 
+.x-won-board button {
+  background-color: #1A95DB;
+}
+
+.o-won-board button {
+  background-color: #FF5A5F;
+}
+
 ol, ul {
   padding-left: 30px;
 }

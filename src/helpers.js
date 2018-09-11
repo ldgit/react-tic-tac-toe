@@ -50,8 +50,14 @@ export function calculateUltimateWinner(boards) {
 }
 
 export function getColorClass(board) {
-  if (calculateWinner(board.squares)) {
-    return 'lightgreen-board';
+  let winner = calculateWinner(board.squares);
+  
+  if ('X' === winner) {
+    return 'x-won-board';
+  }
+
+  if ('O' === winner) {
+    return 'o-won-board';
   }
 
   return board.isActive ? '' : 'lightred-board';
