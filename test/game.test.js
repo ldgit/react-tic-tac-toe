@@ -268,7 +268,7 @@ describe('Ultimate.playSquare', () => {
         assert.equal(repeatedMoveOneState.nextPlayer, 'O');
       });
 
-      it.skip('should not delete history entries', () => {
+      it('should not delete history entries', () => {
         const midState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: '8' });
         const stateBeforeTimeTravel = Ultimate.playSquare(midState, { boardIndex: 8, squareIndex: '5' });
         const stateAfterTimeTravel = Ultimate.timeTravel(stateBeforeTimeTravel, { pointInHistory: 0 });
@@ -277,14 +277,15 @@ describe('Ultimate.playSquare', () => {
         assert.deepEqual(stateAfterTimeTravel.history, stateBeforeTimeTravel.history);
       });
 
-      it.skip('after playing a new valid move, all history after that move is discarded', () => {
+      it('after playing a new valid move, all history after that move is discarded', () => {
         const midState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: '8' });
-        const stateBeforeTimeTravel = Ultimate.playSquare(midState, { boardIndex: 8, squareIndex: '5' });
+        let stateBeforeTimeTravel = Ultimate.playSquare(midState, { boardIndex: 8, squareIndex: '5' });
+        stateBeforeTimeTravel = Ultimate.playSquare(stateBeforeTimeTravel, { boardIndex: 5, squareIndex: '5' });
 
         const stateAfterTimeTravel = Ultimate.timeTravel(stateBeforeTimeTravel, { pointInHistory: 0 });
         const stateAfterValidMove = Ultimate.playSquare(stateAfterTimeTravel, { boardIndex: 8, squareIndex: '3' });
 
-        assert.equal(stateAfterValidMove.history.length, 1);
+        assert.equal(stateAfterValidMove.history.length, 2);
       });
 
       it('playing an invalid move, history is unchanged (already tested in tests marked with *)', () => {});
@@ -314,8 +315,28 @@ describe('Ultimate.playSquare', () => {
 });
 
 describe('deepCopyGameState', () => {
-  it('should copy top level properties');
-  it('should copy squares for each boards array in history');
+  it('should copy top level properties', () => {
+    const initialState = Ultimate.getInitialState();
+    assert.strictEqual(initialState.specialIcons, false);
+    const newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: '8' });
+    newState.specialIcons = 'foo bar baz';
+    assert.strictEqual(initialState.specialIcons, false, 'State not copied after playSquare (top level properties)');
+
+    const afterTimeTravelState = Ultimate.timeTravel(initialState, { pointInHistory: 1 });
+    afterTimeTravelState.specialIcons = 'foo bar baz';
+    assert.strictEqual(initialState.specialIcons, false, 'State not copied after timeTravel (top level properties)');
+  });
+
+  it('should copy squares for each boards array in history', () => {
+    const initialState = Ultimate.getInitialState();
+    assert.strictEqual(initialState.history[0].boards[8].squares[5], null);
+
+    const newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: '8' });
+    newState.history[0].boards[8].squares[5] = '(changed through first history entry of new state)';
+    assert.strictEqual(initialState.history[0].boards[8].squares[5], null, '', 'squares list of boards must be deep copied');
+    newState.history[1].boards[8].squares[5] = '(changed through second history entry of new state)';
+    assert.strictEqual(initialState.history[0].boards[8].squares[5], null, '', 'squares list of boards must be deep copied');
+  });
 });
 
 function getBoardsExcept(boards, boardIndexes) {
