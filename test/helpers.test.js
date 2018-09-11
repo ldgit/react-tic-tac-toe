@@ -178,11 +178,18 @@ describe('getColorClass', () => {
     assert.strictEqual(getColorClass(board), 'lightred-board');
   });
 
-  it('should return "lightgreen-board" if board is won', () => {
-    const inactiveBoard = { squares: winningSquares(), isActive: false };
-    const activeBoard = { squares: winningSquares(), isActive: true };
-    assert.strictEqual(getColorClass(inactiveBoard), 'lightgreen-board');
-    assert.strictEqual(getColorClass(activeBoard), 'lightgreen-board');
+  it('should return "o-won-board" if board is won by O', () => {
+    const inactiveBoard = { squares: oWinningSquares(), isActive: false };
+    const activeBoard = { squares: oWinningSquares(), isActive: true };
+    assert.strictEqual(getColorClass(inactiveBoard), 'o-won-board');
+    assert.strictEqual(getColorClass(activeBoard), 'o-won-board');
+  });
+
+  it('should return "x-won-board" if board is won by X', () => {
+    const inactiveBoard = { squares: xWinningSquares(), isActive: false };
+    const activeBoard = { squares: xWinningSquares(), isActive: true };
+    assert.strictEqual(getColorClass(inactiveBoard), 'x-won-board');
+    assert.strictEqual(getColorClass(activeBoard), 'x-won-board');
   });
 });
 
@@ -216,8 +223,12 @@ describe('getPlayerEmblemClasses', () => {
   });
 });
 
-function winningSquares() {
+function oWinningSquares() {
   return ['O', null, null, 'O', null, null, 'O', null, null];
+}
+
+function xWinningSquares() {
+  return ['X', null, null, 'X', null, null, 'X', null, null];
 }
 
 function emptySquares() {
