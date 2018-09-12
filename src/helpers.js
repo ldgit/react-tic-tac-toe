@@ -60,7 +60,7 @@ export function getColorClass(board) {
     return 'o-won-board';
   }
 
-  return board.isActive ? '' : 'lightred-board';
+  return board.isActive ? '' : 'disabled-board';
 }
 
 export function getSquareClasses({ value, specialIcons }) {

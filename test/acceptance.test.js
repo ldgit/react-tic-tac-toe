@@ -564,20 +564,20 @@ describe('Tic-tac-toe game', () => {
   }
 
   function assertBoardIsWhite(board) {
-    assert.strictEqual(board.classList.contains('lightred-board'), false, `${board.dataset.testid} board should be white, not lightred`);
+    assert.strictEqual(board.classList.contains('disabled-board'), false, `${board.dataset.testid} board should be white, not marked as disabled`);
     assert.strictEqual(board.classList.contains('x-won-board'), false, `${board.dataset.testid} board should be white, not x-won`);
     assert.strictEqual(board.classList.contains('o-won-board'), false, `${board.dataset.testid} board should be white, not o-won`);
   }
 
   function assertBoardIsRed(board) {
-    assert.strictEqual(board.classList.contains('lightred-board'), true, `${board.dataset.testid} must contain lightred-board class`);
+    assert.strictEqual(board.classList.contains('disabled-board'), true, `${board.dataset.testid} must contain disabled-board class`);
     assert.strictEqual(board.classList.contains('x-won-board'), false, `${board.dataset.testid}board should not be x-won`);
     assert.strictEqual(board.classList.contains('o-won-board'), false, `${board.dataset.testid}board should not be o-won`);
   }
 
   function assertBoardHasWonClass(board) {
     assert.strictEqual(board.classList.contains('o-won-board') || board.classList.contains('x-won-board'), true, `${board.dataset.testid} must contain x-won-board or o-won-board class`);
-    assert.strictEqual(board.classList.contains('lightred-board'), false, `${board.dataset.testid} board should not be lightred`);
+    assert.strictEqual(board.classList.contains('disabled-board'), false, `${board.dataset.testid} board should not be marked as disabled`);
   }
 });
 

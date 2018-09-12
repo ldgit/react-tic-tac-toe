@@ -173,23 +173,23 @@ describe('getColorClass', () => {
     assert.strictEqual(getColorClass(board), '');
   });
 
-  it('should return "lightred-board" if board is not active and not won', () => {
+  it('should return "disabled-board" if board is not active and not won', () => {
     const board = { squares: emptySquares(), isActive: false };
-    assert.strictEqual(getColorClass(board), 'lightred-board');
+    assert.equal(getColorClass(board), 'disabled-board');
   });
 
   it('should return "o-won-board" if board is won by O', () => {
     const inactiveBoard = { squares: oWinningSquares(), isActive: false };
     const activeBoard = { squares: oWinningSquares(), isActive: true };
-    assert.strictEqual(getColorClass(inactiveBoard), 'o-won-board');
-    assert.strictEqual(getColorClass(activeBoard), 'o-won-board');
+    assert.equal(getColorClass(inactiveBoard), 'o-won-board');
+    assert.equal(getColorClass(activeBoard), 'o-won-board');
   });
 
   it('should return "x-won-board" if board is won by X', () => {
     const inactiveBoard = { squares: xWinningSquares(), isActive: false };
     const activeBoard = { squares: xWinningSquares(), isActive: true };
-    assert.strictEqual(getColorClass(inactiveBoard), 'x-won-board');
-    assert.strictEqual(getColorClass(activeBoard), 'x-won-board');
+    assert.equal(getColorClass(inactiveBoard), 'x-won-board');
+    assert.equal(getColorClass(activeBoard), 'x-won-board');
   });
 });
 

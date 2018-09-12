@@ -4,16 +4,16 @@ body {
   margin-top: 5px;
 }
 
-.lightred-board button {
-  background-color: MistyRose;
+.disabled-board button {
+  background-color: #f4f4f4;
 }
 
 .x-won-board button {
-  background-color: #1A95DB;
+  background-color: #EDFFEF;
 }
 
 .o-won-board button {
-  background-color: #FF5A5F;
+  background-color: #EDFEFF;
 }
 
 ol, ul {
