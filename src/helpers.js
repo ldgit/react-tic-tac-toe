@@ -30,19 +30,6 @@ function getPlayerThatFilledTheLine(line) {
   return null;
 }
 
-export function markInactiveAndInactiveBoards(boards, nextBoardToPlay) {
-  if (calculateWinner(boards[nextBoardToPlay].squares)) {
-    return boards.map(
-      board => Object.assign({}, board, { isActive: !calculateWinner(board.squares), squares: board.squares.slice() }),
-    );
-  }
-
-  return boards.map((board, index) => (index !== parseInt(nextBoardToPlay, 10)
-    ? Object.assign({}, board, { isActive: false, squares: board.squares.slice() })
-    : Object.assign({}, board, { isActive: true, squares: board.squares.slice() })
-  ));
-}
-
 export function calculateUltimateWinner(boards) {
   const ultimateBoard = boards.map(board => calculateWinner(board.squares));
 
