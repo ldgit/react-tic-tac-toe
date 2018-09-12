@@ -5,8 +5,9 @@
   "main": "index.js",
   "homepage": "https://ldgit.github.io/react-tic-tac-toe/",
   "scripts": {
-    "test": "mocha --require @babel/register",
+    "test": "nyc --reporter=text mocha --require @babel/register",
     "test:watch": "argus",
+    "coverage": "npm t && nyc report --reporter=text-lcov | coveralls",
     "build": "webpack --mode=development",
     "build:prod": "webpack --mode=production",
     "start": "webpack-dev-server --open --mode=development",
@@ -26,6 +27,11 @@
     "react-dom": "^16.5.0",
     "sass-loader": "^7.1.0"
   },
+  "nyc": {
+    "extension": [
+      ".jsx"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
@@ -35,6 +41,7 @@
     "babel-loader": "^8.0.2",
     "chai": "^4.1.2",
     "clean-webpack-plugin": "^0.1.19",
+    "coveralls": "^3.0.2",
     "css-loader": "^1.0.0",
     "eslint": "^5.5.0",
     "eslint-config-airbnb": "^17.1.0",
@@ -45,6 +52,7 @@
     "html-webpack-plugin": "^3.2.0",
     "jsdom": "^12.0.0",
     "mocha": "^5.2.0",
+    "nyc": "^13.0.1",
     "style-loader": "^0.23.0",
     "webpack": "^4.17.2",
     "webpack-cli": "^3.1.0",
