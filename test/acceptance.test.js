@@ -2,30 +2,26 @@ import assert from 'assert';
 import { expect } from 'chai';
 import React from 'react';
 import ReactDom from 'react-dom';
-import { JSDOM } from 'jsdom';
 import Game from '../src/components/Game';
 import UltimateGame from '../src/components/UltimateGame';
+import {
+  getBrowserEnvironment, sel, clickOnElement, selectByText,
+} from './test-utils';
 
 describe('Tic-tac-toe game', () => {
   let document;
   let app;
   let window;
   let originalGlobalWindow;
+  let click;
 
   beforeEach(() => {
-    ({ window } = new JSDOM(`<!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Tic-Tac-Toe</title>
-      </head>
-      <body></body>
-    </html>`));
-    ({ document } = window);
+    ({ window, document } = getBrowserEnvironment());
     app = document.createElement('div');
     document.body.appendChild(app);
     originalGlobalWindow = global.window;
     global.window = window;
+    click = clickOnElement.bind(null, window);
   });
 
   afterEach(() => {
@@ -541,23 +537,6 @@ describe('Tic-tac-toe game', () => {
       .map(data => sel(app, data.boardTestId));
   }
 
-  function selectByText(container, selector, text) {
-    const elements = Array.from(container.querySelectorAll(selector)).filter(element => element.textContent === text);
-
-    return elements.length > 0 ? elements[0] : null;
-  }
-
-  function click(element) {
-    const event = new window.MouseEvent('click', {
-      view: window,
-      bubbles: true,
-      cancelable: true,
-    });
-
-    assert.ok(element, 'Element that should be clicked on does not exist');
-    element.dispatchEvent(event);
-  }
-
   function assertGameStatus(statusType, player) {
     expect(sel(app, 'gameStatus').textContent).to.have.string(statusType);
     expect(sel(app, 'gameStatus').querySelector('button').textContent).to.equal(player);
@@ -580,13 +559,6 @@ describe('Tic-tac-toe game', () => {
     assert.strictEqual(board.classList.contains('disabled-board'), false, `${board.dataset.testid} board should not be marked as disabled`);
   }
 });
-
-function sel(container, testId) {
-  const element = container.querySelector(`[data-testid="${testId}"]`);
-  assert.ok(element, `element with data-testid "${testId}" not found`);
-
-  return element;
-}
 
 function getAllBoardTestIds() {
   return [

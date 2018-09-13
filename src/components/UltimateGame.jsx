@@ -1,6 +1,7 @@
 import React from 'react';
 import Board from './Board';
 import Status from './Status';
+import ExportGameState from './Export';
 import TimeTravelButton from './TimeTravelButton';
 import {
   calculateUltimateWinner,
@@ -55,35 +56,40 @@ export default class UltimateGame extends React.Component {
 
     return (
       <div className="table">
-        <div className="table-cell">
-          <div>
-            {this.renderBoard(0, boards, 'topLeftBoard')}
-            {this.renderBoard(1, boards, 'topMiddleBoard')}
-            {this.renderBoard(2, boards, 'topRightBoard')}
+        <div className="table-row">
+          <div className="table-cell">
+            <div>
+              {this.renderBoard(0, boards, 'topLeftBoard')}
+              {this.renderBoard(1, boards, 'topMiddleBoard')}
+              {this.renderBoard(2, boards, 'topRightBoard')}
+            </div>
+            <div>
+              {this.renderBoard(3, boards, 'centerLeftBoard')}
+              {this.renderBoard(4, boards, 'centerMiddleBoard')}
+              {this.renderBoard(5, boards, 'centerRightBoard')}
+            </div>
+            <div>
+              {this.renderBoard(6, boards, 'bottomLeftBoard')}
+              {this.renderBoard(7, boards, 'bottomMiddleBoard')}
+              {this.renderBoard(8, boards, 'bottomRightBoard')}
+            </div>
           </div>
-          <div>
-            {this.renderBoard(3, boards, 'centerLeftBoard')}
-            {this.renderBoard(4, boards, 'centerMiddleBoard')}
-            {this.renderBoard(5, boards, 'centerRightBoard')}
-          </div>
-          <div>
-            {this.renderBoard(6, boards, 'bottomLeftBoard')}
-            {this.renderBoard(7, boards, 'bottomMiddleBoard')}
-            {this.renderBoard(8, boards, 'bottomRightBoard')}
+          <div className="game-info table-cell table-large-padding max-height">
+            <Status
+              description={winner ? 'Winner' : 'Next player'}
+              player={winner || nextPlayer}
+              specialIcons={specialIcons}
+            />
+            <br />
+            <button type="button" onClick={this.toggleSpecialIcons}>Vue vs. React?</button>
+            <br />
+            <ol>
+              {history.map(renderTimeTravelButton.bind(null, this.jumpTo, pointInHistory))}
+            </ol>
           </div>
         </div>
-        <div className="game-info table-cell table-large-padding">
-          <Status
-            description={winner ? 'Winner' : 'Next player'}
-            player={winner || nextPlayer}
-            specialIcons={specialIcons}
-          />
-          <br />
-          <button type="button" onClick={this.toggleSpecialIcons}>Vue vs. React?</button>
-          <br />
-          <ol>
-            {history.map(renderTimeTravelButton.bind(null, this.jumpTo, pointInHistory))}
-          </ol>
+        <div className="table-row">
+          <ExportGameState gameState={this.state} />
         </div>
       </div>
     );
