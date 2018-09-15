@@ -5,7 +5,14 @@ export default function Board({
   squares, onClick, testId, className, specialIcons = false,
 }) {
   function renderSquare(i, squareTestId) {
-    return <Square value={squares[i]} onClick={() => onClick(i)} squareTestId={squareTestId} specialIcons={specialIcons} />;
+    return (
+      <Square
+        value={squares[i]}
+        onClick={() => onClick(i)}
+        squareTestId={squareTestId}
+        specialIcons={specialIcons}
+      />
+    );
   }
 
   return (

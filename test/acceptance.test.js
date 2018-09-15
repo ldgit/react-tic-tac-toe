@@ -1,3 +1,4 @@
+/* eslint max-len: ['warn', 160, 2] */
 import assert from 'assert';
 import { expect } from 'chai';
 import React from 'react';
@@ -555,7 +556,11 @@ describe('Tic-tac-toe game', () => {
   }
 
   function assertBoardHasWonClass(board) {
-    assert.strictEqual(board.classList.contains('o-won-board') || board.classList.contains('x-won-board'), true, `${board.dataset.testid} must contain x-won-board or o-won-board class`);
+    assert.strictEqual(
+      board.classList.contains('o-won-board') || board.classList.contains('x-won-board'),
+      true,
+      `${board.dataset.testid} must contain x-won-board or o-won-board class`,
+    );
     assert.strictEqual(board.classList.contains('disabled-board'), false, `${board.dataset.testid} board should not be marked as disabled`);
   }
 });
