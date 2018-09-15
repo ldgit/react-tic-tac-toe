@@ -2,9 +2,9 @@ import assert from 'assert';
 import React from 'react';
 import ReactDom from 'react-dom';
 import { getBrowserEnvironment, selectByText, clickOnElement } from '../test-utils';
-import ExportGameState from '../../src/components/Export';
+import SaveAndLoad from '../../src/components/SaveAndLoad';
 
-describe('ExportGameState component', () => {
+describe('SaveAndLoad component', () => {
   let document;
   let window;
   let app;
@@ -17,7 +17,7 @@ describe('ExportGameState component', () => {
     originalGlobalWindow = global.window;
     global.window = window;
     click = clickOnElement.bind(null, window);
-    ReactDom.render(<ExportGameState />, app);
+    ReactDom.render(<SaveAndLoad />, app);
   });
 
   afterEach(() => {
@@ -37,12 +37,12 @@ describe('ExportGameState component', () => {
     beforeEach(() => {
       gameState = {};
       app = createAppElement();
-      ReactDom.render(<ExportGameState gameState={gameState} />, app);
+      ReactDom.render(<SaveAndLoad gameState={gameState} />, app);
     });
 
     it('should not display the textarea element if gameState is empty', () => {
       app = createAppElement();
-      ReactDom.render(<ExportGameState gameState="" />, app);
+      ReactDom.render(<SaveAndLoad gameState="" />, app);
       const exportButton = selectByText(app, 'button', 'Export');
 
       click(exportButton);

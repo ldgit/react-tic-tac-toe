@@ -1,7 +1,7 @@
 import React from 'react';
 import Board from './Board';
 import Status from './Status';
-import ExportGameState from './Export';
+import SaveAndLoad from './SaveAndLoad';
 import TimeTravelButton from './TimeTravelButton';
 import {
   calculateUltimateWinner,
@@ -82,7 +82,7 @@ export default class UltimateGame extends React.Component {
             />
             <br />
             <button type="button" onClick={this.toggleSpecialIcons}>Vue vs. React?</button>
-            <ExportGameState gameState={this.state} />
+            <SaveAndLoad gameState={this.state} />
             <br />
             <ol>
               {history.map(renderTimeTravelButton.bind(null, this.jumpTo, pointInHistory))}
