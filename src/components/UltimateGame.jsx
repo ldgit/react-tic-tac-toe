@@ -87,6 +87,7 @@ export default class UltimateGame extends React.Component {
             />
             <br />
             <button type="button" onClick={this.toggleSpecialIcons}>Vue vs. React?</button>
+            <br /><br />
             <SaveAndLoad gameState={this.state} onLoadGameClick={this.loadGame} />
             <br />
             <ol>
