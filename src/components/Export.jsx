@@ -32,12 +32,12 @@ export default class ExportGameState extends React.Component {
     );
 
     return (
-      <div>
+      <span>
         <button type="button" onClick={this.handleExportClick}>Export</button>
         {displayTextarea && closeButton}
         <br />
         {displayTextarea && textarea}
-      </div>
+      </span>
     );
   }
 }

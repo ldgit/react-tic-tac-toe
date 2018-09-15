@@ -82,14 +82,12 @@ export default class UltimateGame extends React.Component {
             />
             <br />
             <button type="button" onClick={this.toggleSpecialIcons}>Vue vs. React?</button>
+            <ExportGameState gameState={this.state} />
             <br />
             <ol>
               {history.map(renderTimeTravelButton.bind(null, this.jumpTo, pointInHistory))}
             </ol>
           </div>
-        </div>
-        <div className="table-row">
-          <ExportGameState gameState={this.state} />
         </div>
       </div>
     );
