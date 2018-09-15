@@ -132,8 +132,7 @@ describe('SaveAndLoad component', () => {
     it('should hide textarea, "Load game" and Close button when Close button is clicked', () => {
       click(selectByText(app, 'button', 'Load'));
       click(selectByText(app, 'button', 'Close'));
-      assertNoImportGameTextarea();
-      assert.strictEqual(selectByText(app, 'button', 'Load game'), null, '"Load game" button should not render');
+      assertLoadGameDialogRemoved();
     });
 
     it('should parse textarea content as JSON and send it to callback function', () => {
@@ -152,6 +151,18 @@ describe('SaveAndLoad component', () => {
       return promise.then(state => assert.deepEqual(state, { aProperty: 'foo', aList: ['foo', 'bar'] }));
     });
 
+    it('should close load game dialog after game loaded', () => {
+      app = createAppElement();
+      ReactDom.render(<SaveAndLoad gameState={gameState} onLoadGameClick={() => {}} />, app);
+      click(selectByText(app, 'button', 'Load'));
+
+      sel(app, 'importGameTextarea').value = '{ "aProperty": "foo", "aList": ["foo", "bar"] }';
+      triggerChange(sel(app, 'importGameTextarea'));
+      click(selectByText(app, 'button', 'Load game'));
+
+      assertLoadGameDialogRemoved();
+    });
+
     it('should alert the user when textarea content is not a valid JSON object', () => {
       click(selectByText(app, 'button', 'Load'));
 
@@ -163,6 +174,11 @@ describe('SaveAndLoad component', () => {
       assert.equal(window.alert.getMessageLog()[0], 'Invalid save game JSON');
     });
   });
+
+  function assertLoadGameDialogRemoved() {
+    assertNoImportGameTextarea();
+    assert.strictEqual(selectByText(app, 'button', 'Load game'), null, '"Load game" button should not render');
+  }
 
   function assertNoImportGameTextarea() {
     assert.strictEqual(find(app, 'importGameTextarea'), null, 'textarea for importing a game should not render');
