@@ -5,9 +5,10 @@
   "main": "index.js",
   "homepage": "https://ldgit.github.io/react-tic-tac-toe/",
   "scripts": {
-    "test": "mocha --require @babel/register",
+    "test:file": "mocha --require @babel/register",
+    "test": "npm run test:file 'test/**/*.test.{js,jsx}'",
     "test:watch": "argus",
-    "coverage": "nyc --all --require @babel/register mocha && nyc report --reporter=text-lcov | coveralls",
+    "coverage": "nyc --all --require @babel/register mocha 'test/**/*.test.{js,jsx}' && nyc report --reporter=text-lcov | coveralls",
     "build": "webpack --mode=development",
     "build:prod": "webpack --mode=production",
     "start": "webpack-dev-server --open --mode=development",
