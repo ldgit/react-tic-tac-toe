@@ -1,3 +1,4 @@
+/* eslint max-len: ['warn', 150, 2] */
 import assert from 'assert';
 import { expect } from 'chai';
 import Ultimate from '../src/game';
@@ -29,7 +30,9 @@ describe('Ultimate.playSquare', () => {
   it('changing board squares of new state should not alter previous state (immutability)', () => {
     const newState = Ultimate.playSquare(initialState, { boardIndex: 0, squareIndex: 0 });
 
-    expect(getCurrentBoards(initialState)[0].squares[0]).to.be.equal(null, 'played square was modified in the initial state');
+    expect(getCurrentBoards(initialState)[0].squares[0]).to.be.equal(
+      null, 'played square was modified in the initial state',
+    );
 
     assert.notDeepEqual(getCurrentBoards(initialState), getCurrentBoards(newState), 'old boards array changed');
     assertImutability(initialState, newState);
@@ -134,7 +137,11 @@ describe('Ultimate.playSquare', () => {
       });
       const finalState = Ultimate.playSquare(newState, { boardIndex: 1, squareIndex });
 
-      assert.strictEqual(getCurrentBoards(finalState)[indexOfBoardThatMustRemainActive].isActive, true, `board ${indexOfBoardThatMustRemainActive} must be active`);
+      assert.strictEqual(
+        getCurrentBoards(finalState)[indexOfBoardThatMustRemainActive].isActive,
+        true,
+        `board ${indexOfBoardThatMustRemainActive} must be active`,
+      );
       getBoardsExcept(getCurrentBoards(finalState), [indexOfBoardThatMustRemainActive]).forEach((board, boardIndex) => {
         assert.strictEqual(board.isActive, false, `board ${boardIndex} must be inactive`);
       });
@@ -184,7 +191,11 @@ describe('Ultimate.playSquare', () => {
     it('valid move should push new board state to history', () => {
       const newState = Ultimate.playSquare(initialState, { boardIndex: 1, squareIndex: 8 });
 
-      assert.deepEqual(newState.history[0].boards, getCurrentBoards(initialState), 'initial boards are not the first element in history, did you deep copy the boards (and their squares) when creating latest history entry?');
+      assert.deepEqual(
+        newState.history[0].boards,
+        getCurrentBoards(initialState),
+        'initial boards are not the first element in history, did you deep copy the boards (and their squares) when creating latest history entry?',
+      );
       assert.deepEqual(newState.history.length, 2, 'new state boards missing from history');
       assert.deepEqual(newState.history[1].boards, getCurrentBoards(newState));
     });

@@ -1,8 +1,8 @@
 import assert from 'assert';
 import React from 'react';
 import ReactDom from 'react-dom';
-import { JSDOM } from 'jsdom';
 import App from '../../src/components/App';
+import { getBrowserEnvironment, sel } from '../test-utils';
 
 describe('Main App component', () => {
   let window;
@@ -11,15 +11,7 @@ describe('Main App component', () => {
   let originalGlobalWindow;
 
   beforeEach(() => {
-    ({ window } = new JSDOM(`<!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Tic-Tac-Toe</title>
-      </head>
-      <body></body>
-    </html>`));
-    ({ document } = window);
+    ({ window, document } = getBrowserEnvironment());
     app = document.createElement('div');
     document.body.appendChild(app);
     originalGlobalWindow = global.window;
@@ -32,6 +24,6 @@ describe('Main App component', () => {
 
   it('should render (smoke test)', () => {
     ReactDom.render(<App />, app);
-    assert.equal(app.querySelectorAll('[data-testid="topLeftBoard"]').length, 1);
+    assert.ok(sel(app, 'topLeftBoard'));
   });
 });

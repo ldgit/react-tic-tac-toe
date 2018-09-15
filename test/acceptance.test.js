@@ -1,31 +1,30 @@
+/* eslint max-len: ['warn', 160, 2] */
 import assert from 'assert';
 import { expect } from 'chai';
 import React from 'react';
 import ReactDom from 'react-dom';
-import { JSDOM } from 'jsdom';
+import fs from 'fs';
+import path from 'path';
 import Game from '../src/components/Game';
 import UltimateGame from '../src/components/UltimateGame';
+import {
+  getBrowserEnvironment, sel, clickOnElement, selectByText, triggerChange,
+} from './test-utils';
 
 describe('Tic-tac-toe game', () => {
   let document;
   let app;
   let window;
   let originalGlobalWindow;
+  let click;
 
   beforeEach(() => {
-    ({ window } = new JSDOM(`<!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Tic-Tac-Toe</title>
-      </head>
-      <body></body>
-    </html>`));
-    ({ document } = window);
+    ({ window, document } = getBrowserEnvironment());
     app = document.createElement('div');
     document.body.appendChild(app);
     originalGlobalWindow = global.window;
     global.window = window;
+    click = clickOnElement.bind(null, window);
   });
 
   afterEach(() => {
@@ -417,6 +416,42 @@ describe('Tic-tac-toe game', () => {
       click(specialModeToggle);
       assertSpecialModeNotToggled(topMiddleBoardCenterMiddleSquare, topMiddleBoardBottomMiddleSquare, unoccupiedSquare);
     });
+
+    context('save and load functionality', () => {
+      it('can export current game state', () => {
+        const topLeftBoard = sel(app, 'topLeftBoard');
+        const topMiddleBoard = sel(app, 'topMiddleBoard');
+        const topRightBoard = sel(app, 'topRightBoard');
+        clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+        clickEmptySquare(sel(topMiddleBoard, 'topRightSquare')).assertIsFilledWith('O');
+        clickEmptySquare(sel(topRightBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+
+        click(selectByText(app, 'button', 'Save'));
+
+        const exportedState = JSON.parse(sel(app, 'exportGameTextarea').value);
+        assert.equal(exportedState.history[3].boards[2].squares[1], 'X', 'incorrect topRightBoard topMiddleSquare value');
+        assert.equal(exportedState.history[2].boards[1].squares[2], 'O', 'incorrect topMiddleBoard topRightSquare value');
+        assert.equal(exportedState.history[3].boards[0].squares[1], 'X', 'incorrect topRightBoard topMiddleSquare value');
+      });
+
+      it('can load a game state', () => {
+        const topLeftBoard = sel(app, 'topLeftBoard');
+        const topMiddleBoard = sel(app, 'topMiddleBoard');
+        const topRightBoard = sel(app, 'topRightBoard');
+        click(selectByText(app, 'button', 'Load'));
+        sel(app, 'importGameTextarea').value = fs.readFileSync(path.join('test', 'exportedGame.json'));
+        triggerChange(sel(app, 'importGameTextarea'));
+
+        click(selectByText(app, 'button', 'Load game'));
+
+        assert.equal(sel(topLeftBoard, 'topMiddleSquare').textContent, 'X');
+        assert.equal(sel(topMiddleBoard, 'topRightSquare').textContent, 'O');
+        assert.equal(sel(topRightBoard, 'topMiddleSquare').textContent, 'X');
+
+        clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith('O');
+        clickEmptySquare(sel(topLeftBoard, 'bottomLeftSquare')).assertIsFilledWith('X');
+      });
+    });
   });
 
   function assertSpecialModeNotToggled(
@@ -541,23 +576,6 @@ describe('Tic-tac-toe game', () => {
       .map(data => sel(app, data.boardTestId));
   }
 
-  function selectByText(container, selector, text) {
-    const elements = Array.from(container.querySelectorAll(selector)).filter(element => element.textContent === text);
-
-    return elements.length > 0 ? elements[0] : null;
-  }
-
-  function click(element) {
-    const event = new window.MouseEvent('click', {
-      view: window,
-      bubbles: true,
-      cancelable: true,
-    });
-
-    assert.ok(element, 'Element that should be clicked on does not exist');
-    element.dispatchEvent(event);
-  }
-
   function assertGameStatus(statusType, player) {
     expect(sel(app, 'gameStatus').textContent).to.have.string(statusType);
     expect(sel(app, 'gameStatus').querySelector('button').textContent).to.equal(player);
@@ -576,17 +594,14 @@ describe('Tic-tac-toe game', () => {
   }
 
   function assertBoardHasWonClass(board) {
-    assert.strictEqual(board.classList.contains('o-won-board') || board.classList.contains('x-won-board'), true, `${board.dataset.testid} must contain x-won-board or o-won-board class`);
+    assert.strictEqual(
+      board.classList.contains('o-won-board') || board.classList.contains('x-won-board'),
+      true,
+      `${board.dataset.testid} must contain x-won-board or o-won-board class`,
+    );
     assert.strictEqual(board.classList.contains('disabled-board'), false, `${board.dataset.testid} board should not be marked as disabled`);
   }
 });
-
-function sel(container, testId) {
-  const element = container.querySelector(`[data-testid="${testId}"]`);
-  assert.ok(element, `element with data-testid "${testId}" not found`);
-
-  return element;
-}
 
 function getAllBoardTestIds() {
   return [
