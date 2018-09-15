@@ -15,6 +15,7 @@ export default class UltimateGame extends React.Component {
     this.state = Ultimate.getInitialState();
     this.jumpTo = this.jumpTo.bind(this);
     this.toggleSpecialIcons = this.toggleSpecialIcons.bind(this);
+    this.loadGame = this.loadGame.bind(this);
   }
 
   handleClick(boardIndex, squareIndex) {
@@ -29,6 +30,10 @@ export default class UltimateGame extends React.Component {
     const { specialIcons } = this.state;
 
     this.setState({ specialIcons: !specialIcons });
+  }
+
+  loadGame(gameStateToLoad) {
+    this.setState(gameStateToLoad);
   }
 
   renderBoard(boardIndex, boards, testId) {
@@ -82,7 +87,7 @@ export default class UltimateGame extends React.Component {
             />
             <br />
             <button type="button" onClick={this.toggleSpecialIcons}>Vue vs. React?</button>
-            <SaveAndLoad gameState={this.state} />
+            <SaveAndLoad gameState={this.state} onLoadGameClick={this.loadGame} />
             <br />
             <ol>
               {history.map(renderTimeTravelButton.bind(null, this.jumpTo, pointInHistory))}

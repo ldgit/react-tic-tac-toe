@@ -3,10 +3,12 @@ import assert from 'assert';
 import { expect } from 'chai';
 import React from 'react';
 import ReactDom from 'react-dom';
+import fs from 'fs';
+import path from 'path';
 import Game from '../src/components/Game';
 import UltimateGame from '../src/components/UltimateGame';
 import {
-  getBrowserEnvironment, sel, clickOnElement, selectByText,
+  getBrowserEnvironment, sel, clickOnElement, selectByText, triggerChange,
 } from './test-utils';
 
 describe('Tic-tac-toe game', () => {
@@ -413,6 +415,42 @@ describe('Tic-tac-toe game', () => {
 
       click(specialModeToggle);
       assertSpecialModeNotToggled(topMiddleBoardCenterMiddleSquare, topMiddleBoardBottomMiddleSquare, unoccupiedSquare);
+    });
+
+    context('save and load functionality', () => {
+      it('can export current game state', () => {
+        const topLeftBoard = sel(app, 'topLeftBoard');
+        const topMiddleBoard = sel(app, 'topMiddleBoard');
+        const topRightBoard = sel(app, 'topRightBoard');
+        clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+        clickEmptySquare(sel(topMiddleBoard, 'topRightSquare')).assertIsFilledWith('O');
+        clickEmptySquare(sel(topRightBoard, 'topMiddleSquare')).assertIsFilledWith('X');
+
+        click(selectByText(app, 'button', 'Save'));
+
+        const exportedState = JSON.parse(sel(app, 'exportGameTextarea').value);
+        assert.equal(exportedState.history[3].boards[2].squares[1], 'X', 'incorrect topRightBoard topMiddleSquare value');
+        assert.equal(exportedState.history[2].boards[1].squares[2], 'O', 'incorrect topMiddleBoard topRightSquare value');
+        assert.equal(exportedState.history[3].boards[0].squares[1], 'X', 'incorrect topRightBoard topMiddleSquare value');
+      });
+
+      it('can load a game state', () => {
+        const topLeftBoard = sel(app, 'topLeftBoard');
+        const topMiddleBoard = sel(app, 'topMiddleBoard');
+        const topRightBoard = sel(app, 'topRightBoard');
+        click(selectByText(app, 'button', 'Load'));
+        sel(app, 'importGameTextarea').value = fs.readFileSync(path.join('test', 'exportedGame.json'));
+        triggerChange(sel(app, 'importGameTextarea'));
+
+        click(selectByText(app, 'button', 'Load game'));
+
+        assert.equal(sel(topLeftBoard, 'topMiddleSquare').textContent, 'X');
+        assert.equal(sel(topMiddleBoard, 'topRightSquare').textContent, 'O');
+        assert.equal(sel(topRightBoard, 'topMiddleSquare').textContent, 'X');
+
+        clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith('O');
+        clickEmptySquare(sel(topLeftBoard, 'bottomLeftSquare')).assertIsFilledWith('X');
+      });
     });
   });
 
