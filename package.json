@@ -23,9 +23,9 @@
     "url": "https://github.com/ldgit/react-tic-tac-toe.git"
   },
   "dependencies": {
-    "node-sass": "^4.9.3",
-    "react": "^16.5.0",
-    "react-dom": "^16.5.0",
+    "node-sass": "^4.9.4",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
     "sass-loader": "^7.1.0"
   },
   "nyc": {
@@ -42,29 +42,29 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "argus-test-runner": "^2.0.0",
-    "babel-loader": "^8.0.2",
-    "chai": "^4.1.2",
+    "babel-loader": "^8.0.4",
+    "chai": "^4.2.0",
     "clean-webpack-plugin": "^0.1.19",
     "coveralls": "^3.0.2",
     "css-loader": "^1.0.0",
-    "eslint": "^5.5.0",
+    "eslint": "^5.8.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
     "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
-    "jsdom": "^12.0.0",
+    "jsdom": "^12.2.0",
     "mocha": "^5.2.0",
-    "nyc": "^13.0.1",
-    "style-loader": "^0.23.0",
-    "webpack": "^4.17.2",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.8"
+    "nyc": "^13.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.23.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   }
 }
