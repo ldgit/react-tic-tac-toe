@@ -5,7 +5,6 @@ export default class SaveAndLoad extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      gameState: null,
       displayExportGameTextarea: false,
       displayImportGameTextarea: false,
     };
@@ -18,13 +17,11 @@ export default class SaveAndLoad extends React.Component {
   handleExportClick() {
     const { gameState } = this.props;
 
-    this.setState({ gameState, displayExportGameTextarea: gameState || false, displayImportGameTextarea: false });
+    this.setState({ displayExportGameTextarea: gameState || false, displayImportGameTextarea: false });
   }
 
   handleLoadClick() {
-    const { gameState } = this.props;
-
-    this.setState({ gameState, displayImportGameTextarea: true, displayExportGameTextarea: false });
+    this.setState({ displayImportGameTextarea: true, displayExportGameTextarea: false });
   }
 
   handleLoadGameClick(newGameState) {
@@ -39,7 +36,8 @@ export default class SaveAndLoad extends React.Component {
   }
 
   render() {
-    const { gameState, displayExportGameTextarea, displayImportGameTextarea } = this.state;
+    const { gameState } = this.props;
+    const { displayExportGameTextarea, displayImportGameTextarea } = this.state;
     const closeButton = <button type="button" onClick={this.handleCloseButtonClick}>Close</button>;
 
     return (
