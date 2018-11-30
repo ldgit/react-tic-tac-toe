@@ -1,56 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LoadGame from './LoadGame';
 
-export default class SaveAndLoad extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      displayExportGameTextarea: false,
-      displayImportGameTextarea: false,
-    };
-    this.handleExportClick = this.handleExportClick.bind(this);
-    this.handleCloseButtonClick = this.handleCloseButtonClick.bind(this);
-    this.handleLoadClick = this.handleLoadClick.bind(this);
-    this.handleLoadGameClick = this.handleLoadGameClick.bind(this);
+export default function SaveAndLoad({ gameState, onLoadGameClick }) {
+  const [displayExportGameTextarea, setDisplayExportGameTextarea] = useState(false);
+  const [displayImportGameTextarea, setDisplayImportGameTextarea] = useState(false);
+
+  function handleExportClick() {
+    setDisplayImportGameTextarea(false);
+    setDisplayExportGameTextarea(gameState || false);
   }
 
-  handleExportClick() {
-    const { gameState } = this.props;
-
-    this.setState({ displayExportGameTextarea: gameState || false, displayImportGameTextarea: false });
+  function handleLoadClick() {
+    setDisplayImportGameTextarea(true);
+    setDisplayExportGameTextarea(false);
   }
 
-  handleLoadClick() {
-    this.setState({ displayImportGameTextarea: true, displayExportGameTextarea: false });
-  }
-
-  handleLoadGameClick(newGameState) {
-    const { onLoadGameClick } = this.props;
-
-    this.setState({ displayImportGameTextarea: false, displayExportGameTextarea: false });
+  function handleLoadGameClick(newGameState) {
+    setDisplayImportGameTextarea(false);
+    setDisplayExportGameTextarea(false);
     onLoadGameClick(newGameState);
   }
 
-  handleCloseButtonClick() {
-    this.setState({ displayExportGameTextarea: false, displayImportGameTextarea: false });
+  function handleCloseButtonClick() {
+    setDisplayImportGameTextarea(false);
+    setDisplayExportGameTextarea(false);
   }
 
-  render() {
-    const { gameState } = this.props;
-    const { displayExportGameTextarea, displayImportGameTextarea } = this.state;
-    const closeButton = <button type="button" onClick={this.handleCloseButtonClick}>Close</button>;
+  const closeButton = <button type="button" onClick={handleCloseButtonClick}>Close</button>;
 
-    return (
-      <span>
-        <button type="button" onClick={this.handleExportClick}>Save</button>
-        <button type="button" onClick={this.handleLoadClick}>Load</button>
-        {(displayExportGameTextarea || displayImportGameTextarea) && closeButton}
-        <br />
-        {displayExportGameTextarea && <SaveGame gameState={gameState} />}
-        {displayImportGameTextarea && <LoadGame onLoadGameClick={this.handleLoadGameClick} />}
-      </span>
-    );
-  }
+  return (
+    <span>
+      <button type="button" onClick={handleExportClick}>Save</button>
+      <button type="button" onClick={handleLoadClick}>Load</button>
+      {(displayExportGameTextarea || displayImportGameTextarea) && closeButton}
+      <br />
+      {displayExportGameTextarea && <SaveGame gameState={gameState} />}
+      {displayImportGameTextarea && <LoadGame onLoadGameClick={handleLoadGameClick} />}
+    </span>
+  );
 }
 
 function SaveGame({ gameState }) {
