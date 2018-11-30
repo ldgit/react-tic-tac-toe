@@ -1,5 +1,6 @@
 module.exports = {
     "extends": "airbnb",
+    "plugins": ["react-hooks"],
     "rules": {
       "no-use-before-define": ["error", { "functions": false, "classes": true }],
       "react/prop-types": ["off"] ,
@@ -8,6 +9,7 @@ module.exports = {
         'ignoreUrls': false,
         'ignoreComments': false,
       }],
+      "react-hooks/rules-of-hooks": "error",
     },
     "env": {
         "browser": true,
