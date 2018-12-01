@@ -4,6 +4,9 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = (env, argv) => ({
   entry: {
+    // Order matters for html-webpack-plugin
+    polyfills: './src/polyfills.js',
+    'react-polyfills': './src/react-polyfills.js',
     main: './src/index.jsx',
   },
   output: {
