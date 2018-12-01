@@ -7,7 +7,7 @@ module.exports = (env, argv) => ({
     // Order matters for html-webpack-plugin
     polyfills: './src/polyfills.js',
     'react-polyfills': './src/react-polyfills.js',
-    main: './src/index.jsx',
+    main: './src/index.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
