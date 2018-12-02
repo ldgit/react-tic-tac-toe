@@ -4,7 +4,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = (env, argv) => ({
   entry: {
-    // Order matters for html-webpack-plugin
     polyfills: './src/polyfills.js',
     'react-polyfills': './src/react-polyfills.js',
     main: './src/index.js',
@@ -15,7 +14,8 @@ module.exports = (env, argv) => ({
   },
   optimization: {
     splitChunks: {
-      chunks: 'all',
+      // We want to load polyfills separately and only if the browser does not support needed features.
+      chunks: chunk => !['react-polyfills', 'polyfills'].includes(chunk.name),
     },
   },
   devtool: argv.mode === 'development' ? 'inline-source-map' : 'none',
@@ -53,7 +53,10 @@ module.exports = (env, argv) => ({
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      title: 'Tic-Tac-Toe',
+      template: 'src/index.html',
+      // Custom parameter, these chunks are injected differently, see template above
+      polyfills: ['polyfills', 'react-polyfills'],
+      inject: false,
     }),
   ],
 });

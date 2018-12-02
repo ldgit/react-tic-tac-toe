@@ -1,4 +1,6 @@
+import 'core-js/es6/set';
 import renderApp from './components/App';
+import { whenPolyfillsLoaded } from './load-polyfills';
 import './index.sass';
 
-renderApp(document);
+whenPolyfillsLoaded(() => renderApp(document));

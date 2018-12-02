@@ -3,8 +3,8 @@ import { JSDOM } from 'jsdom';
 
 import { Simulate } from 'react-dom/test-utils';
 
-export function getBrowserEnvironment() {
-  const { window } = new JSDOM(`<!DOCTYPE html>
+export function getBrowserEnvironment(html = '') {
+  const { window } = new JSDOM(html || `<!DOCTYPE html>
   <html>
     <head>
       <meta charset="UTF-8">
