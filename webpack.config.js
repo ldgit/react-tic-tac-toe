@@ -59,6 +59,7 @@ module.exports = (env, argv) => ({
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: false,
+      // Until v4, see https://github.com/jantimon/html-webpack-plugin/issues/1094#issuecomment-434567656
       minify: {
         collapseWhitespace: true,
         removeComments: true,
