@@ -7,10 +7,17 @@
 </head>
 
 <body>
+
+<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+  <% if (chunk === 'set-polyfill') { %>
+  <script>window.Set || document.write('\x3Cscript src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>">\x3C/script>')</script>
+  <% } %>
+<% } %>
+
 <% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
   <% if (htmlWebpackPlugin.options.polyfills.includes(chunk)) { %>
   <span data-polyfillurl="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></span>
-  <% } else { %>
+  <% } else if (chunk !== htmlWebpackPlugin.options.setPolyfillChunk) { %>
   <script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
   <% } %>
 <% } %>
