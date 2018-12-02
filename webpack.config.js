@@ -59,6 +59,14 @@ module.exports = (env, argv) => ({
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: false,
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        useShortDoctype: true,
+      },
       // Custom parameters
       // These chunks are injected differently, see template above
       polyfills: ['polyfills', 'react-polyfills'],
