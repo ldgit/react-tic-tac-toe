@@ -1,9 +1,10 @@
 import React from 'react';
+import ReactDom from 'react-dom';
 import Game from './Game';
 import Title from './Title';
 import UltimateGame from './UltimateGame';
 
-export default function App() {
+function App() {
   return (
     <div className="table">
       <div className="table-cell table-small-padding">
@@ -16,4 +17,10 @@ export default function App() {
       </div>
     </div>
   );
+}
+
+export default function renderApp(document) {
+  const app = document.createElement('div');
+  document.body.appendChild(app);
+  ReactDom.render(<App />, app);
 }
