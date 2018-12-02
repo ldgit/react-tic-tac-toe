@@ -40,7 +40,8 @@
       "**/node_modules/**",
       "dist/**",
       "docs/**",
-      "*.config.js"
+      "*.config.js",
+      "src/polyfill/**"
     ]
   },
   "devDependencies": {
