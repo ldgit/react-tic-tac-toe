@@ -3,21 +3,23 @@ import Board from './Board';
 import Status from './Status';
 import SaveAndLoad from './SaveAndLoad';
 import TimeTravelButton from './TimeTravelButton';
+import { getColorClass } from '../helpers';
 import {
+  getInitialState,
+  playSquare,
+  timeTravel,
   calculateUltimateWinner,
-  getColorClass,
-} from '../helpers';
-import Ultimate from '../game';
+} from '../ultimate-game';
 
 export default function UltimateGame() {
-  const [state, setState] = useState(Ultimate.getInitialState());
+  const [state, setState] = useState(getInitialState());
 
   function handleClick(boardIndex, squareIndex) {
-    setState(Ultimate.playSquare(state, { boardIndex, squareIndex }));
+    setState(playSquare(state, { boardIndex, squareIndex }));
   }
 
   function jumpTo(pointInHistory) {
-    setState(Ultimate.timeTravel(state, { pointInHistory }));
+    setState(timeTravel(state, { pointInHistory }));
   }
 
   function toggleSpecialIcons() {

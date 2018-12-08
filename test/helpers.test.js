@@ -1,7 +1,6 @@
 import * as assert from 'assert';
 import {
   calculateWinner,
-  calculateUltimateWinner,
   getColorClass,
   getSquareClasses,
   getPlayerEmblemClasses,
@@ -105,66 +104,6 @@ describe('calculateWinner', () => {
 
     return newSquares;
   }
-});
-
-describe('calculateUltimateWinner', () => {
-  it('should return null for initial empty boards', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
-    assert.strictEqual(calculateUltimateWinner(boards), null);
-  });
-
-  it('should return null if ony two boards won', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
-    boards[1].squares = ['O', 'O', 'O', ...Array(6).fill(null)];
-    boards[3].squares = [...Array(6).fill(null), 'O', 'O', 'O'];
-
-    assert.strictEqual(calculateUltimateWinner(boards), null);
-  });
-
-  it('should return null if top row of boards won, but by different players', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
-    boards[0].squares = ['X', 'X', 'X', ...Array(6).fill(null)];
-    boards[1].squares = [...Array(6).fill(null), 'O', 'O', 'O'];
-    boards[2].squares = ['X', null, null, null, 'X', null, null, null, 'X'];
-
-    assert.strictEqual(calculateUltimateWinner(boards), null);
-  });
-
-  it('should return X if X won top row of boards', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
-    boards[0].squares = ['X', 'X', 'X', ...Array(6).fill(null)];
-    boards[1].squares = [...Array(6).fill(null), 'X', 'X', 'X'];
-    boards[2].squares = ['X', null, null, null, 'X', null, null, null, 'X'];
-
-    assert.strictEqual(calculateUltimateWinner(boards), 'X');
-  });
-
-  it('should return O if O won left column of boards', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
-    boards[0].squares = ['O', null, null, 'O', null, null, 'O', null, null];
-    boards[3].squares = [null, null, 'O', null, 'O', null, 'O', null, null];
-    boards[6].squares = [null, 'O', null, null, 'O', null, null, 'O', null];
-
-    assert.strictEqual(calculateUltimateWinner(boards), 'O');
-  });
-
-  it('should return X if X won diagonal boards', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
-    boards[0].squares = ['X', null, null, 'X', null, null, 'X', null, null];
-    boards[4].squares = [null, null, 'X', null, 'X', null, 'X', null, null];
-    boards[8].squares = [null, 'X', null, null, 'X', null, null, 'X', null];
-
-    assert.strictEqual(calculateUltimateWinner(boards), 'X');
-  });
-
-  it('should return O if O won reverse diagonal boards', () => {
-    const boards = Array(9).fill().map(() => ({ squares: emptySquares(), isActive: false }));
-    boards[2].squares = ['O', null, null, 'O', null, null, 'O', null, null];
-    boards[4].squares = [null, null, 'O', null, 'O', null, 'O', null, null];
-    boards[6].squares = [null, 'O', null, null, 'O', null, null, 'O', null];
-
-    assert.strictEqual(calculateUltimateWinner(boards), 'O');
-  });
 });
 
 describe('getColorClass', () => {
