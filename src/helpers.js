@@ -30,12 +30,6 @@ function getPlayerThatFilledTheLine(line) {
   return null;
 }
 
-export function calculateUltimateWinner(boards) {
-  const ultimateBoard = boards.map(board => calculateWinner(board.squares));
-
-  return calculateWinner(ultimateBoard);
-}
-
 export function getColorClass(board) {
   const winner = calculateWinner(board.squares);
 

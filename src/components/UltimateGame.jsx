@@ -3,27 +3,29 @@ import Board from './Board';
 import Status from './Status';
 import SaveAndLoad from './SaveAndLoad';
 import TimeTravelButton from './TimeTravelButton';
+import { getColorClass } from '../helpers';
 import {
+  getInitialState,
+  playSquare,
+  timeTravel,
   calculateUltimateWinner,
-  getColorClass,
-} from '../helpers';
-import Ultimate from '../game';
+} from '../ultimate-game';
 
 export default class UltimateGame extends React.Component {
   constructor(props) {
     super(props);
-    this.state = Ultimate.getInitialState();
+    this.state = getInitialState();
     this.jumpTo = this.jumpTo.bind(this);
     this.toggleSpecialIcons = this.toggleSpecialIcons.bind(this);
     this.loadGame = this.loadGame.bind(this);
   }
 
   handleClick(boardIndex, squareIndex) {
-    this.setState(previousState => Ultimate.playSquare(previousState, { boardIndex, squareIndex }));
+    this.setState(previousState => playSquare(previousState, { boardIndex, squareIndex }));
   }
 
   jumpTo(pointInHistory) {
-    this.setState(previousState => Ultimate.timeTravel(previousState, { pointInHistory }));
+    this.setState(previousState => timeTravel(previousState, { pointInHistory }));
   }
 
   toggleSpecialIcons() {

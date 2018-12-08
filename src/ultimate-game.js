@@ -1,10 +1,6 @@
-import { calculateWinner, calculateUltimateWinner } from './helpers';
+import { calculateWinner } from './helpers';
 
-const Ultimate = {
-  playSquare, getInitialState, timeTravel, deepCopyGameState,
-};
-
-function playSquare(oldState, { boardIndex, squareIndex }) {
+export function playSquare(oldState, { boardIndex, squareIndex }) {
   const newState = deepCopyGameState(oldState);
   const newBoards = deepCopyGameBoards(newState.history[oldState.pointInHistory].boards);
 
@@ -43,7 +39,7 @@ function playSquare(oldState, { boardIndex, squareIndex }) {
   return newState;
 }
 
-function getInitialState() {
+export function getInitialState() {
   const boards = Array(9).fill().map(() => (
     { squares: Array(9).fill(null), isActive: true }
   ));
@@ -56,12 +52,18 @@ function getInitialState() {
   };
 }
 
-function timeTravel(oldState, { pointInHistory }) {
+export function timeTravel(oldState, { pointInHistory }) {
   const newState = deepCopyGameState(oldState);
   newState.pointInHistory = pointInHistory;
   newState.nextPlayer = pointInHistory % 2 === 0 ? 'X' : 'O';
 
   return newState;
+}
+
+export function calculateUltimateWinner(boards) {
+  const ultimateBoard = boards.map(board => calculateWinner(board.squares));
+
+  return calculateWinner(ultimateBoard);
 }
 
 function deepCopyGameState(state) {
@@ -84,5 +86,3 @@ function nextBoardIsWon(boards, { squareIndex }) {
 function getNextPlayer(move, newBoards, oldState) {
   return oldState.nextPlayer === 'X' ? 'O' : 'X';
 }
-
-export default Ultimate;
