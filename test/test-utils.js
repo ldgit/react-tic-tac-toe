@@ -57,3 +57,19 @@ export function createAlertSpy() {
 
   return alertSpy;
 }
+
+export function deepFreeze(object) {
+  // Retrieve the property names defined on object
+  const propNames = Object.getOwnPropertyNames(object);
+
+  // Freeze properties before freezing self
+  // eslint-disable-next-line no-restricted-syntax
+  for (const name of propNames) {
+    const value = object[name];
+
+    // eslint-disable-next-line no-param-reassign
+    object[name] = value && typeof value === 'object' ? deepFreeze(value) : value;
+  }
+
+  return Object.freeze(object);
+}
