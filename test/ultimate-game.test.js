@@ -157,7 +157,6 @@ describe('playSquare', () => {
       getBoardsExcept(getCurrentBoards(finalState), [indexOfBoardThatMustRemainActive]).forEach((board, boardIndex) => {
         assert.strictEqual(board.isActive, false, `board ${boardIndex} must be inactive`);
       });
-
     });
   });
 
