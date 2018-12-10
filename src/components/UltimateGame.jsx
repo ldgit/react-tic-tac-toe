@@ -4,22 +4,17 @@ import Status from './Status';
 import SaveAndLoad from './SaveAndLoad';
 import TimeTravelButton from './TimeTravelButton';
 import { getColorClass } from '../helpers';
-import {
-  getInitialState,
-  playSquare,
-  timeTravel,
-  calculateUltimateWinner,
-} from '../ultimate-game';
+import { ultimateTicTacToe, calculateUltimateWinner } from '../ultimate-game';
 
 export default function UltimateGame() {
-  const [state, setState] = useState(getInitialState());
+  const [state, setState] = useState(ultimateTicTacToe(undefined, ''));
 
   function handleClick(boardIndex, squareIndex) {
-    setState(playSquare(state, { boardIndex, squareIndex }));
+    setState(ultimateTicTacToe(state, { type: 'PLAY_SQUARE', boardIndex, squareIndex }));
   }
 
   function jumpTo(pointInHistory) {
-    setState(timeTravel(state, { pointInHistory }));
+    setState(ultimateTicTacToe(state, { type: 'TIME_TRAVEL', pointInHistory }));
   }
 
   function toggleSpecialIcons() {

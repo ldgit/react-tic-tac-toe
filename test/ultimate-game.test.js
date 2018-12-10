@@ -1,30 +1,27 @@
 /* eslint max-len: ['warn', 150, 2] */
 import assert from 'assert';
 import { expect } from 'chai';
-import {
-  getInitialState,
-  playSquare,
-  timeTravel,
-  calculateUltimateWinner,
-} from '../src/ultimate-game';
+import { calculateUltimateWinner, ultimateTicTacToe } from '../src/ultimate-game';
 import { deepFreeze } from './test-utils';
 
 function getCurrentBoards(state) {
   return state.history[state.history.length - 1].boards;
 }
 
-function callPlaySquare(oldState, action) {
+function callPlaySquare(oldState, { boardIndex, squareIndex }) {
   if (!Object.isFrozen(oldState)) deepFreeze(oldState);
-  if (!Object.isFrozen(action)) deepFreeze(action);
+  const action = { type: 'PLAY_SQUARE', boardIndex, squareIndex };
+  deepFreeze(action);
 
-  return playSquare(oldState, action);
+  return ultimateTicTacToe(oldState, action);
 }
 
-function callTimeTravel(oldState, action) {
+function callTimeTravel(oldState, { pointInHistory }) {
   if (!Object.isFrozen(oldState)) deepFreeze(oldState);
-  if (!Object.isFrozen(action)) deepFreeze(action);
+  const action = { type: 'TIME_TRAVEL', pointInHistory };
+  deepFreeze(action);
 
-  return timeTravel(oldState, action);
+  return ultimateTicTacToe(oldState, action);
 }
 
 function callCalculateUltimateWinner(boards) {
@@ -33,11 +30,17 @@ function callCalculateUltimateWinner(boards) {
   return calculateUltimateWinner(boards);
 }
 
-describe('playSquare', () => {
+describe('PLAY_SQUARE', () => {
   let initialState;
 
   beforeEach(() => {
-    initialState = getInitialState();
+    initialState = ultimateTicTacToe(undefined, { type: 'NOT_IMPORTANT' });
+  });
+
+  it('should just return state unchanged if action not known', () => {
+    initialState.specialIcons = true;
+    deepFreeze(initialState);
+    assert.deepEqual(initialState, ultimateTicTacToe(initialState, { type: 'DOES_NOT_EXIST' }));
   });
 
   ['0', 0].forEach((squareIndex) => {

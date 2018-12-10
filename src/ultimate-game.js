@@ -1,6 +1,23 @@
 import { calculateWinner } from './helpers';
 
-export function playSquare(oldState, { boardIndex, squareIndex }) {
+export function ultimateTicTacToe(state = getInitialState(), action) {
+  switch (action.type) {
+    case 'PLAY_SQUARE':
+      return playSquare(state, { boardIndex: action.boardIndex, squareIndex: action.squareIndex });
+    case 'TIME_TRAVEL':
+      return timeTravel(state, { pointInHistory: action.pointInHistory });
+    default:
+      return state;
+  }
+}
+
+export function calculateUltimateWinner(boards) {
+  const ultimateBoard = boards.map(board => calculateWinner(board.squares));
+
+  return calculateWinner(ultimateBoard);
+}
+
+function playSquare(oldState, { boardIndex, squareIndex }) {
   const newState = deepCopyGameState(oldState);
   const newBoards = deepCopyGameBoards(newState.history[oldState.pointInHistory].boards);
 
@@ -40,7 +57,7 @@ export function playSquare(oldState, { boardIndex, squareIndex }) {
   return newState;
 }
 
-export function getInitialState() {
+function getInitialState() {
   const boards = Array(9).fill().map(() => (
     { squares: Array(9).fill(null), isActive: true }
   ));
@@ -53,18 +70,12 @@ export function getInitialState() {
   };
 }
 
-export function timeTravel(oldState, { pointInHistory }) {
+function timeTravel(oldState, { pointInHistory }) {
   const newState = deepCopyGameState(oldState);
   newState.pointInHistory = pointInHistory;
   newState.nextPlayer = pointInHistory % 2 === 0 ? 'X' : 'O';
 
   return newState;
-}
-
-export function calculateUltimateWinner(boards) {
-  const ultimateBoard = boards.map(board => calculateWinner(board.squares));
-
-  return calculateWinner(ultimateBoard);
 }
 
 function deepCopyGameState(state) {
