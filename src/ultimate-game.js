@@ -83,12 +83,12 @@ function updateBoardActiveStatus(boardIndex, squareIndex) {
   };
 }
 
-function timeTravel(oldState, { pointInHistory }) {
-  const newState = deepCopyGameState(oldState);
-  newState.pointInHistory = pointInHistory;
-  newState.nextPlayer = pointInHistory % 2 === 0 ? 'X' : 'O';
-
-  return newState;
+function timeTravel(state, { pointInHistory }) {
+  return {
+    ...state,
+    pointInHistory,
+    nextPlayer: pointInHistory % 2 === 0 ? 'X' : 'O',
+  };
 }
 
 function getInitialState() {
@@ -102,20 +102,6 @@ function getInitialState() {
     pointInHistory: 0,
     specialIcons: false,
   };
-}
-
-function deepCopyGameState(state) {
-  const newHistory = state.history.map(boardEntry => ({ boards: deepCopyGameBoards(boardEntry.boards) }));
-
-  return {
-    ...state,
-    nextPlayer: state.nextPlayer,
-    history: newHistory,
-  };
-}
-
-function deepCopyGameBoards(boards) {
-  return boards.map(board => ({ ...board, isActive: board.isActive, squares: [...board.squares] }));
 }
 
 function nextBoardIsWon(boards, { squareIndex }) {

@@ -250,17 +250,6 @@ describe('ultimate tic-tac-toe', () => {
         assert.equal(callTimeTravel(secondMoveState, { pointInHistory: 1 }).nextPlayer, 'O');
       });
 
-      it('should return a deep copy of input state', () => {
-        const newState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 8 });
-
-        const stateAfterTimeTravel = callTimeTravel(newState, { pointInHistory: 0 });
-
-        stateAfterTimeTravel.pointInHistory = 1984;
-        stateAfterTimeTravel.history[0].boards[4].squares[1] = 'modified in state returned by time travel, should not be in previus state';
-        assert.strictEqual(newState.pointInHistory, 1, 'time travel must return a *copy* of input state');
-        expect(newState.history[0].boards[4].squares[1]).to.equal(null, 'time travel must return a *deep copy* of input state');
-      });
-
       it(
         'when time traveling to past and then playing a move, should discard all history after that time travel point',
         () => {
