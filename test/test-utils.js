@@ -69,10 +69,13 @@ export function deepFreeze(object) {
   // eslint-disable-next-line no-restricted-syntax
   for (const name of propNames) {
     const value = object[name];
-
-    // eslint-disable-next-line no-param-reassign
-    object[name] = value && typeof value === 'object' ? deepFreeze(value) : value;
+    if (value && typeof value === 'object') {
+      if (!Object.isFrozen(value)) {
+        // eslint-disable-next-line no-param-reassign
+        object[name] = value && typeof value === 'object' ? deepFreeze(value) : value;
+      }
+    }
   }
 
-  return Object.freeze(object);
+  return !Object.isFrozen(object) ? Object.freeze(object) : object;
 }

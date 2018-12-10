@@ -22,42 +22,71 @@ export function calculateUltimateWinner(boards) {
   return calculateWinner(ultimateBoard);
 }
 
-function playSquare(oldState, { boardIndex, squareIndex }) {
-  const newState = deepCopyGameState(oldState);
-  const newBoards = deepCopyGameBoards(newState.history[oldState.pointInHistory].boards);
-
-  if (calculateUltimateWinner(newBoards)) { // game already finished
-    return newState;
+function playSquare(state, { boardIndex, squareIndex }) {
+  if (calculateUltimateWinner(state.history[state.pointInHistory].boards)) { // game over
+    return state;
+  }
+  if (!chosenSquareIsPlayable(state, boardIndex, squareIndex)) { // do nothing
+    return state;
   }
 
-  const boardToPlay = newBoards[boardIndex];
-  const aValidSquareWasPlayed = boardToPlay.isActive
+  const { boards } = state.history[state.pointInHistory];
+  const updatedBoards = boards
+    .map(updateBoardSquares(boardIndex, squareIndex, state.nextPlayer))
+    .map(updateBoardActiveStatus(boardIndex, squareIndex));
+
+  const { history } = state;
+  const newHistory = [
+    ...history.slice(0, state.pointInHistory + 1),
+    { boards: updatedBoards },
+  ];
+
+  return {
+    ...state,
+    nextPlayer: getNextPlayer({ boardIndex, squareIndex }, updatedBoards, state),
+    history: newHistory,
+    pointInHistory: newHistory.length - 1,
+  };
+}
+
+function chosenSquareIsPlayable(state, boardIndex, squareIndex) {
+  const boardToPlay = state.history[state.pointInHistory].boards[boardIndex];
+
+  return boardToPlay.isActive
     && boardToPlay.squares[squareIndex] === null
     && !calculateWinner(boardToPlay.squares);
+}
 
-  if (!aValidSquareWasPlayed) {
-    // Nothing changes in this case
-    return newState;
-  }
+function updateBoardSquares(playedBoardIndex, playedSquareIndex, player) {
+  return (board, boardIndex) => {
+    if (boardIndex === playedBoardIndex) {
+      const { squares } = board;
 
-  // Needs to happen before deciding which board is active because it is used in that calculation
-  boardToPlay.squares[squareIndex] = newState.nextPlayer;
+      return {
+        ...board,
+        squares: [...squares.slice(0, playedSquareIndex), player, ...squares.slice(+playedSquareIndex + 1)],
+      };
+    }
 
-  const newBoardsWithUpdatedActiveStatus = newBoards.map((board, index) => {
+    return board;
+  };
+}
+
+function updateBoardActiveStatus(boardIndex, squareIndex) {
+  return (board, index, boards) => {
     const isBoardActive = index === parseInt(squareIndex, 10);
 
     return {
       ...board,
-      isActive: nextBoardIsWon(newBoards, { boardIndex, squareIndex }) ? true : isBoardActive,
+      isActive: nextBoardIsWon(boards, { boardIndex, squareIndex }) ? true : isBoardActive,
     };
-  });
+  };
+}
 
-  newState.nextPlayer = getNextPlayer({ boardIndex, squareIndex }, newBoards, oldState);
-
-  const newHistory = newState.history.slice(0, oldState.pointInHistory + 1);
-  newHistory.push({ boards: newBoardsWithUpdatedActiveStatus });
-  newState.history = newHistory;
-  newState.pointInHistory = newHistory.length - 1;
+function timeTravel(oldState, { pointInHistory }) {
+  const newState = deepCopyGameState(oldState);
+  newState.pointInHistory = pointInHistory;
+  newState.nextPlayer = pointInHistory % 2 === 0 ? 'X' : 'O';
 
   return newState;
 }
@@ -73,14 +102,6 @@ function getInitialState() {
     pointInHistory: 0,
     specialIcons: false,
   };
-}
-
-function timeTravel(oldState, { pointInHistory }) {
-  const newState = deepCopyGameState(oldState);
-  newState.pointInHistory = pointInHistory;
-  newState.nextPlayer = pointInHistory % 2 === 0 ? 'X' : 'O';
-
-  return newState;
 }
 
 function deepCopyGameState(state) {

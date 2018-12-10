@@ -9,7 +9,7 @@ function getCurrentBoards(state) {
 }
 
 function callPlaySquare(oldState, { boardIndex, squareIndex }) {
-  if (!Object.isFrozen(oldState)) deepFreeze(oldState);
+  deepFreeze(oldState);
   const action = { type: 'PLAY_SQUARE', boardIndex, squareIndex };
   deepFreeze(action);
 
@@ -17,7 +17,7 @@ function callPlaySquare(oldState, { boardIndex, squareIndex }) {
 }
 
 function callTimeTravel(oldState, { pointInHistory }) {
-  if (!Object.isFrozen(oldState)) deepFreeze(oldState);
+  deepFreeze(oldState);
   const action = { type: 'TIME_TRAVEL', pointInHistory };
   deepFreeze(action);
 
@@ -54,6 +54,12 @@ describe('ultimate tic-tac-toe', () => {
       const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex });
       assert.deepEqual(getCurrentBoards(newState)[0].squares, ['X', ...Array(8).fill(null)]);
     });
+  });
+
+  it('playing a square must handle square index as text', () => {
+    // Otherwise this causes problems in, for example, .slice(), because '4' + 1 === '41' instead of 5
+    const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: '5' });
+    assert.equal(getCurrentBoards(newState)[0].squares.length, 9);
   });
 
   it('second move should correctly update next player', () => {
