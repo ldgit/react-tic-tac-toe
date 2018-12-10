@@ -6,6 +6,11 @@ export function ultimateTicTacToe(state = getInitialState(), action) {
       return playSquare(state, { boardIndex: action.boardIndex, squareIndex: action.squareIndex });
     case 'TIME_TRAVEL':
       return timeTravel(state, { pointInHistory: action.pointInHistory });
+    case 'TOGGLE_SPECIAL_ICONS':
+      return {
+        ...state,
+        specialIcons: !state.specialIcons,
+      };
     default:
       return state;
   }

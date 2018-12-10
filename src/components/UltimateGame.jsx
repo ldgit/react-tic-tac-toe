@@ -18,7 +18,7 @@ export default function UltimateGame() {
   }
 
   function toggleSpecialIcons() {
-    setState({ ...state, specialIcons: !state.specialIcons });
+    setState(ultimateTicTacToe(state, { type: 'TOGGLE_SPECIAL_ICONS' }));
   }
 
   function loadGame(gameStateToLoad) {

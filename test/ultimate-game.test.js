@@ -30,7 +30,7 @@ function callCalculateUltimateWinner(boards) {
   return calculateUltimateWinner(boards);
 }
 
-describe('PLAY_SQUARE', () => {
+describe('ultimate tic-tac-toe', () => {
   let initialState;
 
   beforeEach(() => {
@@ -310,6 +310,19 @@ describe('PLAY_SQUARE', () => {
       });
 
       it('playing an invalid move, history is unchanged (already tested in tests marked with *)', () => { });
+    });
+  });
+
+  context('special icons', () => {
+    [true, false].forEach((specialIcons) => {
+      it(`special icons action should toggle specialIcons state (${specialIcons})`, () => {
+        initialState.specialIcons = specialIcons;
+
+        deepFreeze(initialState);
+        const newState = ultimateTicTacToe(initialState, { type: 'TOGGLE_SPECIAL_ICONS' });
+
+        assert.strictEqual(newState.specialIcons, !specialIcons);
+      });
     });
   });
 });
