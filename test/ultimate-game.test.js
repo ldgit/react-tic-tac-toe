@@ -1,8 +1,8 @@
 /* eslint max-len: ['warn', 150, 2] */
 import assert from 'assert';
 import { expect } from 'chai';
+import deepFreeze from 'deep-freeze';
 import { calculateUltimateWinner, ultimateTicTacToe } from '../src/ultimate-game';
-import { deepFreeze } from './test-utils';
 
 function getCurrentBoards(state) {
   return state.history[state.history.length - 1].boards;
@@ -25,7 +25,7 @@ function callTimeTravel(oldState, { pointInHistory }) {
 }
 
 function callCalculateUltimateWinner(boards) {
-  if (!Object.isFrozen(boards)) deepFreeze(boards);
+  deepFreeze(boards);
 
   return calculateUltimateWinner(boards);
 }

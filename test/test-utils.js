@@ -57,25 +57,3 @@ export function createAlertSpy() {
 
   return alertSpy;
 }
-
-/**
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze#What_is_shallow_freeze
- */
-export function deepFreeze(object) {
-  // Retrieve the property names defined on object
-  const propNames = Object.getOwnPropertyNames(object);
-
-  // Freeze properties before freezing self
-  // eslint-disable-next-line no-restricted-syntax
-  for (const name of propNames) {
-    const value = object[name];
-    if (value && typeof value === 'object') {
-      if (!Object.isFrozen(value)) {
-        // eslint-disable-next-line no-param-reassign
-        object[name] = value && typeof value === 'object' ? deepFreeze(value) : value;
-      }
-    }
-  }
-
-  return !Object.isFrozen(object) ? Object.freeze(object) : object;
-}
