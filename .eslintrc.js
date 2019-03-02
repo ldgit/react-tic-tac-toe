@@ -10,6 +10,7 @@ module.exports = {
         'ignoreComments': false,
       }],
       "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
     },
     "env": {
         "browser": true,
