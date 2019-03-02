@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Board from './Board';
 import Status from './Status';
 import SaveAndLoad from './SaveAndLoad';
@@ -11,95 +11,85 @@ import {
   calculateUltimateWinner,
 } from '../ultimate-game';
 
-export default class UltimateGame extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = getInitialState();
-    this.jumpTo = this.jumpTo.bind(this);
-    this.toggleSpecialIcons = this.toggleSpecialIcons.bind(this);
-    this.loadGame = this.loadGame.bind(this);
+export default function UltimateGame() {
+  const [state, setState] = useState(getInitialState());
+
+  function handleClick(boardIndex, squareIndex) {
+    setState(playSquare(state, { boardIndex, squareIndex }));
   }
 
-  handleClick(boardIndex, squareIndex) {
-    this.setState(previousState => playSquare(previousState, { boardIndex, squareIndex }));
+  function jumpTo(pointInHistory) {
+    setState(timeTravel(state, { pointInHistory }));
   }
 
-  jumpTo(pointInHistory) {
-    this.setState(previousState => timeTravel(previousState, { pointInHistory }));
+  function toggleSpecialIcons() {
+    setState({ ...state, specialIcons: !state.specialIcons });
   }
 
-  toggleSpecialIcons() {
-    const { specialIcons } = this.state;
-
-    this.setState({ specialIcons: !specialIcons });
+  function loadGame(gameStateToLoad) {
+    setState(gameStateToLoad);
   }
 
-  loadGame(gameStateToLoad) {
-    this.setState(gameStateToLoad);
-  }
-
-  renderBoard(boardIndex, boards, testId) {
+  function renderBoard(boardIndex, boards, testId) {
     const currentBoard = boards[boardIndex];
     const boardClass = `table-cell table-board-border ${getColorClass(currentBoard)}`;
-    const { specialIcons } = this.state;
+    const { specialIcons } = state;
 
     return (
       <Board
         className={boardClass}
         squares={currentBoard.squares}
         testId={testId}
-        onClick={squareIndex => this.handleClick(boardIndex, squareIndex)}
+        onClick={squareIndex => handleClick(boardIndex, squareIndex)}
         specialIcons={specialIcons}
       />
     );
   }
 
-  render() {
-    const {
-      nextPlayer, history, pointInHistory, specialIcons,
-    } = this.state;
-    const { boards } = history[pointInHistory];
-    const winner = calculateUltimateWinner(boards);
+  const {
+    nextPlayer, history, pointInHistory, specialIcons,
+  } = state;
+  const { boards } = history[pointInHistory];
+  const winner = calculateUltimateWinner(boards);
 
-    return (
-      <div className="table">
-        <div className="table-row">
-          <div className="table-cell">
-            <div>
-              {this.renderBoard(0, boards, 'topLeftBoard')}
-              {this.renderBoard(1, boards, 'topMiddleBoard')}
-              {this.renderBoard(2, boards, 'topRightBoard')}
-            </div>
-            <div>
-              {this.renderBoard(3, boards, 'centerLeftBoard')}
-              {this.renderBoard(4, boards, 'centerMiddleBoard')}
-              {this.renderBoard(5, boards, 'centerRightBoard')}
-            </div>
-            <div>
-              {this.renderBoard(6, boards, 'bottomLeftBoard')}
-              {this.renderBoard(7, boards, 'bottomMiddleBoard')}
-              {this.renderBoard(8, boards, 'bottomRightBoard')}
-            </div>
+  return (
+    <div className="table">
+      <div className="table-row">
+        <div className="table-cell">
+          <div>
+            {renderBoard(0, boards, 'topLeftBoard')}
+            {renderBoard(1, boards, 'topMiddleBoard')}
+            {renderBoard(2, boards, 'topRightBoard')}
           </div>
-          <div className="game-info table-cell table-large-padding max-height">
-            <Status
-              description={winner ? 'Winner' : 'Next player'}
-              player={winner || nextPlayer}
-              specialIcons={specialIcons}
-            />
-            <br />
-            <button type="button" onClick={this.toggleSpecialIcons}>Vue vs. React?</button>
-            <br /><br />
-            <SaveAndLoad gameState={this.state} onLoadGameClick={this.loadGame} />
-            <br />
-            <ol>
-              {history.map(renderTimeTravelButton.bind(null, this.jumpTo, pointInHistory))}
-            </ol>
+          <div>
+            {renderBoard(3, boards, 'centerLeftBoard')}
+            {renderBoard(4, boards, 'centerMiddleBoard')}
+            {renderBoard(5, boards, 'centerRightBoard')}
+          </div>
+          <div>
+            {renderBoard(6, boards, 'bottomLeftBoard')}
+            {renderBoard(7, boards, 'bottomMiddleBoard')}
+            {renderBoard(8, boards, 'bottomRightBoard')}
           </div>
         </div>
+        <div className="game-info table-cell table-large-padding max-height">
+          <Status
+            description={winner ? 'Winner' : 'Next player'}
+            player={winner || nextPlayer}
+            specialIcons={specialIcons}
+          />
+          <br />
+          <button type="button" onClick={toggleSpecialIcons}>Vue vs. React?</button>
+          <br /><br />
+          <SaveAndLoad gameState={state} onLoadGameClick={loadGame} />
+          <br />
+          <ol>
+            {history.map(renderTimeTravelButton.bind(null, jumpTo, pointInHistory))}
+          </ol>
+        </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 function renderTimeTravelButton(onClickHandler, pointInHistory, boardsObject, moveNumber) {
