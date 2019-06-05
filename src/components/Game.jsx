@@ -37,12 +37,19 @@ export default function Game() {
   const { squares } = history[stepNumber];
   const winner = calculateWinner(squares);
   const moves = history.map((step, moveIndex) => {
-    const description = moveIndex ? `Go to move ${moveIndex}` : 'Go to game start';
+    const description = moveIndex
+      ? `Go to move ${moveIndex}`
+      : 'Go to game start';
 
     return (
       // eslint-disable-next-line react/no-array-index-key
       <li key={moveIndex}>
-        <TimeTravelButton highlight={stepNumber === moveIndex} onClick={() => { jumpTo(moveIndex); }}>
+        <TimeTravelButton
+          highlight={stepNumber === moveIndex}
+          onClick={() => {
+            jumpTo(moveIndex);
+          }}
+        >
           {description}
         </TimeTravelButton>
       </li>
@@ -55,7 +62,10 @@ export default function Game() {
         <Board squares={squares} onClick={i => handleClick(i)} />
       </div>
       <div className="game-info">
-        <Status description={winner ? 'Winner' : 'Next player'} player={winner || getNextValue()} />
+        <Status
+          description={winner ? 'Winner' : 'Next player'}
+          player={winner || getNextValue()}
+        />
         <ol>{moves}</ol>
       </div>
     </div>

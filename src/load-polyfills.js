@@ -1,5 +1,10 @@
 export function whenPolyfillsLoadedUnconfigured(window, document, callback) {
-  if (window.Map && window.Object.assign && window.Array.prototype.fill && window.requestAnimationFrame) {
+  if (
+    window.Map &&
+    window.Object.assign &&
+    window.Array.prototype.fill &&
+    window.requestAnimationFrame
+  ) {
     callback();
     return;
   }
@@ -26,4 +31,5 @@ export function whenPolyfillsLoadedUnconfigured(window, document, callback) {
   }
 }
 
-export const whenPolyfillsLoaded = callback => whenPolyfillsLoadedUnconfigured(window, document, callback);
+export const whenPolyfillsLoaded = callback =>
+  whenPolyfillsLoadedUnconfigured(window, document, callback);

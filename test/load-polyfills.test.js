@@ -11,7 +11,9 @@ describe('load-polyfills', () => {
   let whenPolyfillsLoaded;
 
   beforeEach(() => {
-    const html = fs.readFileSync(path.join('.', 'test', 'fixtures', 'load-polyfills.html'));
+    const html = fs.readFileSync(
+      path.join('.', 'test', 'fixtures', 'load-polyfills.html'),
+    );
     ({ document, window } = getBrowserEnvironment(html));
     setUpEnvironmentThatDoesNotNeedPolyfills(document, window);
     onloadCallbacks = [];
@@ -21,7 +23,11 @@ describe('load-polyfills', () => {
       },
       configurable: true,
     });
-    whenPolyfillsLoaded = whenPolyfillsLoadedUnconfigured.bind(null, window, document);
+    whenPolyfillsLoaded = whenPolyfillsLoadedUnconfigured.bind(
+      null,
+      window,
+      document,
+    );
   });
 
   it('should not load polyfills if all needed features supported', () => {
@@ -31,7 +37,7 @@ describe('load-polyfills', () => {
     assert.strictEqual(polyfillScripts.length, 0);
   });
 
-  it('should call provided callback if no polyfills needed', (done) => {
+  it('should call provided callback if no polyfills needed', done => {
     whenPolyfillsLoaded(done);
   });
 
@@ -57,7 +63,7 @@ describe('load-polyfills', () => {
     assert.equal(typeof window.Array.prototype.fill, 'function');
     delete window.Array.prototype.fill;
 
-    whenPolyfillsLoaded(() => { });
+    whenPolyfillsLoaded(() => {});
 
     assertPolyfillsLoaded();
   });
@@ -66,7 +72,7 @@ describe('load-polyfills', () => {
     assert.equal(typeof window.requestAnimationFrame, 'function');
     delete window.requestAnimationFrame;
 
-    whenPolyfillsLoaded(() => { });
+    whenPolyfillsLoaded(() => {});
 
     assertPolyfillsLoaded();
   });
@@ -91,7 +97,7 @@ describe('load-polyfills', () => {
     });
 
     it('should execute given callback function when all polyfills loaded', () => {
-      const promise = new Promise((resolve) => {
+      const promise = new Promise(resolve => {
         whenPolyfillsLoaded(resolve);
       });
 
@@ -101,9 +107,12 @@ describe('load-polyfills', () => {
     });
 
     it('should not execute given callback function if only some polyfills loaded', () => {
-      const wait = seconds => new Promise(resolve => setTimeout(resolve, seconds));
+      const wait = seconds =>
+        new Promise(resolve => setTimeout(resolve, seconds));
 
-      whenPolyfillsLoaded(() => assert.fail('Should not run if only one polyfill script loaded'));
+      whenPolyfillsLoaded(() =>
+        assert.fail('Should not run if only one polyfill script loaded'),
+      );
       onloadCallbacks[1]();
 
       return wait(30);

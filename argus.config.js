@@ -5,7 +5,10 @@ module.exports = {
       testNameSuffix: '.test',
       testDir: 'test',
       sourceDir: 'src',
-      testRunnerCommand: { command: 'npm', arguments: ['run', 'test:file', '--'] },
+      testRunnerCommand: {
+        command: 'npm',
+        arguments: ['run', 'test:file', '--'],
+      },
       runAllTestsCommand: { command: 'npm', arguments: ['t'] },
     },
     {
@@ -13,7 +16,10 @@ module.exports = {
       testNameSuffix: '.test',
       testDir: 'test',
       sourceDir: 'src',
-      testRunnerCommand: { command: 'npm', arguments: ['run', 'test:file', '--'] },
+      testRunnerCommand: {
+        command: 'npm',
+        arguments: ['run', 'test:file', '--'],
+      },
       runAllTestsCommand: { command: 'npm', arguments: ['t'] },
     },
   ],

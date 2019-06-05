@@ -4,14 +4,17 @@ import { JSDOM } from 'jsdom';
 import { Simulate } from 'react-dom/test-utils';
 
 export function getBrowserEnvironment(html = '') {
-  const { window } = new JSDOM(html || `<!DOCTYPE html>
+  const { window } = new JSDOM(
+    html ||
+      `<!DOCTYPE html>
   <html>
     <head>
       <meta charset="UTF-8">
       <title>Tic-Tac-Toe</title>
     </head>
     <body></body>
-  </html>`);
+  </html>`,
+  );
   const { document } = window;
 
   return { document, window };
@@ -40,12 +43,17 @@ export function clickOnElement(window, element) {
 }
 
 export function triggerChange(element) {
-  assert.ok(element, 'Element that the change event should be triggered on does not exist');
+  assert.ok(
+    element,
+    'Element that the change event should be triggered on does not exist',
+  );
   Simulate.change(element);
 }
 
 export function selectByText(container, selector, text) {
-  const elements = Array.from(container.querySelectorAll(selector)).filter(element => element.textContent === text);
+  const elements = Array.from(container.querySelectorAll(selector)).filter(
+    element => element.textContent === text,
+  );
 
   return elements.length > 0 ? elements[0] : null;
 }

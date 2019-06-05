@@ -12,8 +12,9 @@
     "build": "webpack --mode=development",
     "build:prod": "webpack --mode=production",
     "start": "webpack-dev-server --open --mode=development",
+    "prettier": "prettier \"{*.{js,jsx,css,json,md},{src,test}/**/*.{js,jsx,css,json,md}}\" --check",
     "lint": "eslint --ext .jsx,.js ./",
-    "test:all": "npm run lint &&  npm t",
+    "test:all": "npm run prettier && npm run lint && npm t",
     "deploy": "npm run test:all && npm run build:prod && rm -rf docs/* && cp -R dist/. docs/"
   },
   "author": "Danko Lučić",
@@ -58,6 +59,7 @@
     "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
@@ -67,10 +69,28 @@
     "jsdom": "^15.1.1",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
+    "prettier": "1.17.1",
     "style-loader": "^0.23.1",
     "webpack": "^4.33.0",
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.6.0"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "bracketSpacing": true,
+    "htmlWhitespaceSensitivity": "css",
+    "insertPragma": false,
+    "jsxBracketSameLine": false,
+    "jsxSingleQuote": false,
+    "printWidth": 80,
+    "proseWrap": "preserve",
+    "quoteProps": "as-needed",
+    "requirePragma": false,
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "all",
+    "useTabs": false
   },
   "browserslist": [
     "ie > 8"

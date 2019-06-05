@@ -2,7 +2,11 @@ import React from 'react';
 import Square from './Square';
 
 export default function Board({
-  squares, onClick, testId, className, specialIcons = false,
+  squares,
+  onClick,
+  testId,
+  className,
+  specialIcons = false,
 }) {
   function renderSquare(i, squareTestId) {
     return (

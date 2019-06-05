@@ -32,7 +32,9 @@ export default function UltimateGame() {
 
   function renderBoard(boardIndex, boards, testId) {
     const currentBoard = boards[boardIndex];
-    const boardClass = `table-cell table-board-border ${getColorClass(currentBoard)}`;
+    const boardClass = `table-cell table-board-border ${getColorClass(
+      currentBoard,
+    )}`;
     const { specialIcons } = state;
 
     return (
@@ -46,9 +48,7 @@ export default function UltimateGame() {
     );
   }
 
-  const {
-    nextPlayer, history, pointInHistory, specialIcons,
-  } = state;
+  const { nextPlayer, history, pointInHistory, specialIcons } = state;
   const { boards } = history[pointInHistory];
   const winner = calculateUltimateWinner(boards);
 
@@ -79,12 +79,17 @@ export default function UltimateGame() {
             specialIcons={specialIcons}
           />
           <br />
-          <button type="button" onClick={toggleSpecialIcons}>Vue vs. React?</button>
-          <br /><br />
+          <button type="button" onClick={toggleSpecialIcons}>
+            Vue vs. React?
+          </button>
+          <br />
+          <br />
           <SaveAndLoad gameState={state} onLoadGameClick={loadGame} />
           <br />
           <ol>
-            {history.map(renderTimeTravelButton.bind(null, jumpTo, pointInHistory))}
+            {history.map(
+              renderTimeTravelButton.bind(null, jumpTo, pointInHistory),
+            )}
           </ol>
         </div>
       </div>
@@ -92,12 +97,21 @@ export default function UltimateGame() {
   );
 }
 
-function renderTimeTravelButton(onClickHandler, pointInHistory, boardsObject, moveNumber) {
-  const description = moveNumber === 0 ? 'Go to game start' : `Go to move ${moveNumber}`;
+function renderTimeTravelButton(
+  onClickHandler,
+  pointInHistory,
+  boardsObject,
+  moveNumber,
+) {
+  const description =
+    moveNumber === 0 ? 'Go to game start' : `Go to move ${moveNumber}`;
 
   return (
     <li key={moveNumber}>
-      <TimeTravelButton onClick={() => onClickHandler(moveNumber)} highlight={pointInHistory === moveNumber}>
+      <TimeTravelButton
+        onClick={() => onClickHandler(moveNumber)}
+        highlight={pointInHistory === moveNumber}
+      >
         {description}
       </TimeTravelButton>
     </li>

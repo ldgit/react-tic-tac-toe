@@ -2,7 +2,13 @@ import assert from 'assert';
 import React from 'react';
 import ReactDom from 'react-dom';
 import {
-  getBrowserEnvironment, find, sel, selectByText, clickOnElement, triggerChange, createAlertSpy,
+  getBrowserEnvironment,
+  find,
+  sel,
+  selectByText,
+  clickOnElement,
+  triggerChange,
+  createAlertSpy,
 } from '../test-utils';
 import SaveAndLoad from '../../src/components/SaveAndLoad';
 
@@ -40,7 +46,10 @@ describe('SaveAndLoad component', () => {
   context('click on "Save" button', () => {
     beforeEach(() => {
       app = createAppElement();
-      ReactDom.render(<SaveAndLoad gameState={gameState} onLoadGameClick={() => {}} />, app);
+      ReactDom.render(
+        <SaveAndLoad gameState={gameState} onLoadGameClick={() => {}} />,
+        app,
+      );
     });
 
     it('should hide load game textarea', () => {
@@ -55,7 +64,10 @@ describe('SaveAndLoad component', () => {
 
     it('should not display the textarea element if gameState is empty', () => {
       app = createAppElement();
-      ReactDom.render(<SaveAndLoad gameState="" onLoadGameClick={() => {}} />, app);
+      ReactDom.render(
+        <SaveAndLoad gameState="" onLoadGameClick={() => {}} />,
+        app,
+      );
       const exportButton = selectByText(app, 'button', 'Save');
 
       click(exportButton);
@@ -91,7 +103,11 @@ describe('SaveAndLoad component', () => {
     it('should hide textarea and "Close" button if "Close" button is clicked', () => {
       click(selectByText(app, 'button', 'Save'));
       click(selectByText(app, 'button', 'Close'));
-      assert.strictEqual(selectByText(app, 'button', 'Close'), null, 'close should not be displayed');
+      assert.strictEqual(
+        selectByText(app, 'button', 'Close'),
+        null,
+        'close should not be displayed',
+      );
       assertTextareaIsHidden(app);
     });
   });
@@ -99,17 +115,28 @@ describe('SaveAndLoad component', () => {
   context('click on load button', () => {
     beforeEach(() => {
       app = createAppElement();
-      ReactDom.render(<SaveAndLoad gameState={gameState} onLoadGameClick={() => {}} />, app);
+      ReactDom.render(
+        <SaveAndLoad gameState={gameState} onLoadGameClick={() => {}} />,
+        app,
+      );
     });
 
     it('should display a textarea', () => {
-      assert.strictEqual(typeof getTextArea(app), 'undefined', 'textarea should not render before the click');
+      assert.strictEqual(
+        typeof getTextArea(app),
+        'undefined',
+        'textarea should not render before the click',
+      );
 
       click(selectByText(app, 'button', 'Load'));
 
       const textarea = getTextArea(app);
       assert.ok(textarea, 'textarea not found');
-      assert.deepEqual(textarea, find(app, 'importGameTextarea'), 'textarea should be for importing another game');
+      assert.deepEqual(
+        textarea,
+        find(app, 'importGameTextarea'),
+        'textarea should be for importing another game',
+      );
     });
 
     it('should hide save game textarea', () => {
@@ -119,14 +146,25 @@ describe('SaveAndLoad component', () => {
       click(selectByText(app, 'button', 'Load'));
 
       const textarea = getTextArea(app);
-      assert.strictEqual(find(app, 'exportGameTextarea'), null, 'textarea for exporting the game should not render');
-      assert.deepEqual(textarea, find(app, 'importGameTextarea'), 'textarea should be for importing another game');
+      assert.strictEqual(
+        find(app, 'exportGameTextarea'),
+        null,
+        'textarea for exporting the game should not render',
+      );
+      assert.deepEqual(
+        textarea,
+        find(app, 'importGameTextarea'),
+        'textarea should be for importing another game',
+      );
     });
 
     it('should display "Load game" button when Load button is clicked', () => {
       assert.strictEqual(selectByText(app, 'button', 'Load game'), null);
       click(selectByText(app, 'button', 'Load'));
-      assert.ok(selectByText(app, 'button', 'Load game'), '"Load game" button not found');
+      assert.ok(
+        selectByText(app, 'button', 'Load game'),
+        '"Load game" button not found',
+      );
     });
 
     it('should hide textarea, "Load game" and Close button when Close button is clicked', () => {
@@ -137,26 +175,39 @@ describe('SaveAndLoad component', () => {
 
     it('should parse textarea content as JSON and send it to callback function', () => {
       let loadGameClickHandler;
-      const promise = new Promise((resolve) => {
+      const promise = new Promise(resolve => {
         loadGameClickHandler = resolve;
       });
       app = createAppElement();
-      ReactDom.render(<SaveAndLoad gameState={gameState} onLoadGameClick={loadGameClickHandler} />, app);
+      ReactDom.render(
+        <SaveAndLoad
+          gameState={gameState}
+          onLoadGameClick={loadGameClickHandler}
+        />,
+        app,
+      );
       click(selectByText(app, 'button', 'Load'));
 
-      sel(app, 'importGameTextarea').value = '{ "aProperty": "foo", "aList": ["foo", "bar"] }';
+      sel(app, 'importGameTextarea').value =
+        '{ "aProperty": "foo", "aList": ["foo", "bar"] }';
       triggerChange(sel(app, 'importGameTextarea'));
       click(selectByText(app, 'button', 'Load game'));
 
-      return promise.then(state => assert.deepEqual(state, { aProperty: 'foo', aList: ['foo', 'bar'] }));
+      return promise.then(state =>
+        assert.deepEqual(state, { aProperty: 'foo', aList: ['foo', 'bar'] }),
+      );
     });
 
     it('should close load game dialog after game loaded', () => {
       app = createAppElement();
-      ReactDom.render(<SaveAndLoad gameState={gameState} onLoadGameClick={() => {}} />, app);
+      ReactDom.render(
+        <SaveAndLoad gameState={gameState} onLoadGameClick={() => {}} />,
+        app,
+      );
       click(selectByText(app, 'button', 'Load'));
 
-      sel(app, 'importGameTextarea').value = '{ "aProperty": "foo", "aList": ["foo", "bar"] }';
+      sel(app, 'importGameTextarea').value =
+        '{ "aProperty": "foo", "aList": ["foo", "bar"] }';
       triggerChange(sel(app, 'importGameTextarea'));
       click(selectByText(app, 'button', 'Load game'));
 
@@ -168,7 +219,11 @@ describe('SaveAndLoad component', () => {
 
       sel(app, 'importGameTextarea').value = 'notValidJson{}';
       triggerChange(sel(app, 'importGameTextarea'));
-      assert.equal(window.alert.getMessageLog().length, 0, 'No alerts on textarea change event');
+      assert.equal(
+        window.alert.getMessageLog().length,
+        0,
+        'No alerts on textarea change event',
+      );
       click(selectByText(app, 'button', 'Load game'));
 
       assert.equal(window.alert.getMessageLog()[0], 'Invalid save game JSON');
@@ -177,15 +232,27 @@ describe('SaveAndLoad component', () => {
 
   function assertLoadGameDialogRemoved() {
     assertNoImportGameTextarea();
-    assert.strictEqual(selectByText(app, 'button', 'Load game'), null, '"Load game" button should not render');
+    assert.strictEqual(
+      selectByText(app, 'button', 'Load game'),
+      null,
+      '"Load game" button should not render',
+    );
   }
 
   function assertNoImportGameTextarea() {
-    assert.strictEqual(find(app, 'importGameTextarea'), null, 'textarea for importing a game should not render');
+    assert.strictEqual(
+      find(app, 'importGameTextarea'),
+      null,
+      'textarea for importing a game should not render',
+    );
   }
 
   function assertTextareaIsHidden(appElement) {
-    assert.strictEqual(getTextArea(appElement), undefined, 'textarea should not render');
+    assert.strictEqual(
+      getTextArea(appElement),
+      undefined,
+      'textarea should not render',
+    );
   }
 
   function createAppElement() {

@@ -2,16 +2,20 @@ import { calculateWinner } from './helpers';
 
 export function playSquare(oldState, { boardIndex, squareIndex }) {
   const newState = deepCopyGameState(oldState);
-  const newBoards = deepCopyGameBoards(newState.history[oldState.pointInHistory].boards);
+  const newBoards = deepCopyGameBoards(
+    newState.history[oldState.pointInHistory].boards,
+  );
 
-  if (calculateUltimateWinner(newBoards)) { // game already finished
+  if (calculateUltimateWinner(newBoards)) {
+    // game already finished
     return newState;
   }
 
   const boardToPlay = newBoards[boardIndex];
-  const aValidSquareWasPlayed = boardToPlay.isActive
-    && boardToPlay.squares[squareIndex] === null
-    && !calculateWinner(boardToPlay.squares);
+  const aValidSquareWasPlayed =
+    boardToPlay.isActive &&
+    boardToPlay.squares[squareIndex] === null &&
+    !calculateWinner(boardToPlay.squares);
 
   if (!aValidSquareWasPlayed) {
     // Nothing changes in this case
@@ -25,11 +29,17 @@ export function playSquare(oldState, { boardIndex, squareIndex }) {
     const isBoardActive = index === parseInt(squareIndex, 10);
 
     return Object.assign({}, board, {
-      isActive: nextBoardIsWon(newBoards, { boardIndex, squareIndex }) ? true : isBoardActive,
+      isActive: nextBoardIsWon(newBoards, { boardIndex, squareIndex })
+        ? true
+        : isBoardActive,
     });
   });
 
-  newState.nextPlayer = getNextPlayer({ boardIndex, squareIndex }, newBoards, oldState);
+  newState.nextPlayer = getNextPlayer(
+    { boardIndex, squareIndex },
+    newBoards,
+    oldState,
+  );
 
   const newHistory = newState.history.slice(0, oldState.pointInHistory + 1);
   newHistory.push({ boards: newBoardsWithUpdatedActiveStatus });
@@ -40,9 +50,9 @@ export function playSquare(oldState, { boardIndex, squareIndex }) {
 }
 
 export function getInitialState() {
-  const boards = Array(9).fill().map(() => (
-    { squares: Array(9).fill(null), isActive: true }
-  ));
+  const boards = Array(9)
+    .fill()
+    .map(() => ({ squares: Array(9).fill(null), isActive: true }));
 
   return {
     nextPlayer: 'X',
@@ -67,7 +77,9 @@ export function calculateUltimateWinner(boards) {
 }
 
 function deepCopyGameState(state) {
-  const newHistory = state.history.map(boardEntry => ({ boards: deepCopyGameBoards(boardEntry.boards) }));
+  const newHistory = state.history.map(boardEntry => ({
+    boards: deepCopyGameBoards(boardEntry.boards),
+  }));
 
   return Object.assign({}, state, {
     nextPlayer: state.nextPlayer,
@@ -76,7 +88,12 @@ function deepCopyGameState(state) {
 }
 
 function deepCopyGameBoards(boards) {
-  return boards.map(board => Object.assign({}, board, { isActive: board.isActive, squares: board.squares.slice() }));
+  return boards.map(board =>
+    Object.assign({}, board, {
+      isActive: board.isActive,
+      squares: board.squares.slice(),
+    }),
+  );
 }
 
 function nextBoardIsWon(boards, { squareIndex }) {
