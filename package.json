@@ -5,7 +5,7 @@
   "main": "index.js",
   "homepage": "https://ldgit.github.io/react-tic-tac-toe/",
   "scripts": {
-    "test:file": "mocha --require @babel/register",
+    "test:file": "mocha --require @babel/register --file test/bootstrap.js",
     "test": "npm run test:file \"test/**/*.test.{js,jsx}\"",
     "test:watch": "argus",
     "coverage": "nyc --all --require @babel/register mocha 'test/**/*.test.{js,jsx}' && nyc report --reporter=text-lcov | coveralls",

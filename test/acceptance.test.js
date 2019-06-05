@@ -1,4 +1,3 @@
-/* eslint max-len: ['warn', 160, 2] */
 import assert from 'assert';
 import { expect } from 'chai';
 import React from 'react';
@@ -7,32 +6,16 @@ import fs from 'fs';
 import path from 'path';
 import Game from '../src/components/Game';
 import UltimateGame from '../src/components/UltimateGame';
-import {
-  getBrowserEnvironment,
-  sel,
-  clickOnElement,
-  selectByText,
-  triggerChange,
-} from './test-utils';
+import { sel, clickOnElement, selectByText, triggerChange } from './test-utils';
 
 describe('Tic-tac-toe game', () => {
-  let document;
   let app;
-  let window;
-  let originalGlobalWindow;
   let click;
 
   beforeEach(() => {
-    ({ window, document } = getBrowserEnvironment());
     app = document.createElement('div');
     document.body.appendChild(app);
-    originalGlobalWindow = global.window;
-    global.window = window;
     click = clickOnElement.bind(null, window);
-  });
-
-  afterEach(() => {
-    global.window = originalGlobalWindow;
   });
 
   context('standard tic-tac-toe', () => {
