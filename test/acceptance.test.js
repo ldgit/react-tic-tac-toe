@@ -414,6 +414,26 @@ describe('Ultimate Tic-tac-toe game', () => {
     });
   });
 
+  describe('share url functionality', () => {
+    it.skip('should set all game actions as url query string', () => {
+      testUtils.changeWindowUrl('https://example.com');
+      const topLeftBoard = sel(app, 'topLeftBoard');
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      const bottomRightBoard = sel(app, 'bottomRightBoard');
+      // Play some moves
+      clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertFilledWith('X');
+      clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertFilledWith('O');
+      clickEmptySquare(sel(topLeftBoard, 'bottomRightSquare')).assertFilledWith('X');
+      clickEmptySquare(sel(bottomRightBoard, 'centerMiddleSquare')).assertFilledWith('O');
+
+      const shareButton = selectByText(app, '*', 'Share game');
+      expect(shareButton, 'shareButton not found').to.not.be.null;
+      click(shareButton);
+
+      expect(window.location.href).to.equal('https://example.com?g[]=x01;g[]=o03;g[]=x22&g[]=88');
+    });
+  });
+
   function assertSpecialModeNotToggled(
     topMiddleBoardCenterMiddleSquare,
     topMiddleBoardBottomMiddleSquare,
