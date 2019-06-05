@@ -430,7 +430,7 @@ describe('Ultimate Tic-tac-toe game', () => {
       expect(shareButton, 'shareButton not found').to.not.be.null;
       click(shareButton);
 
-      expect(window.location.href).to.equal('https://example.com?g[]=x01;g[]=o03;g[]=x22&g[]=88');
+      expect(window.location.href).to.equal('https://example.com?g[]=x01;g[]=o03;g[]=x22&g[]=o88');
     });
   });
 
