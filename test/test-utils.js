@@ -4,20 +4,22 @@ import { JSDOM } from 'jsdom';
 import { Simulate } from 'react-dom/test-utils';
 
 export function getBrowserEnvironment(html = '') {
-  const { window } = new JSDOM(
+  const dom = new JSDOM(
     html ||
       `<!DOCTYPE html>
-  <html>
+    <html>
     <head>
-      <meta charset="UTF-8">
-      <title>Tic-Tac-Toe</title>
+    <meta charset="UTF-8">
+    <title>Tic-Tac-Toe</title>
     </head>
     <body></body>
-  </html>`,
+    </html>`,
   );
+  const { window } = dom;
   const { document } = window;
+  const changeWindowUrl = newUrl => dom.reconfigure({ url: newUrl });
 
-  return { document, window };
+  return { document, window, changeWindowUrl };
 }
 
 export function sel(container, testId) {
