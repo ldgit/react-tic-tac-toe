@@ -4,11 +4,10 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import fs from 'fs';
 import path from 'path';
-import Game from '../src/components/Game';
 import UltimateGame from '../src/components/UltimateGame';
 import { sel, clickOnElement, selectByText, triggerChange } from './test-utils';
 
-describe('Tic-tac-toe game', () => {
+describe('Ultimate Tic-tac-toe game', () => {
   let app;
   let click;
 
@@ -16,665 +15,522 @@ describe('Tic-tac-toe game', () => {
     app = document.createElement('div');
     document.body.appendChild(app);
     click = clickOnElement.bind(null, window);
+    // eslint-disable-next-line react/jsx-filename-extension
+    ReactDom.render(<UltimateGame />, app);
   });
 
-  context('standard tic-tac-toe', () => {
-    beforeEach(() => {
-      // eslint-disable-next-line react/jsx-filename-extension
-      ReactDom.render(<Game />, app);
-    });
-
-    it('clicking on already played square does nothing', () => {
-      clickEmptySquare(sel(app, 'centerMiddleSquare'));
-
-      click(sel(app, 'centerMiddleSquare'));
-
-      assertGameStatus('Next player', 'O');
-      assert.equal(sel(app, 'centerMiddleSquare').textContent, 'X');
-    });
-
-    it('play a game where X wins', () => {
-      // Final board
-      // X O O
-      // O X
-      // X   X
-      clickEmptySquare(sel(app, 'centerMiddleSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(app, 'topMiddleSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(app, 'bottomLeftSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(app, 'topRightSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(app, 'topLeftSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(app, 'centerLeftSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(app, 'bottomRightSquare')).assertIsFilledWith('X');
-    });
-
-    it('should update game status with next player info after each move', () => {
-      assertGameStatus('Next player', 'X');
-      clickEmptySquare(sel(app, 'centerMiddleSquare'));
-      assertGameStatus('Next player', 'O');
-      clickEmptySquare(sel(app, 'topRightSquare'));
-      assertGameStatus('Next player', 'X');
-    });
-
-    it('horizontal O win', () => {
-      // Final board
-      // O O O
-      //   X
-      // X   X
-      clickEmptySquare(sel(app, 'centerMiddleSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(app, 'topMiddleSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(app, 'bottomRightSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(app, 'topRightSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(app, 'bottomLeftSquare')).assertIsFilledWith('X');
-
-      assertGameStatus('Next player', 'O');
-      clickEmptySquare(sel(app, 'topLeftSquare')).assertIsFilledWith('O');
-      assertGameStatus('Winner', 'O');
-    });
-
-    it('middle vertical X win', () => {
-      playMiddleVerticalXWin();
-      assertGameStatus('Winner', 'X');
-    });
-
-    it('clicking on empty square after winning move does nothing', () => {
-      // Final board
-      // O O O
-      //   X
-      // X   X
-      clickEmptySquare(sel(app, 'centerMiddleSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(app, 'topMiddleSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(app, 'bottomRightSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(app, 'topRightSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(app, 'bottomLeftSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(app, 'topLeftSquare')).assertIsFilledWith('O');
-
-      clickEmptySquare(sel(app, 'centerLeftSquare')).assertIsFilledWith('');
-      clickEmptySquare(sel(app, 'bottomMiddleSquare')).assertIsFilledWith('');
-    });
-
-    it('time travel: highlight time travel button for current move', () => {
-      expect(
-        selectByText(app, 'button', 'Go to game start').className,
-      ).to.have.string('current-move-button');
-      clickEmptySquare(sel(app, 'centerMiddleSquare')).assertIsFilledWith('X');
-      expect(
-        selectByText(app, 'button', 'Go to game start').className,
-      ).to.not.have.string('current-move-button');
-      expect(
-        selectByText(app, 'button', 'Go to move 1').className,
-      ).to.have.string('current-move-button');
-
-      click(selectByText(app, 'button', 'Go to game start'));
-      expect(
-        selectByText(app, 'button', 'Go to game start').className,
-      ).to.have.string('current-move-button');
-      expect(
-        selectByText(app, 'button', 'Go to move 1').className,
-      ).to.not.have.string('current-move-button');
-    });
-
-    it('time travel: X wins, then time travel two moves back, then O wins', () => {
-      playMiddleVerticalXWin();
-      assertGameStatus('Winner', 'X');
-
-      click(selectByText(app, 'button', 'Go to move 3'));
-      assertGameStatus('Next player', 'O');
-      // Board now:
-      // O X
-      //   X
-      //
-      clickEmptySquare(sel(app, 'centerLeftSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(app, 'topRightSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(app, 'bottomLeftSquare')).assertIsFilledWith('O');
-      assertGameStatus('Winner', 'O');
-    });
-
-    function playMiddleVerticalXWin() {
-      // Final board
-      // O X
-      //   X
-      // O X
-      clickEmptySquare(sel(app, 'centerMiddleSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(app, 'topLeftSquare')).assertIsFilledWith('O');
-      clickEmptySquare(sel(app, 'topMiddleSquare')).assertIsFilledWith('X');
-      clickEmptySquare(sel(app, 'bottomLeftSquare')).assertIsFilledWith('O');
-
-      assertGameStatus('Next player', 'X');
-      clickEmptySquare(sel(app, 'bottomMiddleSquare')).assertIsFilledWith('X');
-    }
+  it("player can't play on already played square", () => {
+    const centerMiddleBoard = sel(app, 'centerMiddleBoard');
+    clickEmptySquare(
+      sel(centerMiddleBoard, 'centerMiddleSquare'),
+    ).assertIsFilledWith('X');
+    clickSquare(
+      sel(centerMiddleBoard, 'centerMiddleSquare'),
+    ).assertIsNotFilledWith('O');
+    clickSquare(
+      sel(centerMiddleBoard, 'centerMiddleSquare'),
+    ).assertIsNotFilledWith('');
   });
 
-  context('ultimate tic-tac-toe', () => {
-    beforeEach(() => {
-      // eslint-disable-next-line react/jsx-filename-extension
-      ReactDom.render(<UltimateGame />, app);
-    });
+  getAllBoardTestIds().forEach(({ boardTestId }) => {
+    it(`player O has to play in top left board if player X played in top left square of ${boardTestId} board`, () => {
+      const boardToPlay = sel(app, boardTestId);
+      clickEmptySquare(sel(boardToPlay, 'topLeftSquare')).assertIsFilledWith(
+        'X',
+      );
 
-    it("player can't play on already played square", () => {
+      selectAllBoardsExcept(['topLeftBoard']).map(board =>
+        clickEmptySquare(sel(board, 'bottomLeftSquare')).assertIsFilledWith(''),
+      );
+    });
+  });
+
+  getAllBoardTestIds().forEach(({ boardTestId }) => {
+    it(`player O has to play in center middle board if player X played in center middle square of ${boardTestId} board`, () => {
+      const boardToPlay = sel(app, boardTestId);
+      clickEmptySquare(
+        sel(boardToPlay, 'centerMiddleSquare'),
+      ).assertIsFilledWith('X');
+
+      selectAllBoardsExcept(['centerMiddleBoard']).map(board =>
+        clickEmptySquare(sel(board, 'topLeftSquare')).assertIsFilledWith(''),
+      );
+
       const centerMiddleBoard = sel(app, 'centerMiddleBoard');
       clickEmptySquare(
-        sel(centerMiddleBoard, 'centerMiddleSquare'),
-      ).assertIsFilledWith('X');
-      clickSquare(
-        sel(centerMiddleBoard, 'centerMiddleSquare'),
-      ).assertIsNotFilledWith('O');
-      clickSquare(
-        sel(centerMiddleBoard, 'centerMiddleSquare'),
-      ).assertIsNotFilledWith('');
+        sel(centerMiddleBoard, 'bottomRightSquare'),
+      ).assertIsFilledWith('O');
     });
+  });
 
-    getAllBoardTestIds().forEach(({ boardTestId }) => {
-      it(`player O has to play in top left board if player X played in top left square of ${boardTestId} board`, () => {
-        const boardToPlay = sel(app, boardTestId);
-        clickEmptySquare(sel(boardToPlay, 'topLeftSquare')).assertIsFilledWith(
-          'X',
-        );
-
-        selectAllBoardsExcept(['topLeftBoard']).map(board =>
-          clickEmptySquare(sel(board, 'bottomLeftSquare')).assertIsFilledWith(
-            '',
-          ),
-        );
-      });
-    });
-
-    getAllBoardTestIds().forEach(({ boardTestId }) => {
-      it(`player O has to play in center middle board if player X played in center middle square of ${boardTestId} board`, () => {
-        const boardToPlay = sel(app, boardTestId);
-        clickEmptySquare(
-          sel(boardToPlay, 'centerMiddleSquare'),
-        ).assertIsFilledWith('X');
-
-        selectAllBoardsExcept(['centerMiddleBoard']).map(board =>
-          clickEmptySquare(sel(board, 'topLeftSquare')).assertIsFilledWith(''),
-        );
-
-        const centerMiddleBoard = sel(app, 'centerMiddleBoard');
-        clickEmptySquare(
-          sel(centerMiddleBoard, 'bottomRightSquare'),
-        ).assertIsFilledWith('O');
-      });
-    });
-
-    [
-      { squareTestId: 'topLeftSquare', boardOPlayerMustPlay: 'topLeftBoard' },
-      {
-        squareTestId: 'topMiddleSquare',
-        boardOPlayerMustPlay: 'topMiddleBoard',
-      },
-      { squareTestId: 'topRightSquare', boardOPlayerMustPlay: 'topRightBoard' },
-      {
-        squareTestId: 'centerLeftSquare',
-        boardOPlayerMustPlay: 'centerLeftBoard',
-      },
-      {
-        squareTestId: 'centerMiddleSquare',
-        boardOPlayerMustPlay: 'centerMiddleBoard',
-      },
-      {
-        squareTestId: 'centerRightSquare',
-        boardOPlayerMustPlay: 'centerRightBoard',
-      },
-      {
-        squareTestId: 'bottomLeftSquare',
-        boardOPlayerMustPlay: 'bottomLeftBoard',
-      },
-      {
-        squareTestId: 'bottomMiddleSquare',
-        boardOPlayerMustPlay: 'bottomMiddleBoard',
-      },
-      {
-        squareTestId: 'bottomRightSquare',
-        boardOPlayerMustPlay: 'bottomRightBoard',
-      },
-    ].forEach(({ squareTestId, boardOPlayerMustPlay }) => {
-      it(`player X has to play in bottom right board if player O played in bottom right square of ${boardOPlayerMustPlay} board
+  [
+    { squareTestId: 'topLeftSquare', boardOPlayerMustPlay: 'topLeftBoard' },
+    {
+      squareTestId: 'topMiddleSquare',
+      boardOPlayerMustPlay: 'topMiddleBoard',
+    },
+    { squareTestId: 'topRightSquare', boardOPlayerMustPlay: 'topRightBoard' },
+    {
+      squareTestId: 'centerLeftSquare',
+      boardOPlayerMustPlay: 'centerLeftBoard',
+    },
+    {
+      squareTestId: 'centerMiddleSquare',
+      boardOPlayerMustPlay: 'centerMiddleBoard',
+    },
+    {
+      squareTestId: 'centerRightSquare',
+      boardOPlayerMustPlay: 'centerRightBoard',
+    },
+    {
+      squareTestId: 'bottomLeftSquare',
+      boardOPlayerMustPlay: 'bottomLeftBoard',
+    },
+    {
+      squareTestId: 'bottomMiddleSquare',
+      boardOPlayerMustPlay: 'bottomMiddleBoard',
+    },
+    {
+      squareTestId: 'bottomRightSquare',
+      boardOPlayerMustPlay: 'bottomRightBoard',
+    },
+  ].forEach(({ squareTestId, boardOPlayerMustPlay }) => {
+    it(`player X has to play in bottom right board if player O played in bottom right square of ${boardOPlayerMustPlay} board
         (first played square ${squareTestId} of centerMiddleBoard)`, () => {
-        const boardToPlay = sel(app, 'centerMiddleBoard');
-        clickEmptySquare(sel(boardToPlay, squareTestId)).assertIsFilledWith(
-          'X',
-        );
+      const boardToPlay = sel(app, 'centerMiddleBoard');
+      clickEmptySquare(sel(boardToPlay, squareTestId)).assertIsFilledWith('X');
 
-        selectAllBoardsExcept([boardOPlayerMustPlay]).map(board =>
-          clickSquare(sel(board, 'bottomRightSquare')).assertIsNotFilledWith(
-            'O',
-          ),
-        );
-        clickEmptySquare(
-          sel(sel(app, boardOPlayerMustPlay), 'bottomRightSquare'),
-        ).assertIsFilledWith('O');
-
-        selectAllBoardsExcept(
-          squareTestId !== 'bottomRightSquare'
-            ? ['bottomRightBoard']
-            : ['bottomRightBoard', 'centerMiddleBoard'],
-        ).map(board =>
-          clickSquare(sel(board, 'bottomRightSquare')).assertIsNotFilledWith(
-            'X',
-          ),
-        );
-        clickEmptySquare(
-          sel(sel(app, 'bottomRightBoard'), 'centerLeftSquare'),
-        ).assertIsFilledWith('X');
-      });
-    });
-
-    it('play a game, X wins', () => {
-      playGameWherePlayerOneWins({});
-    });
-
-    it('Allow no more play after someone wins', () => {
-      playGameWherePlayerOneWins({});
+      selectAllBoardsExcept([boardOPlayerMustPlay]).map(board =>
+        clickSquare(sel(board, 'bottomRightSquare')).assertIsNotFilledWith('O'),
+      );
       clickEmptySquare(
-        sel(sel(app, 'topMiddleBoard'), 'topLeftSquare'),
-      ).assertIsFilledWith('');
-    });
-
-    it('when a local board is won, disable further input on it', () => {
-      const topLeftBoard = sel(app, 'topLeftBoard');
-      const topMiddleBoard = sel(app, 'topMiddleBoard');
-      const topRightBoard = sel(app, 'topRightBoard');
-      const centerLeftBoard = sel(app, 'centerLeftBoard');
-
-      // X wins top left board (top horizontal) so that O is sent to that board
-      clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith(
-        'X',
-      );
-      clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith(
-        'O',
-      );
-      clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith(
-        'X',
-      );
-      clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith(
-        'O',
-      );
-      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith(
-        'X',
-      );
-
-      // O can't play top left board anymore
-      clickEmptySquare(
-        sel(topLeftBoard, 'centerLeftSquare'),
-      ).assertIsFilledWith('');
-      clickEmptySquare(
-        sel(topLeftBoard, 'centerMiddleSquare'),
-      ).assertIsFilledWith('');
-
-      clickEmptySquare(
-        sel(centerLeftBoard, 'topLeftSquare'),
+        sel(sel(app, boardOPlayerMustPlay), 'bottomRightSquare'),
       ).assertIsFilledWith('O');
 
-      // X can't play top left board anymore
-      clickEmptySquare(
-        sel(topLeftBoard, 'centerLeftSquare'),
-      ).assertIsFilledWith('');
-      clickEmptySquare(
-        sel(topLeftBoard, 'centerMiddleSquare'),
-      ).assertIsFilledWith('');
-    });
-
-    getAllBoardTestIds()
-      .filter(({ boardTestId }) => boardTestId !== 'topLeftBoard')
-      .forEach(({ boardTestId }) => {
-        it(`when a board is won and next player is sent to that board, that player can play any board except the won one (played ${boardTestId})`, () => {
-          const topLeftBoard = sel(app, 'topLeftBoard');
-          const topMiddleBoard = sel(app, 'topMiddleBoard');
-          const topRightBoard = sel(app, 'topRightBoard');
-
-          // X wins top left board (top horizontal) so that O is sent to that board
-          clickEmptySquare(
-            sel(topLeftBoard, 'topMiddleSquare'),
-          ).assertIsFilledWith('X');
-          clickEmptySquare(
-            sel(topMiddleBoard, 'topLeftSquare'),
-          ).assertIsFilledWith('O');
-          clickEmptySquare(
-            sel(topLeftBoard, 'topRightSquare'),
-          ).assertIsFilledWith('X');
-          clickEmptySquare(
-            sel(topRightBoard, 'topLeftSquare'),
-          ).assertIsFilledWith('O');
-          clickEmptySquare(
-            sel(topLeftBoard, 'topLeftSquare'),
-          ).assertIsFilledWith('X');
-
-          const anyBoardButTopLeft = sel(app, boardTestId);
-          clickEmptySquare(
-            sel(anyBoardButTopLeft, 'centerMiddleSquare'),
-          ).assertIsFilledWith('O');
-        });
-      });
-
-    it('when sent to board that was already won, that player can play any other board', () => {
-      const topLeftBoard = sel(app, 'topLeftBoard');
-      const topMiddleBoard = sel(app, 'topMiddleBoard');
-      const topRightBoard = sel(app, 'topRightBoard');
-      const centerMiddleBoard = sel(app, 'centerMiddleBoard');
-      const centerLeftBoard = sel(app, 'centerLeftBoard');
-      const bottomLeftBoard = sel(app, 'bottomLeftBoard');
-
-      // X wins top left board (top horizontal) so that O is sent to that board
-      clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith(
-        'X',
-      );
-      clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith(
-        'O',
-      );
-      clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith(
-        'X',
-      );
-      clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith(
-        'O',
-      );
-      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith(
-        'X',
+      selectAllBoardsExcept(
+        squareTestId !== 'bottomRightSquare'
+          ? ['bottomRightBoard']
+          : ['bottomRightBoard', 'centerMiddleBoard'],
+      ).map(board =>
+        clickSquare(sel(board, 'bottomRightSquare')).assertIsNotFilledWith('X'),
       );
       clickEmptySquare(
-        sel(centerLeftBoard, 'bottomLeftSquare'),
-      ).assertIsFilledWith('O');
-      clickEmptySquare(
-        sel(bottomLeftBoard, 'topLeftSquare'),
-      ).assertIsFilledWith('X');
-
-      // Top left board was already won, so O can play any other board
-      clickEmptySquare(
-        sel(centerMiddleBoard, 'bottomRightSquare'),
-      ).assertIsFilledWith('O');
-    });
-
-    it('should color all non-playable boards light red, all won boards o-won-board or x-won-board class, and playable boards white', () => {
-      const allBoards = getAllBoardTestIds().map(data =>
-        sel(app, data.boardTestId),
-      );
-      allBoards.forEach(assertBoardIsWhite);
-
-      const centerMiddleBoard = sel(app, 'centerMiddleBoard');
-      const topMiddleBoard = sel(app, 'topMiddleBoard');
-      const bottomMiddleBoard = sel(app, 'bottomMiddleBoard');
-      clickEmptySquare(
-        sel(centerMiddleBoard, 'topMiddleSquare'),
-      ).assertIsFilledWith('X');
-
-      selectAllBoardsExcept(['topMiddleBoard']).forEach(assertBoardIsRed);
-      assertBoardIsWhite(topMiddleBoard);
-
-      clickEmptySquare(
-        sel(topMiddleBoard, 'centerMiddleSquare'),
-      ).assertIsFilledWith('O');
-      clickEmptySquare(
-        sel(centerMiddleBoard, 'bottomMiddleSquare'),
-      ).assertIsFilledWith('X');
-      clickEmptySquare(
-        sel(bottomMiddleBoard, 'centerMiddleSquare'),
-      ).assertIsFilledWith('O');
-      clickEmptySquare(
-        sel(centerMiddleBoard, 'centerMiddleSquare'),
-      ).assertIsFilledWith('X');
-
-      selectAllBoardsExcept(['centerMiddleBoard']).forEach(assertBoardIsWhite);
-      assertBoardHasWonClass(centerMiddleBoard);
-    });
-
-    it('simple time travel: play one move, then go to game start, then play a different move', () => {
-      const topLeftBoard = sel(app, 'topLeftBoard');
-      clickEmptySquare(sel(topLeftBoard, 'bottomRightSquare'));
-      click(selectByText(app, 'button', 'Go to game start'));
-      clickEmptySquare(
-        sel(topLeftBoard, 'bottomRightSquare'),
+        sel(sel(app, 'bottomRightBoard'), 'centerLeftSquare'),
       ).assertIsFilledWith('X');
     });
+  });
 
-    it('time travel: X wins, then back three turns, then continue playing', () => {
-      const bottomLeftBoard = sel(app, 'bottomLeftBoard');
-      const bottomRightBoard = sel(app, 'bottomRightBoard');
-      const topRightBoard = sel(app, 'topRightBoard');
-      const centerMiddleBoard = sel(app, 'centerMiddleBoard');
-      const centerLeftBoard = sel(app, 'centerLeftBoard');
+  it('play a game, X wins', () => {
+    playGameWherePlayerOneWins({});
+  });
 
-      XWinsIn23Moves();
-      assertGameStatus('Winner', 'X');
-      click(selectByText(app, 'button', 'Go to move 20')); // O has just won bottomLeftBoard by clicking on bottomRightSquare
+  it('Allow no more play after someone wins', () => {
+    playGameWherePlayerOneWins({});
+    clickEmptySquare(
+      sel(sel(app, 'topMiddleBoard'), 'topLeftSquare'),
+    ).assertIsFilledWith('');
+  });
 
-      assert.strictEqual(
-        sel(bottomLeftBoard, 'bottomRightSquare').textContent,
-        'O',
-        'Square filled in 20. move must still be filled',
-      );
-      assert.strictEqual(
-        sel(bottomRightBoard, 'centerMiddleSquare').textContent,
-        '',
-        'Square filled in 23. move must not be filled',
-      );
-      assert.strictEqual(
-        sel(topRightBoard, 'bottomRightSquare').textContent,
-        '',
-        'Square filled in 22. move must not be filled',
-      );
-      assert.strictEqual(
-        sel(bottomRightBoard, 'topRightSquare').textContent,
-        '',
-        'Square filled in 21. move must not be filled',
-      );
+  it('when a local board is won, disable further input on it', () => {
+    const topLeftBoard = sel(app, 'topLeftBoard');
+    const topMiddleBoard = sel(app, 'topMiddleBoard');
+    const topRightBoard = sel(app, 'topRightBoard');
+    const centerLeftBoard = sel(app, 'centerLeftBoard');
 
-      assertGameStatus('Next player', 'X');
+    // X wins top left board (top horizontal) so that O is sent to that board
+    clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith(
+      'X',
+    );
+    clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith(
+      'O',
+    );
+    clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith(
+      'X',
+    );
+    clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith(
+      'O',
+    );
+    clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith(
+      'X',
+    );
 
-      clickEmptySquare(
-        sel(bottomRightBoard, 'centerMiddleSquare'),
-      ).assertIsFilledWith('X');
-      // Center middle board already won by X, so O can play any active board
-      assertGameStatus('Next player', 'O');
-      clickEmptySquare(
-        sel(centerMiddleBoard, 'bottomRightSquare'),
-      ).assertIsFilledWith('');
-      assertGameStatus(
-        'Next player',
-        'O',
-        'Next player is still "O" because center middle board is won',
-      );
-      clickEmptySquare(
-        sel(centerLeftBoard, 'bottomRightSquare'),
-      ).assertIsFilledWith('O');
-    });
+    // O can't play top left board anymore
+    clickEmptySquare(sel(topLeftBoard, 'centerLeftSquare')).assertIsFilledWith(
+      '',
+    );
+    clickEmptySquare(
+      sel(topLeftBoard, 'centerMiddleSquare'),
+    ).assertIsFilledWith('');
 
-    it('time travel: X wins in 23. moves, go to game start, Y wins in 24 moves', () => {
-      playGameWhereXWins();
-      click(selectByText(app, 'button', 'Go to game start'));
-      playGameWhereOWins();
-    });
+    clickEmptySquare(sel(centerLeftBoard, 'topLeftSquare')).assertIsFilledWith(
+      'O',
+    );
 
-    // eslint-disable-next-line max-len
-    it('time travel: all time travel buttons must be preserved after they are clicked until next move is played', () => {
-      playGameWhereXWins();
-      click(selectByText(app, 'button', 'Go to game start'));
-      click(selectByText(app, 'button', 'Go to move 20'));
-      click(selectByText(app, 'button', 'Go to move 18'));
-      click(selectByText(app, 'button', 'Go to game start'));
-      clickEmptySquare(
-        sel(sel(app, 'centerMiddleBoard'), 'centerMiddleSquare'),
-      ).assertIsFilledWith('X');
-      assert.strictEqual(
-        selectByText(app, 'button', 'Go to move 20'),
-        null,
-        'Button "Go to move 20" should not render',
-      );
-      assert.strictEqual(
-        selectByText(app, 'button', 'Go to move 2'),
-        null,
-        'Button "Go to move 2" should not render',
-      );
-    });
+    // X can't play top left board anymore
+    clickEmptySquare(sel(topLeftBoard, 'centerLeftSquare')).assertIsFilledWith(
+      '',
+    );
+    clickEmptySquare(
+      sel(topLeftBoard, 'centerMiddleSquare'),
+    ).assertIsFilledWith('');
+  });
 
-    it('time travel: highlight time travel button for current move', () => {
-      const topMiddleBoard = sel(app, 'topMiddleBoard');
-      expect(
-        selectByText(app, 'button', 'Go to game start').className,
-      ).to.have.string('current-move-button');
-      clickEmptySquare(
-        sel(topMiddleBoard, 'topMiddleSquare'),
-      ).assertIsFilledWith('X');
-      expect(
-        selectByText(app, 'button', 'Go to game start').className,
-      ).to.not.have.string('current-move-button');
-      expect(
-        selectByText(app, 'button', 'Go to move 1').className,
-      ).to.have.string('current-move-button');
-
-      click(selectByText(app, 'button', 'Go to game start'));
-      expect(
-        selectByText(app, 'button', 'Go to game start').className,
-      ).to.have.string('current-move-button');
-      expect(
-        selectByText(app, 'button', 'Go to move 1').className,
-      ).to.not.have.string('current-move-button');
-    });
-
-    it('when game is won, disable further inputs on all local boards', () => {
-      playGameWherePlayerOneWins({});
-      const topMiddleBoard = sel(app, 'topMiddleBoard');
-      clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith(
-        '',
-      );
-      assertGameStatus('Winner', 'X');
-    });
-
-    it('time travel re-enables previously won local-board', () => {
-      const topLeftBoard = sel(app, 'topLeftBoard');
-      const topMiddleBoard = sel(app, 'topMiddleBoard');
-      const topRightBoard = sel(app, 'topRightBoard');
-
-      // X wins top left board (top horizontal) so that O is sent to that board
-      clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith(
-        'X',
-      );
-      clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith(
-        'O',
-      );
-      clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith(
-        'X',
-      );
-      clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith(
-        'O',
-      );
-      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith(
-        'X',
-      );
-
-      click(selectByText(app, 'button', 'Go to move 4'));
-      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith(
-        'X',
-      );
-
-      click(selectByText(app, 'button', 'Go to game start'));
-      clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith(
-        'X',
-      );
-    });
-
-    it('clicking on "Vue vs. React?" button toggles special mode on and off', () => {
-      const specialModeToggle = selectByText(app, 'button', 'Vue vs. React?');
-      const topMiddleBoardCenterMiddleSquare = sel(
-        sel(app, 'topMiddleBoard'),
-        'centerMiddleSquare',
-      );
-      const topMiddleBoardBottomMiddleSquare = sel(
-        sel(app, 'centerMiddleBoard'),
-        'bottomMiddleSquare',
-      );
-      const unoccupiedSquare = sel(
-        sel(app, 'bottomMiddleBoard'),
-        'centerMiddleSquare',
-      );
-      clickEmptySquare(topMiddleBoardCenterMiddleSquare).assertIsFilledWith(
-        'X',
-      );
-
-      click(specialModeToggle);
-      assertCorrectIconInGameStatus('react-icon');
-      click(specialModeToggle);
-
-      clickEmptySquare(topMiddleBoardBottomMiddleSquare).assertIsFilledWith(
-        'O',
-      );
-      assertSpecialModeNotToggled(
-        topMiddleBoardCenterMiddleSquare,
-        topMiddleBoardBottomMiddleSquare,
-        unoccupiedSquare,
-      );
-
-      click(specialModeToggle);
-      assertSpecialModeToggled(
-        topMiddleBoardCenterMiddleSquare,
-        topMiddleBoardBottomMiddleSquare,
-        unoccupiedSquare,
-      );
-
-      click(specialModeToggle);
-      assertSpecialModeNotToggled(
-        topMiddleBoardCenterMiddleSquare,
-        topMiddleBoardBottomMiddleSquare,
-        unoccupiedSquare,
-      );
-    });
-
-    context('save and load functionality', () => {
-      it('can export current game state', () => {
+  getAllBoardTestIds()
+    .filter(({ boardTestId }) => boardTestId !== 'topLeftBoard')
+    .forEach(({ boardTestId }) => {
+      it(`when a board is won and next player is sent to that board, that player can play any board except the won one (played ${boardTestId})`, () => {
         const topLeftBoard = sel(app, 'topLeftBoard');
         const topMiddleBoard = sel(app, 'topMiddleBoard');
         const topRightBoard = sel(app, 'topRightBoard');
+
+        // X wins top left board (top horizontal) so that O is sent to that board
         clickEmptySquare(
           sel(topLeftBoard, 'topMiddleSquare'),
         ).assertIsFilledWith('X');
         clickEmptySquare(
-          sel(topMiddleBoard, 'topRightSquare'),
-        ).assertIsFilledWith('O');
-        clickEmptySquare(
-          sel(topRightBoard, 'topMiddleSquare'),
-        ).assertIsFilledWith('X');
-
-        click(selectByText(app, 'button', 'Save'));
-
-        const exportedState = JSON.parse(sel(app, 'exportGameTextarea').value);
-        assert.equal(
-          exportedState.history[3].boards[2].squares[1],
-          'X',
-          'incorrect topRightBoard topMiddleSquare value',
-        );
-        assert.equal(
-          exportedState.history[2].boards[1].squares[2],
-          'O',
-          'incorrect topMiddleBoard topRightSquare value',
-        );
-        assert.equal(
-          exportedState.history[3].boards[0].squares[1],
-          'X',
-          'incorrect topRightBoard topMiddleSquare value',
-        );
-      });
-
-      it('can load a game state', () => {
-        const topLeftBoard = sel(app, 'topLeftBoard');
-        const topMiddleBoard = sel(app, 'topMiddleBoard');
-        const topRightBoard = sel(app, 'topRightBoard');
-        click(selectByText(app, 'button', 'Load'));
-        sel(app, 'importGameTextarea').value = fs.readFileSync(
-          path.join('test', 'exportedGame.json'),
-        );
-        triggerChange(sel(app, 'importGameTextarea'));
-
-        click(selectByText(app, 'button', 'Load game'));
-
-        assert.equal(sel(topLeftBoard, 'topMiddleSquare').textContent, 'X');
-        assert.equal(sel(topMiddleBoard, 'topRightSquare').textContent, 'O');
-        assert.equal(sel(topRightBoard, 'topMiddleSquare').textContent, 'X');
-
-        clickEmptySquare(
           sel(topMiddleBoard, 'topLeftSquare'),
         ).assertIsFilledWith('O');
         clickEmptySquare(
-          sel(topLeftBoard, 'bottomLeftSquare'),
+          sel(topLeftBoard, 'topRightSquare'),
         ).assertIsFilledWith('X');
+        clickEmptySquare(
+          sel(topRightBoard, 'topLeftSquare'),
+        ).assertIsFilledWith('O');
+        clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith(
+          'X',
+        );
+
+        const anyBoardButTopLeft = sel(app, boardTestId);
+        clickEmptySquare(
+          sel(anyBoardButTopLeft, 'centerMiddleSquare'),
+        ).assertIsFilledWith('O');
       });
+    });
+
+  it('when sent to board that was already won, that player can play any other board', () => {
+    const topLeftBoard = sel(app, 'topLeftBoard');
+    const topMiddleBoard = sel(app, 'topMiddleBoard');
+    const topRightBoard = sel(app, 'topRightBoard');
+    const centerMiddleBoard = sel(app, 'centerMiddleBoard');
+    const centerLeftBoard = sel(app, 'centerLeftBoard');
+    const bottomLeftBoard = sel(app, 'bottomLeftBoard');
+
+    // X wins top left board (top horizontal) so that O is sent to that board
+    clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith(
+      'X',
+    );
+    clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith(
+      'O',
+    );
+    clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith(
+      'X',
+    );
+    clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith(
+      'O',
+    );
+    clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith(
+      'X',
+    );
+    clickEmptySquare(
+      sel(centerLeftBoard, 'bottomLeftSquare'),
+    ).assertIsFilledWith('O');
+    clickEmptySquare(sel(bottomLeftBoard, 'topLeftSquare')).assertIsFilledWith(
+      'X',
+    );
+
+    // Top left board was already won, so O can play any other board
+    clickEmptySquare(
+      sel(centerMiddleBoard, 'bottomRightSquare'),
+    ).assertIsFilledWith('O');
+  });
+
+  it('should color all non-playable boards light red, all won boards o-won-board or x-won-board class, and playable boards white', () => {
+    const allBoards = getAllBoardTestIds().map(data =>
+      sel(app, data.boardTestId),
+    );
+    allBoards.forEach(assertBoardIsWhite);
+
+    const centerMiddleBoard = sel(app, 'centerMiddleBoard');
+    const topMiddleBoard = sel(app, 'topMiddleBoard');
+    const bottomMiddleBoard = sel(app, 'bottomMiddleBoard');
+    clickEmptySquare(
+      sel(centerMiddleBoard, 'topMiddleSquare'),
+    ).assertIsFilledWith('X');
+
+    selectAllBoardsExcept(['topMiddleBoard']).forEach(assertBoardIsRed);
+    assertBoardIsWhite(topMiddleBoard);
+
+    clickEmptySquare(
+      sel(topMiddleBoard, 'centerMiddleSquare'),
+    ).assertIsFilledWith('O');
+    clickEmptySquare(
+      sel(centerMiddleBoard, 'bottomMiddleSquare'),
+    ).assertIsFilledWith('X');
+    clickEmptySquare(
+      sel(bottomMiddleBoard, 'centerMiddleSquare'),
+    ).assertIsFilledWith('O');
+    clickEmptySquare(
+      sel(centerMiddleBoard, 'centerMiddleSquare'),
+    ).assertIsFilledWith('X');
+
+    selectAllBoardsExcept(['centerMiddleBoard']).forEach(assertBoardIsWhite);
+    assertBoardHasWonClass(centerMiddleBoard);
+  });
+
+  it('simple time travel: play one move, then go to game start, then play a different move', () => {
+    const topLeftBoard = sel(app, 'topLeftBoard');
+    clickEmptySquare(sel(topLeftBoard, 'bottomRightSquare'));
+    click(selectByText(app, 'button', 'Go to game start'));
+    clickEmptySquare(sel(topLeftBoard, 'bottomRightSquare')).assertIsFilledWith(
+      'X',
+    );
+  });
+
+  it('time travel: X wins, then back three turns, then continue playing', () => {
+    const bottomLeftBoard = sel(app, 'bottomLeftBoard');
+    const bottomRightBoard = sel(app, 'bottomRightBoard');
+    const topRightBoard = sel(app, 'topRightBoard');
+    const centerMiddleBoard = sel(app, 'centerMiddleBoard');
+    const centerLeftBoard = sel(app, 'centerLeftBoard');
+
+    XWinsIn23Moves();
+    assertGameStatus('Winner', 'X');
+    click(selectByText(app, 'button', 'Go to move 20')); // O has just won bottomLeftBoard by clicking on bottomRightSquare
+
+    assert.strictEqual(
+      sel(bottomLeftBoard, 'bottomRightSquare').textContent,
+      'O',
+      'Square filled in 20. move must still be filled',
+    );
+    assert.strictEqual(
+      sel(bottomRightBoard, 'centerMiddleSquare').textContent,
+      '',
+      'Square filled in 23. move must not be filled',
+    );
+    assert.strictEqual(
+      sel(topRightBoard, 'bottomRightSquare').textContent,
+      '',
+      'Square filled in 22. move must not be filled',
+    );
+    assert.strictEqual(
+      sel(bottomRightBoard, 'topRightSquare').textContent,
+      '',
+      'Square filled in 21. move must not be filled',
+    );
+
+    assertGameStatus('Next player', 'X');
+
+    clickEmptySquare(
+      sel(bottomRightBoard, 'centerMiddleSquare'),
+    ).assertIsFilledWith('X');
+    // Center middle board already won by X, so O can play any active board
+    assertGameStatus('Next player', 'O');
+    clickEmptySquare(
+      sel(centerMiddleBoard, 'bottomRightSquare'),
+    ).assertIsFilledWith('');
+    assertGameStatus(
+      'Next player',
+      'O',
+      'Next player is still "O" because center middle board is won',
+    );
+    clickEmptySquare(
+      sel(centerLeftBoard, 'bottomRightSquare'),
+    ).assertIsFilledWith('O');
+  });
+
+  it('time travel: X wins in 23. moves, go to game start, Y wins in 24 moves', () => {
+    playGameWhereXWins();
+    click(selectByText(app, 'button', 'Go to game start'));
+    playGameWhereOWins();
+  });
+
+  // eslint-disable-next-line max-len
+  it('time travel: all time travel buttons must be preserved after they are clicked until next move is played', () => {
+    playGameWhereXWins();
+    click(selectByText(app, 'button', 'Go to game start'));
+    click(selectByText(app, 'button', 'Go to move 20'));
+    click(selectByText(app, 'button', 'Go to move 18'));
+    click(selectByText(app, 'button', 'Go to game start'));
+    clickEmptySquare(
+      sel(sel(app, 'centerMiddleBoard'), 'centerMiddleSquare'),
+    ).assertIsFilledWith('X');
+    assert.strictEqual(
+      selectByText(app, 'button', 'Go to move 20'),
+      null,
+      'Button "Go to move 20" should not render',
+    );
+    assert.strictEqual(
+      selectByText(app, 'button', 'Go to move 2'),
+      null,
+      'Button "Go to move 2" should not render',
+    );
+  });
+
+  it('time travel: highlight time travel button for current move', () => {
+    const topMiddleBoard = sel(app, 'topMiddleBoard');
+    expect(
+      selectByText(app, 'button', 'Go to game start').className,
+    ).to.have.string('current-move-button');
+    clickEmptySquare(sel(topMiddleBoard, 'topMiddleSquare')).assertIsFilledWith(
+      'X',
+    );
+    expect(
+      selectByText(app, 'button', 'Go to game start').className,
+    ).to.not.have.string('current-move-button');
+    expect(
+      selectByText(app, 'button', 'Go to move 1').className,
+    ).to.have.string('current-move-button');
+
+    click(selectByText(app, 'button', 'Go to game start'));
+    expect(
+      selectByText(app, 'button', 'Go to game start').className,
+    ).to.have.string('current-move-button');
+    expect(
+      selectByText(app, 'button', 'Go to move 1').className,
+    ).to.not.have.string('current-move-button');
+  });
+
+  it('when game is won, disable further inputs on all local boards', () => {
+    playGameWherePlayerOneWins({});
+    const topMiddleBoard = sel(app, 'topMiddleBoard');
+    clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith(
+      '',
+    );
+    assertGameStatus('Winner', 'X');
+  });
+
+  it('time travel re-enables previously won local-board', () => {
+    const topLeftBoard = sel(app, 'topLeftBoard');
+    const topMiddleBoard = sel(app, 'topMiddleBoard');
+    const topRightBoard = sel(app, 'topRightBoard');
+
+    // X wins top left board (top horizontal) so that O is sent to that board
+    clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith(
+      'X',
+    );
+    clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith(
+      'O',
+    );
+    clickEmptySquare(sel(topLeftBoard, 'topRightSquare')).assertIsFilledWith(
+      'X',
+    );
+    clickEmptySquare(sel(topRightBoard, 'topLeftSquare')).assertIsFilledWith(
+      'O',
+    );
+    clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith(
+      'X',
+    );
+
+    click(selectByText(app, 'button', 'Go to move 4'));
+    clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith(
+      'X',
+    );
+
+    click(selectByText(app, 'button', 'Go to game start'));
+    clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertIsFilledWith(
+      'X',
+    );
+  });
+
+  it('clicking on "Vue vs. React?" button toggles special mode on and off', () => {
+    const specialModeToggle = selectByText(app, 'button', 'Vue vs. React?');
+    const topMiddleBoardCenterMiddleSquare = sel(
+      sel(app, 'topMiddleBoard'),
+      'centerMiddleSquare',
+    );
+    const topMiddleBoardBottomMiddleSquare = sel(
+      sel(app, 'centerMiddleBoard'),
+      'bottomMiddleSquare',
+    );
+    const unoccupiedSquare = sel(
+      sel(app, 'bottomMiddleBoard'),
+      'centerMiddleSquare',
+    );
+    clickEmptySquare(topMiddleBoardCenterMiddleSquare).assertIsFilledWith('X');
+
+    click(specialModeToggle);
+    assertCorrectIconInGameStatus('react-icon');
+    click(specialModeToggle);
+
+    clickEmptySquare(topMiddleBoardBottomMiddleSquare).assertIsFilledWith('O');
+    assertSpecialModeNotToggled(
+      topMiddleBoardCenterMiddleSquare,
+      topMiddleBoardBottomMiddleSquare,
+      unoccupiedSquare,
+    );
+
+    click(specialModeToggle);
+    assertSpecialModeToggled(
+      topMiddleBoardCenterMiddleSquare,
+      topMiddleBoardBottomMiddleSquare,
+      unoccupiedSquare,
+    );
+
+    click(specialModeToggle);
+    assertSpecialModeNotToggled(
+      topMiddleBoardCenterMiddleSquare,
+      topMiddleBoardBottomMiddleSquare,
+      unoccupiedSquare,
+    );
+  });
+
+  context('save and load functionality', () => {
+    it('can export current game state', () => {
+      const topLeftBoard = sel(app, 'topLeftBoard');
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      const topRightBoard = sel(app, 'topRightBoard');
+      clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertIsFilledWith(
+        'X',
+      );
+      clickEmptySquare(
+        sel(topMiddleBoard, 'topRightSquare'),
+      ).assertIsFilledWith('O');
+      clickEmptySquare(
+        sel(topRightBoard, 'topMiddleSquare'),
+      ).assertIsFilledWith('X');
+
+      click(selectByText(app, 'button', 'Save'));
+
+      const exportedState = JSON.parse(sel(app, 'exportGameTextarea').value);
+      assert.equal(
+        exportedState.history[3].boards[2].squares[1],
+        'X',
+        'incorrect topRightBoard topMiddleSquare value',
+      );
+      assert.equal(
+        exportedState.history[2].boards[1].squares[2],
+        'O',
+        'incorrect topMiddleBoard topRightSquare value',
+      );
+      assert.equal(
+        exportedState.history[3].boards[0].squares[1],
+        'X',
+        'incorrect topRightBoard topMiddleSquare value',
+      );
+    });
+
+    it('can load a game state', () => {
+      const topLeftBoard = sel(app, 'topLeftBoard');
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      const topRightBoard = sel(app, 'topRightBoard');
+      click(selectByText(app, 'button', 'Load'));
+      sel(app, 'importGameTextarea').value = fs.readFileSync(
+        path.join('test', 'exportedGame.json'),
+      );
+      triggerChange(sel(app, 'importGameTextarea'));
+
+      click(selectByText(app, 'button', 'Load game'));
+
+      assert.equal(sel(topLeftBoard, 'topMiddleSquare').textContent, 'X');
+      assert.equal(sel(topMiddleBoard, 'topRightSquare').textContent, 'O');
+      assert.equal(sel(topRightBoard, 'topMiddleSquare').textContent, 'X');
+
+      clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertIsFilledWith(
+        'O',
+      );
+      clickEmptySquare(
+        sel(topLeftBoard, 'bottomLeftSquare'),
+      ).assertIsFilledWith('X');
     });
   });
 
