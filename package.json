@@ -90,7 +90,15 @@
     "singleQuote": true,
     "tabWidth": 2,
     "trailingComma": "all",
-    "useTabs": false
+    "useTabs": false,
+    "overrides": [
+      {
+        "files": "*.test.js",
+        "options": {
+          "printWidth": 100
+        }
+      }
+    ]
   },
   "browserslist": [
     "ie > 8"

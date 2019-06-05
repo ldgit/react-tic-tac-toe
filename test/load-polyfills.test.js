@@ -11,9 +11,7 @@ describe('load-polyfills', () => {
   let whenPolyfillsLoaded;
 
   beforeEach(() => {
-    const html = fs.readFileSync(
-      path.join('.', 'test', 'fixtures', 'load-polyfills.html'),
-    );
+    const html = fs.readFileSync(path.join('.', 'test', 'fixtures', 'load-polyfills.html'));
     ({ document, window } = getBrowserEnvironment(html));
     setUpEnvironmentThatDoesNotNeedPolyfills(document, window);
     onloadCallbacks = [];
@@ -23,11 +21,7 @@ describe('load-polyfills', () => {
       },
       configurable: true,
     });
-    whenPolyfillsLoaded = whenPolyfillsLoadedUnconfigured.bind(
-      null,
-      window,
-      document,
-    );
+    whenPolyfillsLoaded = whenPolyfillsLoadedUnconfigured.bind(null, window, document);
   });
 
   it('should not load polyfills if all needed features supported', () => {
@@ -107,12 +101,9 @@ describe('load-polyfills', () => {
     });
 
     it('should not execute given callback function if only some polyfills loaded', () => {
-      const wait = seconds =>
-        new Promise(resolve => setTimeout(resolve, seconds));
+      const wait = seconds => new Promise(resolve => setTimeout(resolve, seconds));
 
-      whenPolyfillsLoaded(() =>
-        assert.fail('Should not run if only one polyfill script loaded'),
-      );
+      whenPolyfillsLoaded(() => assert.fail('Should not run if only one polyfill script loaded'));
       onloadCallbacks[1]();
 
       return wait(30);

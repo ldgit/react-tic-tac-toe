@@ -86,24 +86,24 @@ describe('Classic Tic-tac-toe game', () => {
   });
 
   it('time travel: highlight time travel button for current move', () => {
-    expect(
-      selectByText(app, 'button', 'Go to game start').className,
-    ).to.have.string('current-move-button');
+    expect(selectByText(app, 'button', 'Go to game start').className).to.have.string(
+      'current-move-button',
+    );
     clickEmptySquare(sel(app, 'centerMiddleSquare')).assertIsFilledWith('X');
-    expect(
-      selectByText(app, 'button', 'Go to game start').className,
-    ).to.not.have.string('current-move-button');
-    expect(
-      selectByText(app, 'button', 'Go to move 1').className,
-    ).to.have.string('current-move-button');
+    expect(selectByText(app, 'button', 'Go to game start').className).to.not.have.string(
+      'current-move-button',
+    );
+    expect(selectByText(app, 'button', 'Go to move 1').className).to.have.string(
+      'current-move-button',
+    );
 
     click(selectByText(app, 'button', 'Go to game start'));
-    expect(
-      selectByText(app, 'button', 'Go to game start').className,
-    ).to.have.string('current-move-button');
-    expect(
-      selectByText(app, 'button', 'Go to move 1').className,
-    ).to.not.have.string('current-move-button');
+    expect(selectByText(app, 'button', 'Go to game start').className).to.have.string(
+      'current-move-button',
+    );
+    expect(selectByText(app, 'button', 'Go to move 1').className).to.not.have.string(
+      'current-move-button',
+    );
   });
 
   it('time travel: X wins, then time travel two moves back, then O wins', () => {
@@ -152,8 +152,6 @@ describe('Classic Tic-tac-toe game', () => {
 
   function assertGameStatus(statusType, player) {
     expect(sel(app, 'gameStatus').textContent).to.have.string(statusType);
-    expect(sel(app, 'gameStatus').querySelector('button').textContent).to.equal(
-      player,
-    );
+    expect(sel(app, 'gameStatus').querySelector('button').textContent).to.equal(player);
   }
 });
