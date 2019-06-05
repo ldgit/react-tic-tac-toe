@@ -10,12 +10,5 @@ module.exports = {
   },
   env: {
     browser: true,
-    mocha: true,
   },
-  overrides: [
-    {
-      files: '*.test.js',
-      globals: { testUtils: 'readonly' },
-    },
-  ],
 };
