@@ -10,7 +10,7 @@
 
 <% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
   <% if (chunk === 'set-polyfill') { %>
-  <script>window.Set || document.write('\x3Cscript src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>">\x3C/script>')</script>
+  <script>window.Set && window.Map || document.write('\x3Cscript src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>">\x3C/script>')</script>
   <% } %>
 <% } %>
 

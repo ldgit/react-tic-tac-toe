@@ -1,3 +1,2 @@
-// Set polyfill is included separately, see webpack configuration for details.
-import 'core-js/es6/map';
+// Set and Map polyfills are included separately, see webpack configuration for details.
 import 'raf/polyfill';

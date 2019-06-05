@@ -71,7 +71,7 @@ module.exports = (env, argv) => ({
       // Custom parameters
       // These chunks are injected differently, see template above
       polyfills: ['polyfills', 'react-polyfills'],
-      // Unlike Map or raf polyfills, Set polyfill is needed by React immediately when React bundle is loaded, thus it
+      // Unlike raf polyfill, Set and Map polyfills are needed by React immediately when React bundle is loaded, thus it
       // needs to be handled differently, for details see template above
       setPolyfillChunk: 'set-polyfill',
     }),

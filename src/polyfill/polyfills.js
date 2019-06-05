@@ -1,2 +1,2 @@
-import 'core-js/fn/array/fill';
-import 'core-js/fn/object/assign';
+import 'core-js/features/array/fill';
+import 'core-js/features/object/assign';
