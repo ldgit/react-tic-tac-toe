@@ -52,7 +52,7 @@
     "argus-test-runner": "^2.0.1",
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
-    "clean-webpack-plugin": "^1.0.1",
+    "clean-webpack-plugin": "^3.0.0",
     "coveralls": "^3.0.3",
     "css-loader": "^2.1.1",
     "eslint": "^5.16.0",

@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 // We want to load polyfills separately and only if the browser does not support needed features, so we don't split
 // these chunks.
@@ -55,7 +55,7 @@ module.exports = (env, argv) => ({
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: false,
