@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { expect } from 'chai';
 import { JSDOM } from 'jsdom';
 
 import { Simulate } from 'react-dom/test-utils';
@@ -64,4 +65,11 @@ export function createAlertSpy() {
   alertSpy.getMessageLog = () => messageLog;
 
   return alertSpy;
+}
+
+export function assertFilledWith(square, symbol) {
+  expect(square.textContent).to.equal(
+    symbol,
+    `square not filled with expected symbol "${symbol}"`,
+  );
 }

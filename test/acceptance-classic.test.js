@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import React from 'react';
 import ReactDom from 'react-dom';
 import Game from '../src/components/Game';
-import { sel, clickOnElement, selectByText } from './test-utils';
+import { sel, clickOnElement, selectByText, assertFilledWith } from './test-utils';
 
 describe('Classic Tic-tac-toe game', () => {
   let app;
@@ -23,7 +23,7 @@ describe('Classic Tic-tac-toe game', () => {
     click(sel(app, 'centerMiddleSquare'));
 
     assertGameStatus('Next player', 'O');
-    assert.equal(sel(app, 'centerMiddleSquare').textContent, 'X');
+    assertFilledWith(sel(app, 'centerMiddleSquare'), 'X');
   });
 
   it('play a game where X wins', () => {
@@ -141,12 +141,7 @@ describe('Classic Tic-tac-toe game', () => {
     click(square);
 
     return {
-      assertIsFilledWith: symbol =>
-        assert.equal(
-          square.textContent,
-          symbol,
-          `square not filled with expected symbol "${symbol}"`,
-        ),
+      assertIsFilledWith: symbol => assertFilledWith(square, symbol),
     };
   }
 

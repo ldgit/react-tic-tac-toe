@@ -5,7 +5,7 @@ import ReactDom from 'react-dom';
 import fs from 'fs';
 import path from 'path';
 import UltimateGame from '../src/components/UltimateGame';
-import { sel, clickOnElement, selectByText, triggerChange } from './test-utils';
+import { sel, clickOnElement, selectByText, triggerChange, assertFilledWith } from './test-utils';
 
 describe('Ultimate Tic-tac-toe game', () => {
   let app;
@@ -405,9 +405,9 @@ describe('Ultimate Tic-tac-toe game', () => {
 
       click(selectByText(app, 'button', 'Load game'));
 
-      assert.equal(sel(topLeftBoard, 'topMiddleSquare').textContent, 'X');
-      assert.equal(sel(topMiddleBoard, 'topRightSquare').textContent, 'O');
-      assert.equal(sel(topRightBoard, 'topMiddleSquare').textContent, 'X');
+      assertFilledWith(sel(topLeftBoard, 'topMiddleSquare'), 'X');
+      assertFilledWith(sel(topMiddleBoard, 'topRightSquare'), 'O');
+      assertFilledWith(sel(topRightBoard, 'topMiddleSquare'), 'X');
 
       clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertFilledWith('O');
       clickEmptySquare(sel(topLeftBoard, 'bottomLeftSquare')).assertFilledWith('X');
@@ -551,12 +551,7 @@ describe('Ultimate Tic-tac-toe game', () => {
     click(square);
 
     return {
-      assertFilledWith: symbol =>
-        assert.equal(
-          square.textContent,
-          symbol,
-          `square not filled with expected symbol "${symbol}"`,
-        ),
+      assertFilledWith: symbol => assertFilledWith(square, symbol),
     };
   }
 
@@ -570,12 +565,7 @@ describe('Ultimate Tic-tac-toe game', () => {
           symbol,
           `square filled with unexpected symbol "${symbol}"`,
         ),
-      assertFilledWith: symbol =>
-        assert.strictEqual(
-          square.textContent,
-          symbol,
-          `square not filled with expected symbol "${symbol}"`,
-        ),
+      assertFilledWith: symbol => assertFilledWith(square, symbol),
     };
   }
 
