@@ -53,45 +53,43 @@ export default function UltimateGame() {
   const winner = calculateUltimateWinner(boards);
 
   return (
-    <div className="table">
-      <div className="table-row">
-        <div className="table-cell">
-          <div>
-            {renderBoard(0, boards, 'topLeftBoard')}
-            {renderBoard(1, boards, 'topMiddleBoard')}
-            {renderBoard(2, boards, 'topRightBoard')}
-          </div>
-          <div>
-            {renderBoard(3, boards, 'centerLeftBoard')}
-            {renderBoard(4, boards, 'centerMiddleBoard')}
-            {renderBoard(5, boards, 'centerRightBoard')}
-          </div>
-          <div>
-            {renderBoard(6, boards, 'bottomLeftBoard')}
-            {renderBoard(7, boards, 'bottomMiddleBoard')}
-            {renderBoard(8, boards, 'bottomRightBoard')}
-          </div>
+    <div className="container">
+      <div className="ultimate-board">
+        <div className="ultimate-row">
+          {renderBoard(0, boards, 'topLeftBoard')}
+          {renderBoard(1, boards, 'topMiddleBoard')}
+          {renderBoard(2, boards, 'topRightBoard')}
         </div>
-        <div className="game-info table-cell table-large-padding max-height">
-          <Status
-            description={winner ? 'Winner' : 'Next player'}
-            player={winner || nextPlayer}
-            specialIcons={specialIcons}
-          />
-          <br />
-          <button type="button" onClick={toggleSpecialIcons}>
-            Vue vs. React?
-          </button>
-          <br />
-          <br />
-          <SaveAndLoad gameState={state} onLoadGameClick={loadGame} />
-          <br />
-          <ol className="history">
-            {history.map(
-              renderTimeTravelButton.bind(null, jumpTo, pointInHistory),
-            )}
-          </ol>
+        <div className="ultimate-row">
+          {renderBoard(3, boards, 'centerLeftBoard')}
+          {renderBoard(4, boards, 'centerMiddleBoard')}
+          {renderBoard(5, boards, 'centerRightBoard')}
         </div>
+        <div className="ultimate-row">
+          {renderBoard(6, boards, 'bottomLeftBoard')}
+          {renderBoard(7, boards, 'bottomMiddleBoard')}
+          {renderBoard(8, boards, 'bottomRightBoard')}
+        </div>
+      </div>
+      <div className="game-info table-cell table-large-padding max-height">
+        <Status
+          description={winner ? 'Winner' : 'Next player'}
+          player={winner || nextPlayer}
+          specialIcons={specialIcons}
+        />
+        <br />
+        <button type="button" onClick={toggleSpecialIcons}>
+          Vue vs. React?
+        </button>
+        <br />
+        <br />
+        <SaveAndLoad gameState={state} onLoadGameClick={loadGame} />
+        <br />
+        <ol className="history">
+          {history.map(
+            renderTimeTravelButton.bind(null, jumpTo, pointInHistory),
+          )}
+        </ol>
       </div>
     </div>
   );
