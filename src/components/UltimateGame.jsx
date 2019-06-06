@@ -86,7 +86,7 @@ export default function UltimateGame() {
           <br />
           <SaveAndLoad gameState={state} onLoadGameClick={loadGame} />
           <br />
-          <ol>
+          <ol className="history">
             {history.map(
               renderTimeTravelButton.bind(null, jumpTo, pointInHistory),
             )}
