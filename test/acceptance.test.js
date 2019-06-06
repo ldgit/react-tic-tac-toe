@@ -5,7 +5,14 @@ import ReactDom from 'react-dom';
 import fs from 'fs';
 import path from 'path';
 import UltimateGame from '../src/components/UltimateGame';
-import { sel, clickOnElement, selectByText, triggerChange, assertFilledWith } from './test-utils';
+import {
+  sel,
+  clickOnElement,
+  selectByText,
+  triggerChange,
+  assertFilledWith,
+  assertNotFilledWith,
+} from './test-utils';
 
 describe('Ultimate Tic-tac-toe game', () => {
   let app;
@@ -22,8 +29,8 @@ describe('Ultimate Tic-tac-toe game', () => {
   it("player can't play on already played square", () => {
     const centerMiddleBoard = sel(app, 'centerMiddleBoard');
     clickEmptySquare(sel(centerMiddleBoard, 'centerMiddleSquare')).assertFilledWith('X');
-    clickSquare(sel(centerMiddleBoard, 'centerMiddleSquare')).assertIsNotFilledWith('O');
-    clickSquare(sel(centerMiddleBoard, 'centerMiddleSquare')).assertIsNotFilledWith('');
+    clickSquare(sel(centerMiddleBoard, 'centerMiddleSquare')).assertFilledWith('X');
+    clickSquare(sel(centerMiddleBoard, 'centerMiddleSquare')).assertFilledWith('X');
   });
 
   getAllBoardTestIds().forEach(({ boardTestId }) => {
@@ -89,7 +96,7 @@ describe('Ultimate Tic-tac-toe game', () => {
       clickEmptySquare(sel(boardToPlay, squareTestId)).assertFilledWith('X');
 
       selectAllBoardsExcept([boardOPlayerMustPlay]).map(board =>
-        clickSquare(sel(board, 'bottomRightSquare')).assertIsNotFilledWith('O'),
+        clickSquare(sel(board, 'bottomRightSquare')).assertNotFilledWith('O'),
       );
       clickEmptySquare(sel(sel(app, boardOPlayerMustPlay), 'bottomRightSquare')).assertFilledWith(
         'O',
@@ -99,7 +106,7 @@ describe('Ultimate Tic-tac-toe game', () => {
         squareTestId !== 'bottomRightSquare'
           ? ['bottomRightBoard']
           : ['bottomRightBoard', 'centerMiddleBoard'],
-      ).map(board => clickSquare(sel(board, 'bottomRightSquare')).assertIsNotFilledWith('X'));
+      ).map(board => clickSquare(sel(board, 'bottomRightSquare')).assertNotFilledWith('X'));
       clickEmptySquare(sel(sel(app, 'bottomRightBoard'), 'centerLeftSquare')).assertFilledWith('X');
     });
   });
@@ -559,12 +566,7 @@ describe('Ultimate Tic-tac-toe game', () => {
     click(square);
 
     return {
-      assertIsNotFilledWith: symbol =>
-        assert.notEqual(
-          square.textContent,
-          symbol,
-          `square filled with unexpected symbol "${symbol}"`,
-        ),
+      assertNotFilledWith: symbol => assertNotFilledWith(square, symbol),
       assertFilledWith: symbol => assertFilledWith(square, symbol),
     };
   }

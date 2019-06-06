@@ -73,3 +73,10 @@ export function assertFilledWith(square, symbol) {
     `square not filled with expected symbol "${symbol}"`,
   );
 }
+
+export function assertNotFilledWith(square, symbol) {
+  expect(square.textContent).to.not.equal(
+    symbol,
+    `square filled with unexpected symbol "${symbol}"`,
+  );
+}
