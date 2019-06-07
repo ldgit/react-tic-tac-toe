@@ -10,7 +10,13 @@ export default function UltimateGame() {
   const [state, setState] = useState(ultimateTicTacToe(undefined, ''));
 
   function handleClick(boardIndex, squareIndex) {
-    setState(ultimateTicTacToe(state, { type: 'PLAY_SQUARE', boardIndex, squareIndex }));
+    setState(
+      ultimateTicTacToe(state, {
+        type: 'PLAY_SQUARE',
+        boardIndex,
+        squareIndex,
+      }),
+    );
   }
 
   function jumpTo(pointInHistory) {

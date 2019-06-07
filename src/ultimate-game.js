@@ -3,7 +3,10 @@ import { calculateWinner } from './helpers';
 export function ultimateTicTacToe(state = getInitialState(), action) {
   switch (action.type) {
     case 'PLAY_SQUARE':
-      return playSquare(state, { boardIndex: action.boardIndex, squareIndex: action.squareIndex });
+      return playSquare(state, {
+        boardIndex: action.boardIndex,
+        squareIndex: action.squareIndex,
+      });
     case 'TIME_TRAVEL':
       return timeTravel(state, { pointInHistory: action.pointInHistory });
     case 'TOGGLE_SPECIAL_ICONS':
@@ -23,10 +26,12 @@ export function calculateUltimateWinner(boards) {
 }
 
 function playSquare(state, { boardIndex, squareIndex }) {
-  if (calculateUltimateWinner(state.history[state.pointInHistory].boards)) { // game over
+  if (calculateUltimateWinner(state.history[state.pointInHistory].boards)) {
+    // game over
     return state;
   }
-  if (!chosenSquareIsPlayable(state, boardIndex, squareIndex)) { // do nothing
+  if (!chosenSquareIsPlayable(state, boardIndex, squareIndex)) {
+    // do nothing
     return state;
   }
 
@@ -43,7 +48,11 @@ function playSquare(state, { boardIndex, squareIndex }) {
 
   return {
     ...state,
-    nextPlayer: getNextPlayer({ boardIndex, squareIndex }, updatedBoards, state),
+    nextPlayer: getNextPlayer(
+      { boardIndex, squareIndex },
+      updatedBoards,
+      state,
+    ),
     history: newHistory,
     pointInHistory: newHistory.length - 1,
   };
@@ -52,9 +61,11 @@ function playSquare(state, { boardIndex, squareIndex }) {
 function chosenSquareIsPlayable(state, boardIndex, squareIndex) {
   const boardToPlay = state.history[state.pointInHistory].boards[boardIndex];
 
-  return boardToPlay.isActive
-    && boardToPlay.squares[squareIndex] === null
-    && !calculateWinner(boardToPlay.squares);
+  return (
+    boardToPlay.isActive &&
+    boardToPlay.squares[squareIndex] === null &&
+    !calculateWinner(boardToPlay.squares)
+  );
 }
 
 function updateBoardSquares(playedBoardIndex, playedSquareIndex, player) {
@@ -64,7 +75,11 @@ function updateBoardSquares(playedBoardIndex, playedSquareIndex, player) {
 
       return {
         ...board,
-        squares: [...squares.slice(0, playedSquareIndex), player, ...squares.slice(+playedSquareIndex + 1)],
+        squares: [
+          ...squares.slice(0, playedSquareIndex),
+          player,
+          ...squares.slice(+playedSquareIndex + 1),
+        ],
       };
     }
 
@@ -78,7 +93,9 @@ function updateBoardActiveStatus(boardIndex, squareIndex) {
 
     return {
       ...board,
-      isActive: nextBoardIsWon(boards, { boardIndex, squareIndex }) ? true : isBoardActive,
+      isActive: nextBoardIsWon(boards, { boardIndex, squareIndex })
+        ? true
+        : isBoardActive,
     };
   };
 }
@@ -92,9 +109,9 @@ function timeTravel(state, { pointInHistory }) {
 }
 
 function getInitialState() {
-  const boards = Array(9).fill().map(() => (
-    { squares: Array(9).fill(null), isActive: true }
-  ));
+  const boards = Array(9)
+    .fill()
+    .map(() => ({ squares: Array(9).fill(null), isActive: true }));
 
   return {
     nextPlayer: 'X',

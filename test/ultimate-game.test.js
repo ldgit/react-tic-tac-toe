@@ -2,7 +2,7 @@ import assert from 'assert';
 import { expect } from 'chai';
 import deepFreeze from 'deep-freeze';
 import { calculateUltimateWinner, ultimateTicTacToe } from '../src/ultimate-game';
-import drawSquareGameState from './fixtures/draw-square-game.json'
+import drawSquareGameState from './fixtures/draw-square-game.json';
 
 function getCurrentBoards(state) {
   return state.history[state.history.length - 1].boards;
