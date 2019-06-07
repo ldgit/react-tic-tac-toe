@@ -21,21 +21,15 @@ export default function Board({
 
   return (
     <div data-testid={testId} className={className}>
-      <div className="table-row">
-        {renderSquare('0', 'topLeftSquare')}
-        {renderSquare('1', 'topMiddleSquare')}
-        {renderSquare('2', 'topRightSquare')}
-      </div>
-      <div className="table-row">
-        {renderSquare('3', 'centerLeftSquare')}
-        {renderSquare('4', 'centerMiddleSquare')}
-        {renderSquare('5', 'centerRightSquare')}
-      </div>
-      <div className="table-row">
-        {renderSquare('6', 'bottomLeftSquare')}
-        {renderSquare('7', 'bottomMiddleSquare')}
-        {renderSquare('8', 'bottomRightSquare')}
-      </div>
+      {renderSquare('0', 'topLeftSquare')}
+      {renderSquare('1', 'topMiddleSquare')}
+      {renderSquare('2', 'topRightSquare')}
+      {renderSquare('3', 'centerLeftSquare')}
+      {renderSquare('4', 'centerMiddleSquare')}
+      {renderSquare('5', 'centerRightSquare')}
+      {renderSquare('6', 'bottomLeftSquare')}
+      {renderSquare('7', 'bottomMiddleSquare')}
+      {renderSquare('8', 'bottomRightSquare')}
     </div>
   );
 }
