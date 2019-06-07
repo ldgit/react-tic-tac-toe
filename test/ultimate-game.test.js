@@ -1,4 +1,3 @@
-/* eslint max-len: ['warn', 150, 2] */
 import assert from 'assert';
 import { expect } from 'chai';
 import {
@@ -7,6 +6,7 @@ import {
   timeTravel,
   calculateUltimateWinner,
 } from '../src/ultimate-game';
+import drawSquareGameState from './fixtures/draw-square-game.json';
 
 function getCurrentBoards(state) {
   return state.history[state.history.length - 1].boards;
@@ -253,7 +253,6 @@ describe('playSquare', () => {
     assert.deepEqual(finalState, midState);
   });
 
-  // eslint-disable-next-line max-len
   it('if move takes the player to won board, mark all boards as active (covers the case where move that takes the player to won board is also the one that won that board)', () => {
     const firstXMoveState = playSquare(initialState, {
       boardIndex: 0,
@@ -283,7 +282,7 @@ describe('playSquare', () => {
     );
   });
 
-  it('playing a move on inactive board that takes the player to a won board should do nothing', () => {
+  it('playing a move on inactive board that takes the next player to a won board should do nothing', () => {
     const firstXMoveState = playSquare(initialState, {
       boardIndex: 0,
       squareIndex: 8,
@@ -316,6 +315,19 @@ describe('playSquare', () => {
       squareIndex: 0,
     });
     assert.deepEqual(fourthXMoveState, thirdOMoveState);
+  });
+
+  it.skip('should mark all other boards as active when played square moves player to a draw board', () => {
+    const newState = playSquare(drawSquareGameState, {
+      boardIndex: 0,
+      squareIndex: 0,
+    });
+
+    const currentBoards = getCurrentBoards(newState);
+    const currentlyActiveBoards = currentBoards.filter(board => board.isActive);
+    expect(currentlyActiveBoards).to.be.lengthOf(8);
+    // eslint-disable-next-line no-unused-expressions
+    expect(currentBoards[0].isActive).to.be.false;
   });
 
   context('history and time travel', () => {

@@ -1,0 +1,1247 @@
+{
+  "nextPlayer": "X",
+  "history": [
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, "O", null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "O", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "O", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "O", null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": true
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, "O"],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "O", null, null, null, "O"],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, "O", null, null, null, "O"],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, "O", null, "O", null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, "O", null, "O", null, "O"],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", null, null, "O", null, "O", null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, "O", "X", null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", null, null, "O", null, "O", null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", null, null, "O", null, "O", null, "O"],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", null, "O", null, "O", null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", null, "O", null, "O", null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", null, "O", null, "O", null, "O"],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", null, "O", "O", "O", null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", null, "O", "O", "O", null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, "X", null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", null, "O", "O", "O", null, "O"],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, "X", null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", null, "O", "O", "O", "X", "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, "X", null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", null, "O", "O", "O", "X", "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, "X", null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "X", null, null, null, null],
+          "isActive": true
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", null, "O", "O", "O", "X", "O"],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, "X", "O", "X", null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, "X", null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", null, "O", "O", "O", "X", "O"],
+          "isActive": true
+        },
+        {
+          "squares": ["O", null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, "X", null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", "X", "O", "O", "O", "X", "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, "X", null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", "X", "O", "O", "O", "X", "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, "O", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "O", null, null, null, "O"],
+          "isActive": true
+        },
+        {
+          "squares": ["O", null, null, null, null, "X", null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", "X", "O", "O", "O", "X", "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, "X", "O", "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, null, null, "O", null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", null, null, null, "O", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", "X", null, "O", null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, null, "X", null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, "O"],
+          "isActive": false
+        },
+        {
+          "squares": ["X", "X", null, null, "X", null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, "O", "X", "X", "O", "O", "O", "X", "O"],
+          "isActive": true
+        },
+        {
+          "squares": ["O", null, "X", "O", "X", null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["O", null, null, null, "O", null, null, "O", null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", null, null, null, "O", null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", "X", "X", null, "O", null, null, null, "O"],
+          "isActive": true
+        },
+        {
+          "squares": ["O", null, null, null, null, "X", null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": ["X", null, null, null, null, null, null, null, "O"],
+          "isActive": true
+        },
+        {
+          "squares": ["X", "X", null, null, "X", null, null, null, null],
+          "isActive": true
+        }
+      ]
+    }
+  ],
+  "pointInHistory": 30,
+  "specialIcons": true
+}
