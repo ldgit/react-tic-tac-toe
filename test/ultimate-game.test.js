@@ -258,17 +258,13 @@ describe('ultimate tic-tac-toe', () => {
     assert.deepEqual(fourthXMoveState, thirdOMoveState);
   });
 
-  it.skip('should mark all other boards as active when played square moves player to a draw board', () => {
-    const newState = callPlaySquare(drawSquareGameState, {
-      boardIndex: 0,
-      squareIndex: 0,
-    });
+  it('should mark all boards as active when played square moves player to a full board', () => {
+    // This move fills top left board and no one wins it
+    const newState = callPlaySquare(drawSquareGameState, { boardIndex: 0, squareIndex: 0 });
 
     const currentBoards = getCurrentBoards(newState);
     const currentlyActiveBoards = currentBoards.filter(board => board.isActive);
-    expect(currentlyActiveBoards).to.be.lengthOf(8);
-    // eslint-disable-next-line no-unused-expressions
-    expect(currentBoards[0].isActive).to.be.false;
+    expect(currentlyActiveBoards, 'All boards are active except last played one').to.be.lengthOf(9);
   });
 
   context('history and time travel', () => {
