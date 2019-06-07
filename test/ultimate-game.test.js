@@ -1,85 +1,88 @@
-/* eslint max-len: ['warn', 150, 2] */
 import assert from 'assert';
 import { expect } from 'chai';
-import {
-  getInitialState,
-  playSquare,
-  timeTravel,
-  calculateUltimateWinner,
-} from '../src/ultimate-game';
+import deepFreeze from 'deep-freeze';
+import { calculateUltimateWinner, ultimateTicTacToe } from '../src/ultimate-game';
+import drawSquareGameState from './fixtures/draw-square-game.json';
 
 function getCurrentBoards(state) {
   return state.history[state.history.length - 1].boards;
 }
 
-describe('playSquare', () => {
+function callPlaySquare(oldState, { boardIndex, squareIndex }) {
+  deepFreeze(oldState);
+  const action = { type: 'PLAY_SQUARE', boardIndex, squareIndex };
+  deepFreeze(action);
+
+  return ultimateTicTacToe(oldState, action);
+}
+
+function callTimeTravel(oldState, { pointInHistory }) {
+  deepFreeze(oldState);
+  const action = { type: 'TIME_TRAVEL', pointInHistory };
+  deepFreeze(action);
+
+  return ultimateTicTacToe(oldState, action);
+}
+
+function callCalculateUltimateWinner(boards) {
+  deepFreeze(boards);
+
+  return calculateUltimateWinner(boards);
+}
+
+describe('ultimate tic-tac-toe', () => {
   let initialState;
 
   beforeEach(() => {
-    initialState = getInitialState();
+    initialState = ultimateTicTacToe(undefined, { type: 'NOT_IMPORTANT' });
+  });
+
+  it('should just return state unchanged if action not known', () => {
+    initialState.specialIcons = true;
+    deepFreeze(initialState);
+    assert.deepEqual(initialState, ultimateTicTacToe(initialState, { type: 'DOES_NOT_EXIST' }));
   });
 
   ['0', 0].forEach(squareIndex => {
     it(`playing a square on initial board should advance to next player (square${JSON.stringify(
       squareIndex,
     )})`, () => {
-      const newState = playSquare(initialState, { boardIndex: 0, squareIndex });
+      const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex });
       assert.equal(newState.nextPlayer, 'O');
     });
 
-    // eslint-disable-next-line max-len
     it(`playing a square on initial board should mark that square as played by current player (square ${JSON.stringify(
       squareIndex,
     )})`, () => {
-      const newState = playSquare(initialState, { boardIndex: 0, squareIndex });
+      const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex });
       assert.deepEqual(getCurrentBoards(newState)[0].squares, ['X', ...Array(8).fill(null)]);
     });
   });
 
-  it('changing board squares of new state should not alter previous state (immutability)', () => {
-    const newState = playSquare(initialState, {
-      boardIndex: 0,
-      squareIndex: 0,
-    });
-
-    expect(getCurrentBoards(initialState)[0].squares[0]).to.be.equal(
-      null,
-      'played square was modified in the initial state',
-    );
-
-    assert.notDeepEqual(
-      getCurrentBoards(initialState),
-      getCurrentBoards(newState),
-      'old boards array changed',
-    );
-    assertImutability(initialState, newState);
+  it('playing a square must handle square index as text', () => {
+    // Otherwise this causes problems in, for example, .slice(), because '4' + 1 === '41' instead of 5
+    const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: '5' });
+    assert.equal(getCurrentBoards(newState)[0].squares.length, 9);
   });
 
   it('second move should correctly update next player', () => {
-    const newState = playSquare(initialState, {
-      boardIndex: 0,
-      squareIndex: 0,
-    });
-    const finalState = playSquare(newState, { boardIndex: 0, squareIndex: 4 });
+    const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: 0 });
+    const finalState = callPlaySquare(newState, { boardIndex: 0, squareIndex: 4 });
     assert.equal(finalState.nextPlayer, 'X');
   });
 
   it('second move should mark that square as played by first player', () => {
-    const newState = playSquare(initialState, {
-      boardIndex: 0,
-      squareIndex: 0,
-    });
-    const finalState = playSquare(newState, { boardIndex: 0, squareIndex: 4 });
+    const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: 0 });
+    const finalState = callPlaySquare(newState, { boardIndex: 0, squareIndex: 4 });
     assert.equal(getCurrentBoards(finalState)[0].squares[4], 'O');
     assert.equal(getCurrentBoards(finalState)[0].squares[0], 'X', 'First move not lost');
   });
 
   [0, 1, 3, 8, '2', '7'].forEach(squareIndex => {
-    // eslint-disable-next-line max-len
     it(`a move marks all boards except one that must be played next as inactive (squareIndex: ${JSON.stringify(
       squareIndex,
     )})`, () => {
-      const newState = playSquare(initialState, { boardIndex: 0, squareIndex });
+      const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex });
       assert.strictEqual(
         getCurrentBoards(newState)[squareIndex].isActive,
         true,
@@ -93,17 +96,12 @@ describe('playSquare', () => {
     });
   });
 
-  // eslint-disable-next-line max-len
   it('move played on inactive board square does nothing (next player is sent to board in relative location to played square) *', () => {
-    const newState = playSquare(initialState, {
-      boardIndex: 0,
-      squareIndex: 0,
-    });
-    const finalState = playSquare(newState, { boardIndex: 1, squareIndex: 4 });
+    const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: 0 });
+    const finalState = callPlaySquare(newState, { boardIndex: 1, squareIndex: 4 });
     expect(getCurrentBoards(finalState)[1].squares[4]).to.be.equal(null);
 
     assert.deepEqual(newState, finalState);
-    assertImutability(newState, finalState);
   });
 
   [
@@ -122,22 +120,19 @@ describe('playSquare', () => {
       getCurrentBoards(initialState)[6].squares = [...Array(3).fill('X'), ...Array(6).fill(null)];
       getCurrentBoards(initialState)[5].isActive = false;
       getCurrentBoards(initialState)[4].isActive = true;
-      const newState = playSquare(initialState, move);
+
+      const newState = callPlaySquare(initialState, move);
 
       expect(getCurrentBoards(newState)[move.boardIndex].squares[move.squareIndex]).to.be.equal(
         squareContent,
       );
       assert.deepEqual(newState, initialState);
-      assertImutability(newState, initialState);
     });
   });
 
   it('playing the same square twice will not advance to next player', () => {
-    const midState = playSquare(initialState, {
-      boardIndex: 0,
-      squareIndex: 0,
-    });
-    const finalState = playSquare(midState, { boardIndex: 0, squareIndex: 0 });
+    const midState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: 0 });
+    const finalState = callPlaySquare(midState, { boardIndex: 0, squareIndex: 0 });
     assert.equal(finalState.nextPlayer, 'O');
 
     assert.notDeepEqual(
@@ -145,15 +140,11 @@ describe('playSquare', () => {
       getCurrentBoards(finalState),
       'old boards array changed',
     );
-    assertImutability(finalState, midState);
   });
 
   it('playing the same square twice will not change the value of that square', () => {
-    const midState = playSquare(initialState, {
-      boardIndex: 1,
-      squareIndex: 1,
-    });
-    const finalState = playSquare(midState, { boardIndex: 1, squareIndex: 1 });
+    const midState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 1 });
+    const finalState = callPlaySquare(midState, { boardIndex: 1, squareIndex: 1 });
     assert.equal(
       getCurrentBoards(finalState)[1].squares[1],
       'X',
@@ -161,12 +152,9 @@ describe('playSquare', () => {
     );
     assert.equal(finalState.nextPlayer, 'O');
 
-    const stateOne = playSquare(initialState, {
-      boardIndex: 0,
-      squareIndex: 4,
-    });
-    const stateTwo = playSquare(stateOne, { boardIndex: 4, squareIndex: 0 });
-    const stateThree = playSquare(stateTwo, { boardIndex: 0, squareIndex: 4 });
+    const stateOne = callPlaySquare(initialState, { boardIndex: 0, squareIndex: 4 });
+    const stateTwo = callPlaySquare(stateOne, { boardIndex: 4, squareIndex: 0 });
+    const stateThree = callPlaySquare(stateTwo, { boardIndex: 0, squareIndex: 4 });
     assert.equal(
       getCurrentBoards(stateThree)[0].squares[4],
       'X',
@@ -202,27 +190,25 @@ describe('playSquare', () => {
         'X',
       ];
 
-      const newState = playSquare(initialState, move);
+      const newState = callPlaySquare(initialState, move);
 
       expect(getCurrentBoards(newState)[move.boardIndex].squares[move.squareIndex]).to.be.equal(
         squareContent,
       );
       assert.deepEqual(newState, initialState);
-      assertImutability(initialState, newState);
     });
   });
 
   [4, '4'].forEach(squareIndex => {
-    // eslint-disable-next-line max-len
     it(`clicking on an empty square on inactive board does not change boards isActive status (${JSON.stringify(
       squareIndex,
     )})`, () => {
       const indexOfBoardThatMustRemainActive = 6;
-      const newState = playSquare(initialState, {
+      const newState = callPlaySquare(initialState, {
         boardIndex: 0,
         squareIndex: indexOfBoardThatMustRemainActive,
       });
-      const finalState = playSquare(newState, { boardIndex: 1, squareIndex });
+      const finalState = callPlaySquare(newState, { boardIndex: 1, squareIndex });
 
       assert.strictEqual(
         getCurrentBoards(finalState)[indexOfBoardThatMustRemainActive].isActive,
@@ -234,48 +220,23 @@ describe('playSquare', () => {
           assert.strictEqual(board.isActive, false, `board ${boardIndex} must be inactive`);
         },
       );
-
-      assertImutability(newState, finalState);
-      assertImutability(initialState, finalState);
     });
   });
 
   it('playing an occupied square on inactive board does nothing', () => {
-    const midState = playSquare(initialState, {
-      boardIndex: 8,
-      squareIndex: '4',
-    });
-    const finalState = playSquare(midState, {
-      boardIndex: 8,
-      squareIndex: '4',
-    });
+    const midState = callPlaySquare(initialState, { boardIndex: 8, squareIndex: '4' });
+    const finalState = callPlaySquare(midState, { boardIndex: 8, squareIndex: '4' });
 
     assert.deepEqual(finalState, midState);
   });
 
-  // eslint-disable-next-line max-len
   it('if move takes the player to won board, mark all boards as active (covers the case where move that takes the player to won board is also the one that won that board)', () => {
-    const firstXMoveState = playSquare(initialState, {
-      boardIndex: 0,
-      squareIndex: 8,
-    });
-    const firstOMoveState = playSquare(firstXMoveState, {
-      boardIndex: 8,
-      squareIndex: 0,
-    });
-    const secondXMoveState = playSquare(firstOMoveState, {
-      boardIndex: 0,
-      squareIndex: 4,
-    });
-    const secondOMoveState = playSquare(secondXMoveState, {
-      boardIndex: 4,
-      squareIndex: 0,
-    });
+    const firstXMoveState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: 8 });
+    const firstOMoveState = callPlaySquare(firstXMoveState, { boardIndex: 8, squareIndex: 0 });
+    const secondXMoveState = callPlaySquare(firstOMoveState, { boardIndex: 0, squareIndex: 4 });
+    const secondOMoveState = callPlaySquare(secondXMoveState, { boardIndex: 4, squareIndex: 0 });
     // X wins board 0, O would otherwise need to play on that same board:
-    const thirdXMoveState = playSquare(secondOMoveState, {
-      boardIndex: 0,
-      squareIndex: 0,
-    });
+    const thirdXMoveState = callPlaySquare(secondOMoveState, { boardIndex: 0, squareIndex: 0 });
 
     assert.deepEqual(
       getCurrentBoards(thirdXMoveState).map(board => board.isActive),
@@ -284,46 +245,35 @@ describe('playSquare', () => {
   });
 
   it('playing a move on inactive board that takes the player to a won board should do nothing', () => {
-    const firstXMoveState = playSquare(initialState, {
-      boardIndex: 0,
-      squareIndex: 8,
-    });
-    const firstOMoveState = playSquare(firstXMoveState, {
-      boardIndex: 8,
-      squareIndex: 0,
-    });
-    const secondXMoveState = playSquare(firstOMoveState, {
-      boardIndex: 0,
-      squareIndex: 4,
-    });
-    const secondOMoveState = playSquare(secondXMoveState, {
-      boardIndex: 4,
-      squareIndex: 0,
-    });
-    const thirdXMoveState = playSquare(secondOMoveState, {
-      boardIndex: 0,
-      squareIndex: 0,
-    }); // X wins board 0
+    const firstXMoveState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: 8 });
+    const firstOMoveState = callPlaySquare(firstXMoveState, { boardIndex: 8, squareIndex: 0 });
+    const secondXMoveState = callPlaySquare(firstOMoveState, { boardIndex: 0, squareIndex: 4 });
+    const secondOMoveState = callPlaySquare(secondXMoveState, { boardIndex: 4, squareIndex: 0 });
+    const thirdXMoveState = callPlaySquare(secondOMoveState, { boardIndex: 0, squareIndex: 0 }); // X wins board 0
     // Inactivates all boards except 8:
-    const thirdOMoveState = playSquare(thirdXMoveState, {
-      boardIndex: 1,
-      squareIndex: 8,
-    });
+    const thirdOMoveState = callPlaySquare(thirdXMoveState, { boardIndex: 1, squareIndex: 8 });
 
     // Move that takes the player to won board:
-    const fourthXMoveState = playSquare(thirdOMoveState, {
-      boardIndex: 7,
+    const fourthXMoveState = callPlaySquare(thirdOMoveState, { boardIndex: 7, squareIndex: 0 });
+    assert.deepEqual(fourthXMoveState, thirdOMoveState);
+  });
+
+  it.skip('should mark all other boards as active when played square moves player to a draw board', () => {
+    const newState = callPlaySquare(drawSquareGameState, {
+      boardIndex: 0,
       squareIndex: 0,
     });
-    assert.deepEqual(fourthXMoveState, thirdOMoveState);
+
+    const currentBoards = getCurrentBoards(newState);
+    const currentlyActiveBoards = currentBoards.filter(board => board.isActive);
+    expect(currentlyActiveBoards).to.be.lengthOf(8);
+    // eslint-disable-next-line no-unused-expressions
+    expect(currentBoards[0].isActive).to.be.false;
   });
 
   context('history and time travel', () => {
     it('valid move should push new board state to history', () => {
-      const newState = playSquare(initialState, {
-        boardIndex: 1,
-        squareIndex: 8,
-      });
+      const newState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 8 });
 
       assert.deepEqual(
         newState.history[0].boards,
@@ -337,24 +287,18 @@ describe('playSquare', () => {
     it('valid move should increment pointInHistory in state', () => {
       let currentState;
       assert.equal(initialState.pointInHistory, 0);
-      currentState = playSquare(initialState, {
-        boardIndex: 1,
-        squareIndex: 8,
-      });
+      currentState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 8 });
       assert.equal(currentState.pointInHistory, 1);
-      currentState = playSquare(currentState, {
-        boardIndex: 8,
-        squareIndex: 2,
-      });
+      currentState = callPlaySquare(currentState, { boardIndex: 8, squareIndex: 2 });
       assert.equal(currentState.pointInHistory, 2);
     });
 
     it('invalid move should not add more entries to history', () => {
-      const stateBeforeInvalidMove = playSquare(initialState, {
+      const stateBeforeInvalidMove = callPlaySquare(initialState, {
         boardIndex: 1,
         squareIndex: 8,
       });
-      const stateAfterInvalidMove = playSquare(stateBeforeInvalidMove, {
+      const stateAfterInvalidMove = callPlaySquare(stateBeforeInvalidMove, {
         boardIndex: 7,
         squareIndex: 4,
       });
@@ -366,76 +310,28 @@ describe('playSquare', () => {
       );
     });
 
-    it('changing one history entry should not change any others');
-
     context('jump to a point in history', () => {
       it('should change pointInHistory property', () => {
-        const newState = playSquare(initialState, {
-          boardIndex: 1,
-          squareIndex: 8,
-        });
-        const stateAfterTimeTravel = timeTravel(newState, {
-          pointInHistory: 0,
-        });
+        const newState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 8 });
+        const stateAfterTimeTravel = callTimeTravel(newState, { pointInHistory: 0 });
         assert.strictEqual(stateAfterTimeTravel.pointInHistory, 0);
       });
 
       it('should change next player accordingly', () => {
-        const firstMoveState = playSquare(initialState, {
-          boardIndex: 1,
-          squareIndex: 8,
-        });
-        const secondMoveState = playSquare(firstMoveState, {
-          boardIndex: 1,
-          squareIndex: 8,
-        });
+        const firstMoveState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 8 });
+        const secondMoveState = callPlaySquare(firstMoveState, { boardIndex: 1, squareIndex: 8 });
 
-        assert.equal(timeTravel(secondMoveState, { pointInHistory: 0 }).nextPlayer, 'X');
-        assert.equal(timeTravel(secondMoveState, { pointInHistory: 1 }).nextPlayer, 'O');
-      });
-
-      it('should return a deep copy of input state', () => {
-        const newState = playSquare(initialState, {
-          boardIndex: 1,
-          squareIndex: 8,
-        });
-
-        const stateAfterTimeTravel = timeTravel(newState, {
-          pointInHistory: 0,
-        });
-
-        stateAfterTimeTravel.pointInHistory = 1984;
-        stateAfterTimeTravel.history[0].boards[4].squares[1] =
-          'modified in state returned by time travel, should not be in previus state';
-        assert.strictEqual(
-          newState.pointInHistory,
-          1,
-          'time travel must return a *copy* of input state',
-        );
-        expect(newState.history[0].boards[4].squares[1]).to.equal(
-          null,
-          'time travel must return a *deep copy* of input state',
-        );
+        assert.equal(callTimeTravel(secondMoveState, { pointInHistory: 0 }).nextPlayer, 'X');
+        assert.equal(callTimeTravel(secondMoveState, { pointInHistory: 1 }).nextPlayer, 'O');
       });
 
       it('when time traveling to past and then playing a move, should discard all history after that time travel point', () => {
-        const moveOneState = playSquare(initialState, {
-          boardIndex: 4,
-          squareIndex: 0,
-        });
-        const moveTwoState = playSquare(moveOneState, {
-          boardIndex: 0,
-          squareIndex: 2,
-        });
-        const moveThreeState = playSquare(moveTwoState, {
-          boardIndex: 2,
-          squareIndex: 3,
-        });
+        const moveOneState = callPlaySquare(initialState, { boardIndex: 4, squareIndex: 0 });
+        const moveTwoState = callPlaySquare(moveOneState, { boardIndex: 0, squareIndex: 2 });
+        const moveThreeState = callPlaySquare(moveTwoState, { boardIndex: 2, squareIndex: 3 });
 
-        const stateAfterTimeTravelToMoveOne = timeTravel(moveThreeState, {
-          pointInHistory: 1,
-        });
-        const finalState = playSquare(stateAfterTimeTravelToMoveOne, {
+        const stateAfterTimeTravelToMoveOne = callTimeTravel(moveThreeState, { pointInHistory: 1 });
+        const finalState = callPlaySquare(stateAfterTimeTravelToMoveOne, {
           boardIndex: 0,
           squareIndex: 3,
         });
@@ -453,23 +349,12 @@ describe('playSquare', () => {
       });
 
       it('when time traveling to past, all rules related to that move apply', () => {
-        const moveOneState = playSquare(initialState, {
-          boardIndex: 4,
-          squareIndex: 0,
-        });
-        const moveTwoState = playSquare(moveOneState, {
-          boardIndex: 0,
-          squareIndex: 2,
-        });
-        const moveThreeState = playSquare(moveTwoState, {
-          boardIndex: 2,
-          squareIndex: 3,
-        });
+        const moveOneState = callPlaySquare(initialState, { boardIndex: 4, squareIndex: 0 });
+        const moveTwoState = callPlaySquare(moveOneState, { boardIndex: 0, squareIndex: 2 });
+        const moveThreeState = callPlaySquare(moveTwoState, { boardIndex: 2, squareIndex: 3 });
 
-        const stateAfterTimeTravelToMoveOne = timeTravel(moveThreeState, {
-          pointInHistory: 1,
-        });
-        const invalidMoveState = playSquare(stateAfterTimeTravelToMoveOne, {
+        const stateAfterTimeTravelToMoveOne = callTimeTravel(moveThreeState, { pointInHistory: 1 });
+        const invalidMoveState = callPlaySquare(stateAfterTimeTravelToMoveOne, {
           boardIndex: 1,
           squareIndex: 3,
         });
@@ -481,13 +366,10 @@ describe('playSquare', () => {
         );
       });
 
-      it('Play one move, then back to game start, then repeat the move. Next player should be O.', () => {
-        const moveOneState = playSquare(initialState, {
-          boardIndex: 4,
-          squareIndex: 0,
-        });
-        const backToGameStart = timeTravel(moveOneState, { pointInHistory: 0 });
-        const repeatedMoveOneState = playSquare(backToGameStart, {
+      it('play one move, then back to game start, then repeat the move. Next player should be O.', () => {
+        const moveOneState = callPlaySquare(initialState, { boardIndex: 4, squareIndex: 0 });
+        const backToGameStart = callTimeTravel(moveOneState, { pointInHistory: 0 });
+        const repeatedMoveOneState = callPlaySquare(backToGameStart, {
           boardIndex: 4,
           squareIndex: 0,
         });
@@ -496,40 +378,24 @@ describe('playSquare', () => {
       });
 
       it('should not delete history entries', () => {
-        const midState = playSquare(initialState, {
-          boardIndex: 1,
-          squareIndex: '8',
-        });
-        const stateBeforeTimeTravel = playSquare(midState, {
-          boardIndex: 8,
-          squareIndex: '5',
-        });
-        const stateAfterTimeTravel = timeTravel(stateBeforeTimeTravel, {
-          pointInHistory: 0,
-        });
+        const midState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: '8' });
+        const stateBeforeTimeTravel = callPlaySquare(midState, { boardIndex: 8, squareIndex: '5' });
+        const stateAfterTimeTravel = callTimeTravel(stateBeforeTimeTravel, { pointInHistory: 0 });
 
         assert.equal(stateAfterTimeTravel.history.length, stateBeforeTimeTravel.history.length);
         assert.deepEqual(stateAfterTimeTravel.history, stateBeforeTimeTravel.history);
       });
 
       it('after playing a new valid move, all history after that move is discarded', () => {
-        const midState = playSquare(initialState, {
-          boardIndex: 1,
-          squareIndex: '8',
-        });
-        let stateBeforeTimeTravel = playSquare(midState, {
-          boardIndex: 8,
-          squareIndex: '5',
-        });
-        stateBeforeTimeTravel = playSquare(stateBeforeTimeTravel, {
+        const midState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: '8' });
+        let stateBeforeTimeTravel = callPlaySquare(midState, { boardIndex: 8, squareIndex: '5' });
+        stateBeforeTimeTravel = callPlaySquare(stateBeforeTimeTravel, {
           boardIndex: 5,
           squareIndex: '5',
         });
 
-        const stateAfterTimeTravel = timeTravel(stateBeforeTimeTravel, {
-          pointInHistory: 0,
-        });
-        const stateAfterValidMove = playSquare(stateAfterTimeTravel, {
+        const stateAfterTimeTravel = callTimeTravel(stateBeforeTimeTravel, { pointInHistory: 0 });
+        const stateAfterValidMove = callPlaySquare(stateAfterTimeTravel, {
           boardIndex: 8,
           squareIndex: '3',
         });
@@ -541,77 +407,17 @@ describe('playSquare', () => {
     });
   });
 
-  function assertImutability(oldState, newState) {
-    /* eslint-disable no-param-reassign */
-    getCurrentBoards(newState)[7].isActive = 'bla bla bla';
-    expect(getCurrentBoards(oldState)[7].isActive).to.not.be.equal(
-      'bla bla bla',
-      'initial state must remain unchanged (isActive), use Array.map & Object.assign',
-    );
+  context('special icons', () => {
+    [true, false].forEach(specialIcons => {
+      it(`special icons action should toggle specialIcons state (${specialIcons})`, () => {
+        initialState.specialIcons = specialIcons;
 
-    getCurrentBoards(newState)[7].squares[1] = 'noooo';
-    expect(getCurrentBoards(oldState)[7].squares[1]).to.not.be.equal(
-      'noooo',
-      'initial state must remain unchanged (square in a board), use Array.map & Object.assign',
-    );
+        deepFreeze(initialState);
+        const newState = ultimateTicTacToe(initialState, { type: 'TOGGLE_SPECIAL_ICONS' });
 
-    newState.nextPlayer = 'foo';
-    expect(oldState.nextPlayer).to.not.equal('foo', 'nextPlayer property not deep copied');
-
-    newState.pointInHistory = 'bar';
-    expect(oldState.pointInHistory).to.not.equal('bar', 'pointInHistory property not deep copied');
-  }
-});
-
-describe('deepCopyGameState', () => {
-  it('should copy top level properties', () => {
-    const initialState = getInitialState();
-    assert.strictEqual(initialState.specialIcons, false);
-    const newState = playSquare(initialState, {
-      boardIndex: 1,
-      squareIndex: '8',
+        assert.strictEqual(newState.specialIcons, !specialIcons);
+      });
     });
-    newState.specialIcons = 'foo bar baz';
-    assert.strictEqual(
-      initialState.specialIcons,
-      false,
-      'State not copied after playSquare (top level properties)',
-    );
-
-    const afterTimeTravelState = timeTravel(initialState, {
-      pointInHistory: 1,
-    });
-    afterTimeTravelState.specialIcons = 'foo bar baz';
-    assert.strictEqual(
-      initialState.specialIcons,
-      false,
-      'State not copied after timeTravel (top level properties)',
-    );
-  });
-
-  it('should copy squares for each boards array in history', () => {
-    const initialState = getInitialState();
-    assert.strictEqual(initialState.history[0].boards[8].squares[5], null);
-
-    const newState = playSquare(initialState, {
-      boardIndex: 1,
-      squareIndex: '8',
-    });
-    newState.history[0].boards[8].squares[5] = '(changed through first history entry of new state)';
-    assert.strictEqual(
-      initialState.history[0].boards[8].squares[5],
-      null,
-      '',
-      'squares list of boards must be deep copied',
-    );
-    newState.history[1].boards[8].squares[5] =
-      '(changed through second history entry of new state)';
-    assert.strictEqual(
-      initialState.history[0].boards[8].squares[5],
-      null,
-      '',
-      'squares list of boards must be deep copied',
-    );
   });
 });
 
@@ -620,7 +426,7 @@ describe('calculateUltimateWinner', () => {
     const boards = Array(9)
       .fill()
       .map(() => ({ squares: emptySquares(), isActive: false }));
-    assert.strictEqual(calculateUltimateWinner(boards), null);
+    assert.strictEqual(callCalculateUltimateWinner(boards), null);
   });
 
   it('should return null if ony two boards won', () => {
@@ -630,7 +436,7 @@ describe('calculateUltimateWinner', () => {
     boards[1].squares = ['O', 'O', 'O', ...Array(6).fill(null)];
     boards[3].squares = [...Array(6).fill(null), 'O', 'O', 'O'];
 
-    assert.strictEqual(calculateUltimateWinner(boards), null);
+    assert.strictEqual(callCalculateUltimateWinner(boards), null);
   });
 
   it('should return null if top row of boards won, but by different players', () => {
@@ -641,7 +447,7 @@ describe('calculateUltimateWinner', () => {
     boards[1].squares = [...Array(6).fill(null), 'O', 'O', 'O'];
     boards[2].squares = ['X', null, null, null, 'X', null, null, null, 'X'];
 
-    assert.strictEqual(calculateUltimateWinner(boards), null);
+    assert.strictEqual(callCalculateUltimateWinner(boards), null);
   });
 
   it('should return X if X won top row of boards', () => {
@@ -652,7 +458,7 @@ describe('calculateUltimateWinner', () => {
     boards[1].squares = [...Array(6).fill(null), 'X', 'X', 'X'];
     boards[2].squares = ['X', null, null, null, 'X', null, null, null, 'X'];
 
-    assert.strictEqual(calculateUltimateWinner(boards), 'X');
+    assert.strictEqual(callCalculateUltimateWinner(boards), 'X');
   });
 
   it('should return O if O won left column of boards', () => {
@@ -663,7 +469,7 @@ describe('calculateUltimateWinner', () => {
     boards[3].squares = [null, null, 'O', null, 'O', null, 'O', null, null];
     boards[6].squares = [null, 'O', null, null, 'O', null, null, 'O', null];
 
-    assert.strictEqual(calculateUltimateWinner(boards), 'O');
+    assert.strictEqual(callCalculateUltimateWinner(boards), 'O');
   });
 
   it('should return X if X won diagonal boards', () => {
@@ -674,7 +480,7 @@ describe('calculateUltimateWinner', () => {
     boards[4].squares = [null, null, 'X', null, 'X', null, 'X', null, null];
     boards[8].squares = [null, 'X', null, null, 'X', null, null, 'X', null];
 
-    assert.strictEqual(calculateUltimateWinner(boards), 'X');
+    assert.strictEqual(callCalculateUltimateWinner(boards), 'X');
   });
 
   it('should return O if O won reverse diagonal boards', () => {
@@ -685,7 +491,7 @@ describe('calculateUltimateWinner', () => {
     boards[4].squares = [null, null, 'O', null, 'O', null, 'O', null, null];
     boards[6].squares = [null, 'O', null, null, 'O', null, null, 'O', null];
 
-    assert.strictEqual(calculateUltimateWinner(boards), 'O');
+    assert.strictEqual(callCalculateUltimateWinner(boards), 'O');
   });
 });
 

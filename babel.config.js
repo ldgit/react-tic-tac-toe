@@ -1,3 +1,10 @@
 const presets = [['@babel/env'], ['@babel/react']];
 
-module.exports = { presets };
+const plugins = [
+  [
+    '@babel/plugin-proposal-object-rest-spread',
+    { useBuiltIns: true, loose: true },
+  ],
+];
+
+module.exports = { presets, plugins };
