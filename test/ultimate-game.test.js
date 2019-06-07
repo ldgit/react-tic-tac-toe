@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import deepFreeze from 'deep-freeze';
 import { calculateUltimateWinner, ultimateTicTacToe } from '../src/ultimate-game';
 import drawSquareGameState from './fixtures/draw-square-game.json';
+import fullAndWonBoardState from './fixtures/full-won-board.json';
 
 function getCurrentBoards(state) {
   return state.history[state.history.length - 1].boards;
@@ -258,17 +259,22 @@ describe('ultimate tic-tac-toe', () => {
     assert.deepEqual(fourthXMoveState, thirdOMoveState);
   });
 
-  it.skip('should mark all other boards as active when played square moves player to a draw board', () => {
-    const newState = callPlaySquare(drawSquareGameState, {
-      boardIndex: 0,
-      squareIndex: 0,
-    });
+  it('should mark all boards as active when played square moves player to a full board', () => {
+    // This move fills top left board and no one wins it
+    const newState = callPlaySquare(drawSquareGameState, { boardIndex: 0, squareIndex: 0 });
 
     const currentBoards = getCurrentBoards(newState);
     const currentlyActiveBoards = currentBoards.filter(board => board.isActive);
-    expect(currentlyActiveBoards).to.be.lengthOf(8);
-    // eslint-disable-next-line no-unused-expressions
-    expect(currentBoards[0].isActive).to.be.false;
+    expect(currentlyActiveBoards, 'All boards are active except last played one').to.be.lengthOf(9);
+  });
+
+  it('should mark all boards as active when played square moves player to a full won board', () => {
+    // This move fills top left board and wins it for player X
+    const newState = callPlaySquare(fullAndWonBoardState, { boardIndex: 0, squareIndex: 0 });
+
+    const currentBoards = getCurrentBoards(newState);
+    const currentlyActiveBoards = currentBoards.filter(board => board.isActive);
+    expect(currentlyActiveBoards, 'All boards are active except last played one').to.be.lengthOf(9);
   });
 
   context('history and time travel', () => {
@@ -492,6 +498,22 @@ describe('calculateUltimateWinner', () => {
     boards[6].squares = [null, 'O', null, null, 'O', null, null, 'O', null];
 
     assert.strictEqual(callCalculateUltimateWinner(boards), 'O');
+  });
+
+  it('should return X if X won diagonal, and one of won boards is full', () => {
+    const boards = [
+      { squares: ['X', 'O', 'O', 'X', 'O', 'X', 'X', 'X', 'O'], isActive: true },
+      { squares: ['X', null, null, null, null, null, null, null, null], isActive: true },
+      { squares: ['X', null, null, null, null, 'X', null, null, null], isActive: true },
+      { squares: ['O', null, null, null, 'O', null, null, null, null], isActive: true },
+      { squares: ['X', null, null, 'X', null, null, 'X', null, null], isActive: true },
+      { squares: ['O', null, null, null, 'O', null, null, null, null], isActive: true },
+      { squares: ['O', null, 'O', null, null, null, null, null, null], isActive: true },
+      { squares: ['O', null, null, null, 'O', null, null, null, 'O'], isActive: true },
+      { squares: ['X', null, null, null, 'X', null, null, null, 'X'], isActive: true },
+    ];
+
+    assert.strictEqual(callCalculateUltimateWinner(boards), 'X');
   });
 });
 

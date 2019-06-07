@@ -20,6 +20,10 @@ describe('calculateWinner', () => {
     assert.strictEqual(calculateWinner(squaresWithLine(2, ['0', null, 'O'])), null);
   });
 
+  it('should return null when board full but a draw', () => {
+    assert.strictEqual(calculateWinner(['X', 'X', 'O', '0', 'X', 'X', '0', 'O', 'O']), null);
+  });
+
   [
     { winner: 'X', squares: threeInLine(0, 'X') },
     { winner: 'X', squares: threeInLine(2, 'X') },

@@ -87,15 +87,18 @@ function updateBoardSquares(playedBoardIndex, playedSquareIndex, player) {
   };
 }
 
-function updateBoardActiveStatus(boardIndex, squareIndex) {
+function updateBoardActiveStatus(playedBoardIndex, playedSquareIndex) {
   return (board, index, boards) => {
-    const isBoardActive = index === parseInt(squareIndex, 10);
+    const isBoardToBePlayedNext = index === parseInt(playedSquareIndex, 10);
 
     return {
       ...board,
-      isActive: nextBoardIsWon(boards, { boardIndex, squareIndex })
+      isActive: nextBoardIsWonOrFull(boards, {
+        boardIndex: playedBoardIndex,
+        squareIndex: playedSquareIndex,
+      })
         ? true
-        : isBoardActive,
+        : isBoardToBePlayedNext,
     };
   };
 }
@@ -121,8 +124,16 @@ function getInitialState() {
   };
 }
 
-function nextBoardIsWon(boards, { squareIndex }) {
-  return !!calculateWinner(boards[squareIndex].squares);
+function nextBoardIsWonOrFull(boards, { squareIndex }) {
+  return isBoardFull(boards[squareIndex])
+    ? true
+    : !!calculateWinner(boards[squareIndex].squares);
+}
+
+function isBoardFull(board) {
+  const emptySquares = board.squares.filter(square => square === null);
+
+  return emptySquares.length === 0;
 }
 
 function getNextPlayer(move, newBoards, oldState) {
