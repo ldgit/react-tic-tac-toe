@@ -438,22 +438,7 @@ describe('Ultimate Tic-tac-toe game', () => {
     expect(topMiddleBoardBottomMiddleSquare.className).to.not.have.string('square-react-icon');
     expect(unoccupiedSquare.className).to.not.have.string('square-vue-icon');
     expect(unoccupiedSquare.className).to.not.have.string('square-react-icon');
-    assertCorrectIconInGameStatus('no-icon');
-    assert.equal(
-      sel(app, 'gameStatus').querySelectorAll('button.no-icon').length,
-      1,
-      'Expected to find one button element with no-icon class',
-    );
-    assert.equal(
-      sel(app, 'gameStatus').querySelectorAll('button.vue-icon').length,
-      0,
-      'Expected to find no button elements with vue-icon class',
-    );
-    assert.equal(
-      sel(app, 'gameStatus').querySelectorAll('button.react-icon').length,
-      0,
-      'Expected to find no button elements with react-icon class',
-    );
+    assertCorrectIconInGameStatus('x-icon');
   }
 
   function assertSpecialModeToggled(
@@ -475,7 +460,7 @@ describe('Ultimate Tic-tac-toe game', () => {
   }
 
   function assertCorrectIconInGameStatus(iconToExpect) {
-    ['no-icon', 'vue-icon', 'react-icon']
+    ['x-icon', 'o-icon', 'vue-icon', 'react-icon']
       .filter(icon => iconToExpect !== icon)
       .forEach(icon => {
         assert.equal(

@@ -115,6 +115,14 @@ button.square-vue-icon
   @include squareIcon('vue-icon.svg')
   @include hideText()
 
+button.square-x-icon
+  @include squareIcon('x-icon.svg')
+  @include hideText()
+
+button.square-o-icon
+  @include squareIcon('o-icon.svg')
+  @include hideText()
+
 button.react-icon
   @include squareIcon('react-icon.svg')
   @include hideText()
@@ -131,6 +139,20 @@ button.vue-icon
 
 button.no-icon
   @include squareButton()
+
+button.o-icon
+  @include squareIcon('o-icon.svg')
+  @include hideText()
+  @include squareButton()
+  min-width: 30px
+  min-height: 30px
+
+button.x-icon
+  @include squareIcon('x-icon.svg')
+  @include hideText()
+  @include squareButton()
+  min-width: 30px
+  min-height: 30px
 
 .current-move-button:hover
   background-color: $almostblack
