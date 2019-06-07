@@ -9,7 +9,7 @@ $almostblack: #111
   white-space: nowrap
   overflow: hidden
 
-@mixin moveButton($color)
+@mixin aButton($color)
   background-color: white
   border: solid 1px
   border-color: $color
@@ -102,10 +102,26 @@ body, button, html
   background-color: $lightblue
 
 .move-button
-  @include moveButton($gray)
+  @include aButton($gray)
 
 .current-move-button
-  @include moveButton($almostblack)
+  @include aButton($almostblack)
+
+.current-move-button:hover
+  background-color: $almostblack
+  color: white
+
+.move-button:hover
+  background-color: $gray
+  color: white
+
+.button
+  @include aButton($almostblack)
+  margin-left: 3px
+
+.button:hover
+  background-color: $almostblack
+  color: white
 
 button.square-react-icon
   @include squareIcon('react-icon.svg')
@@ -153,11 +169,3 @@ button.x-icon
   @include squareButton()
   min-width: 30px
   min-height: 30px
-
-.current-move-button:hover
-  background-color: $almostblack
-  color: white
-
-.move-button:hover
-  background-color: $gray
-  color: white
