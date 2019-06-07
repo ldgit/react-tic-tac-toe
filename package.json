@@ -47,6 +47,7 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
     "argus-test-runner": "^2.0.1",
@@ -56,6 +57,7 @@
     "coveralls": "^3.0.3",
     "css-loader": "^2.1.1",
     "eslint": "^5.16.0",
+    "deep-freeze": "git://github.com/ldgit/deep-freeze-2.git",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-import": "^2.17.3",
