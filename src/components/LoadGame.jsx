@@ -21,7 +21,7 @@ export default function LoadGame({ onLoadGameClick }) {
     <span>
       <textarea data-testid="importGameTextarea" onChange={handleOnChange} />
       <br />
-      <button type="button" onClick={handleLoadGameClick}>
+      <button type="button" className="button" onClick={handleLoadGameClick}>
         Load game
       </button>
     </span>

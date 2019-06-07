@@ -1,4 +1,3 @@
-
 $lightgray: #f4f4f4
 $lightgreen: #EDFFEF
 $lightblue: #EDFEFF
@@ -10,7 +9,7 @@ $almostblack: #111
   white-space: nowrap
   overflow: hidden
 
-@mixin moveButton($color)
+@mixin aButton($color)
   background-color: white
   border: solid 1px
   border-color: $color
@@ -27,21 +26,71 @@ $almostblack: #111
   background-size: contain
 
 @mixin squareButton()
+  flex: 1
+  justify-content: center
+  align-items: center
   background-color: #fff
   border: none
-  font-size: 24px
-  font-weight: bold
-  line-height: 34px
-  height: 34px
-  margin-right: -1px
-  margin-top: -1px
-  padding: 0
-  width: 34px
+
+*
+  box-sizing: border-box
 
 body
   font: 14px "Century Gothic", Futura, sans-serif
-  margin: 20px
-  margin-top: 5px
+  height: 100%
+
+html
+  height: 100%
+
+body, button, html
+  padding: 0
+  margin: 0
+
+.container
+  display: grid
+  grid-template-columns: 80vmin
+  margin-bottom: 1em
+  padding: 10px
+  justify-content: center
+
+.ultimate-board
+  display: inline-grid
+  grid-template-columns: repeat(3, 1fr)
+  grid-gap: 0.4em
+  height: 80vmin
+
+
+.classic-board
+  display: inline-grid
+  grid-template-columns: repeat(3, 1fr)
+  grid-gap: 0.1em
+
+.status
+  margin-bottom: 10px
+
+.square
+  @include squareButton()
+  border: 1px solid #999
+  font-size: 20px
+  text-align: center
+  vertical-align: middle
+
+.square:before
+  content: ''
+  padding-bottom: 100%
+  display: inline-block
+  vertical-align: middle
+
+.square:focus
+  outline: none
+
+.game-info
+  margin-top: 20px
+  margin-left: 20px
+
+.history
+  list-style-type: none
+  padding-left: 0
 
 .disabled-board button
   background-color: $lightgray
@@ -52,35 +101,11 @@ body
 .o-won-board button
   background-color: $lightblue
 
-ol, ul
-  padding-left: 30px
-
 .move-button
-  @include moveButton($gray)
+  @include aButton($gray)
 
 .current-move-button
-  @include moveButton($almostblack)
-
-button.square-react-icon
-  @include squareIcon('react-icon.svg')
-  @include hideText()
-
-button.square-vue-icon
-  @include squareIcon('vue-icon.svg')
-  @include hideText()
-
-button.react-icon
-  @include squareIcon('react-icon.svg')
-  @include hideText()
-  @include squareButton()
-
-button.vue-icon
-  @include squareIcon('vue-icon.svg')
-  @include hideText()
-  @include squareButton()
-
-button.no-icon
-  @include squareButton()
+  @include aButton($almostblack)
 
 .current-move-button:hover
   background-color: $almostblack
@@ -90,55 +115,57 @@ button.no-icon
   background-color: $gray
   color: white
 
-.container
-  display: flex
-  flex-direction: column
+.button
+  @include aButton($almostblack)
+  margin-left: 3px
 
-.classic-board-row
+.button:hover
+  background-color: $almostblack
+  color: white
 
-.table-cell
-  display: table-cell
+button.square-react-icon
+  @include squareIcon('react-icon.svg')
+  @include hideText()
 
-.ultimate-board
-  display: flex
-  flex-direction: column
+button.square-vue-icon
+  @include squareIcon('vue-icon.svg')
+  @include hideText()
 
-.ultimate-row
-  flex: 1
-  flex-direction: row
+button.square-x-icon
+  @include squareIcon('x-icon.svg')
+  @include hideText()
 
-.classic-board
-  flex: 1
+button.square-o-icon
+  @include squareIcon('o-icon.svg')
+  @include hideText()
 
-.table-large-padding
-  padding-left: 50px
+button.react-icon
+  @include squareIcon('react-icon.svg')
+  @include hideText()
+  @include squareButton()
+  min-width: 30px
+  min-height: 30px
 
-.table-board-border
-  border: 2px solid #fff
+button.vue-icon
+  @include squareIcon('vue-icon.svg')
+  @include hideText()
+  @include squareButton()
+  min-width: 30px
+  min-height: 30px
 
-.status
-  margin-bottom: 10px
+button.no-icon
+  @include squareButton()
 
-.square
-  background: #fff
-  border: 1px solid #999
-  float: left
-  font-size: 24px
-  font-weight: bold
-  line-height: 34px
-  height: 34px
-  margin-right: -1px
-  margin-top: -1px
-  padding: 0
-  text-align: center
-  width: 34px
+button.o-icon
+  @include squareIcon('o-icon.svg')
+  @include hideText()
+  @include squareButton()
+  min-width: 30px
+  min-height: 30px
 
-.square:focus
-  outline: none
-
-.game-info
-  margin-left: 20px
-
-.history
-  list-style-type: none
-  padding-left: 0
+button.x-icon
+  @include squareIcon('x-icon.svg')
+  @include hideText()
+  @include squareButton()
+  min-width: 30px
+  min-height: 30px

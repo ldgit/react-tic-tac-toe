@@ -24,11 +24,9 @@ describe('calculateWinner', () => {
     { winner: 'X', squares: threeInLine(0, 'X') },
     { winner: 'X', squares: threeInLine(2, 'X') },
     { winner: 'O', squares: threeInLine(1, 'O') },
-  ].forEach(fixture => {
-    it(`should declare ${fixture.winner} the winner when winner ${
-      fixture.winner
-    } has line of three`, () => {
-      assert.strictEqual(calculateWinner(fixture.squares), fixture.winner);
+  ].forEach(({ winner, squares }) => {
+    it(`should declare ${winner} the winner when winner ${winner} has line of three`, () => {
+      assert.strictEqual(calculateWinner(squares), winner);
     });
   });
 
@@ -36,11 +34,9 @@ describe('calculateWinner', () => {
     { winner: 'X', squares: threeInRow(0, 'X') },
     { winner: 'X', squares: threeInRow(2, 'X') },
     { winner: 'O', squares: threeInRow(1, 'O') },
-  ].forEach(fixture => {
-    it(`should declare ${fixture.winner} the winner when winner ${
-      fixture.winner
-    } has row of three`, () => {
-      assert.strictEqual(calculateWinner(fixture.squares), fixture.winner);
+  ].forEach(({ winner, squares }) => {
+    it(`should declare ${winner} the winner when winner ${winner} has row of three`, () => {
+      assert.strictEqual(calculateWinner(squares), winner);
     });
   });
 
@@ -48,11 +44,9 @@ describe('calculateWinner', () => {
     { winner: 'X', squares: threeInDiagonal('X') },
     { winner: 'O', squares: threeInDiagonal('O') },
     { winner: 'O', squares: threeInDiagonal('O', 'reverse') },
-  ].forEach(fixture => {
-    it(`should declare ${fixture.winner} the winner when winner ${
-      fixture.winner
-    } has diagonal of three`, () => {
-      assert.strictEqual(calculateWinner(fixture.squares), fixture.winner);
+  ].forEach(({ winner, squares }) => {
+    it(`should declare ${winner} the winner when winner ${winner} has diagonal of three`, () => {
+      assert.strictEqual(calculateWinner(squares), winner);
     });
   });
 
@@ -140,8 +134,8 @@ describe('getColorClass', () => {
 
 describe('getSquareClasses', () => {
   it('should just return square if given value of X or O and specialIcons false', () => {
-    assert.equal(getSquareClasses({ value: 'X', specialIcons: false }), 'square');
-    assert.equal(getSquareClasses({ value: 'O', specialIcons: false }), 'square');
+    assert.equal(getSquareClasses({ value: 'X', specialIcons: false }), 'square-x-icon square');
+    assert.equal(getSquareClasses({ value: 'O', specialIcons: false }), 'square-o-icon square');
   });
 
   it('should return square-vue-icon and square classes if given value of X and specialIcons true', () => {
@@ -155,8 +149,8 @@ describe('getSquareClasses', () => {
 
 describe('getPlayerEmblemClasses', () => {
   it('should return empty string if given value of X or O and specialIcons false', () => {
-    assert.strictEqual(getPlayerEmblemClasses({ value: 'X', specialIcons: false }), 'no-icon');
-    assert.strictEqual(getPlayerEmblemClasses({ value: 'O', specialIcons: false }), 'no-icon');
+    assert.strictEqual(getPlayerEmblemClasses({ value: 'X', specialIcons: false }), 'x-icon');
+    assert.strictEqual(getPlayerEmblemClasses({ value: 'O', specialIcons: false }), 'o-icon');
   });
 
   it('should return square-vue-icon and square classes if given value of X and specialIcons true', () => {

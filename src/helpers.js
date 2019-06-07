@@ -45,24 +45,24 @@ export function getColorClass(board) {
 }
 
 export function getSquareClasses({ value, specialIcons }) {
-  if (value === 'X' && specialIcons) {
-    return 'square-vue-icon square';
+  if (value === 'X') {
+    return specialIcons ? 'square-vue-icon square' : 'square-x-icon square';
   }
 
-  if (value === 'O' && specialIcons) {
-    return 'square-react-icon square';
+  if (value === 'O') {
+    return specialIcons ? 'square-react-icon square' : 'square-o-icon square';
   }
 
   return 'square';
 }
 
 export function getPlayerEmblemClasses({ value, specialIcons }) {
-  if (value === 'X' && specialIcons) {
-    return 'vue-icon';
+  if (value === 'X') {
+    return specialIcons ? 'vue-icon' : 'x-icon';
   }
 
-  if (value === 'O' && specialIcons) {
-    return 'react-icon';
+  if (value === 'O') {
+    return specialIcons ? 'react-icon' : 'o-icon';
   }
 
   return 'no-icon';

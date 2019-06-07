@@ -5,10 +5,10 @@ import UltimateGame from './UltimateGame';
 
 function App() {
   return (
-    <>
+    <div className="container">
       <Title name="React" />
       <UltimateGame />
-    </>
+    </div>
   );
 }
 
