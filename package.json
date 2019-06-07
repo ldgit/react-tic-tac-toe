@@ -1,6 +1,6 @@
 {
   "name": "tic-tac-toe-react",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "React intro tutorial (https://reactjs.org/tutorial/tutorial.html)",
   "main": "index.js",
   "homepage": "https://ldgit.github.io/react-tic-tac-toe/",
