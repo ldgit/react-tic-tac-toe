@@ -24,11 +24,9 @@ describe('calculateWinner', () => {
     { winner: 'X', squares: threeInLine(0, 'X') },
     { winner: 'X', squares: threeInLine(2, 'X') },
     { winner: 'O', squares: threeInLine(1, 'O') },
-  ].forEach(fixture => {
-    it(`should declare ${fixture.winner} the winner when winner ${
-      fixture.winner
-    } has line of three`, () => {
-      assert.strictEqual(calculateWinner(fixture.squares), fixture.winner);
+  ].forEach(({ winner, squares }) => {
+    it(`should declare ${winner} the winner when winner ${winner} has line of three`, () => {
+      assert.strictEqual(calculateWinner(squares), winner);
     });
   });
 
@@ -36,11 +34,9 @@ describe('calculateWinner', () => {
     { winner: 'X', squares: threeInRow(0, 'X') },
     { winner: 'X', squares: threeInRow(2, 'X') },
     { winner: 'O', squares: threeInRow(1, 'O') },
-  ].forEach(fixture => {
-    it(`should declare ${fixture.winner} the winner when winner ${
-      fixture.winner
-    } has row of three`, () => {
-      assert.strictEqual(calculateWinner(fixture.squares), fixture.winner);
+  ].forEach(({ winner, squares }) => {
+    it(`should declare ${winner} the winner when winner ${winner} has row of three`, () => {
+      assert.strictEqual(calculateWinner(squares), winner);
     });
   });
 
@@ -48,11 +44,9 @@ describe('calculateWinner', () => {
     { winner: 'X', squares: threeInDiagonal('X') },
     { winner: 'O', squares: threeInDiagonal('O') },
     { winner: 'O', squares: threeInDiagonal('O', 'reverse') },
-  ].forEach(fixture => {
-    it(`should declare ${fixture.winner} the winner when winner ${
-      fixture.winner
-    } has diagonal of three`, () => {
-      assert.strictEqual(calculateWinner(fixture.squares), fixture.winner);
+  ].forEach(({ winner, squares }) => {
+    it(`should declare ${winner} the winner when winner ${winner} has diagonal of three`, () => {
+      assert.strictEqual(calculateWinner(squares), winner);
     });
   });
 

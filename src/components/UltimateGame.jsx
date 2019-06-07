@@ -32,9 +32,7 @@ export default function UltimateGame() {
 
   function renderBoard(boardIndex, boards, testId) {
     const currentBoard = boards[boardIndex];
-    const boardClass = `table-cell table-board-border ${getColorClass(
-      currentBoard,
-    )}`;
+    const boardClass = `classic-board ${getColorClass(currentBoard)}`;
     const { specialIcons } = state;
 
     return (
@@ -53,25 +51,19 @@ export default function UltimateGame() {
   const winner = calculateUltimateWinner(boards);
 
   return (
-    <div className="container">
+    <>
       <div className="ultimate-board">
-        <div className="ultimate-row">
-          {renderBoard(0, boards, 'topLeftBoard')}
-          {renderBoard(1, boards, 'topMiddleBoard')}
-          {renderBoard(2, boards, 'topRightBoard')}
-        </div>
-        <div className="ultimate-row">
-          {renderBoard(3, boards, 'centerLeftBoard')}
-          {renderBoard(4, boards, 'centerMiddleBoard')}
-          {renderBoard(5, boards, 'centerRightBoard')}
-        </div>
-        <div className="ultimate-row">
-          {renderBoard(6, boards, 'bottomLeftBoard')}
-          {renderBoard(7, boards, 'bottomMiddleBoard')}
-          {renderBoard(8, boards, 'bottomRightBoard')}
-        </div>
+        {renderBoard(0, boards, 'topLeftBoard')}
+        {renderBoard(1, boards, 'topMiddleBoard')}
+        {renderBoard(2, boards, 'topRightBoard')}
+        {renderBoard(3, boards, 'centerLeftBoard')}
+        {renderBoard(4, boards, 'centerMiddleBoard')}
+        {renderBoard(5, boards, 'centerRightBoard')}
+        {renderBoard(6, boards, 'bottomLeftBoard')}
+        {renderBoard(7, boards, 'bottomMiddleBoard')}
+        {renderBoard(8, boards, 'bottomRightBoard')}
       </div>
-      <div className="game-info table-cell table-large-padding max-height">
+      <div className="game-info">
         <Status
           description={winner ? 'Winner' : 'Next player'}
           player={winner || nextPlayer}
@@ -91,7 +83,7 @@ export default function UltimateGame() {
           )}
         </ol>
       </div>
-    </div>
+    </>
   );
 }
 
