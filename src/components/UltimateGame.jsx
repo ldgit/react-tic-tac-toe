@@ -70,7 +70,7 @@ export default function UltimateGame() {
           specialIcons={specialIcons}
         />
         <br />
-        <button type="button" onClick={toggleSpecialIcons}>
+        <button type="button" className="button" onClick={toggleSpecialIcons}>
           Vue vs. React?
         </button>
         <br />

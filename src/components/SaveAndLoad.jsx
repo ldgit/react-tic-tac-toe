@@ -31,17 +31,17 @@ export default function SaveAndLoad({ gameState, onLoadGameClick }) {
   }
 
   const closeButton = (
-    <button type="button" onClick={handleCloseButtonClick}>
+    <button type="button" className="button" onClick={handleCloseButtonClick}>
       Close
     </button>
   );
 
   return (
     <span>
-      <button type="button" onClick={handleExportClick}>
+      <button type="button" className="button" onClick={handleExportClick}>
         Save
       </button>
-      <button type="button" onClick={handleLoadClick}>
+      <button type="button" className="button" onClick={handleLoadClick}>
         Load
       </button>
       {(displayExportGameTextarea || displayImportGameTextarea) && closeButton}
