@@ -441,6 +441,14 @@ describe('Ultimate Tic-tac-toe game', () => {
       expect(sel(app, 'urlShareInput').value).to.equal(
         'https://example.com/?a[]=p01&a[]=p10&a[]=p08&a[]=p84',
       );
+
+      // Test that special icons are also remembered as first item of query string
+      const specialModeToggle = selectByText(app, 'button', 'Vue vs. React?');
+      click(specialModeToggle);
+      click(shareButton);
+      expect(sel(app, 'urlShareInput').value).to.equal(
+        'https://example.com/?a[]=ti&a[]=p01&a[]=p10&a[]=p08&a[]=p84',
+      );
     });
 
     it('should set all game actions as url query string when shareButton clicked', () => {

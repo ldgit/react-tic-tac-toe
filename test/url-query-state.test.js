@@ -109,6 +109,17 @@ describe('actionsToQueryString', () => {
       'a[]=p40&a[]=p04&a[]=p46',
     );
   });
+
+  it('should correctly convert actions that toggle icons', () => {
+    expect(
+      actionsToQueryString([
+        toggleSpecialIcons(),
+        playSquare(4, 0),
+        playSquare(0, 4),
+        playSquare(4, 6),
+      ]),
+    ).to.equal('a[]=ti&a[]=p40&a[]=p04&a[]=p46');
+  });
 });
 
 describe('queryStringToActions', () => {
@@ -124,7 +135,8 @@ describe('queryStringToActions', () => {
   });
 
   it('should return actions list when given correct query string', () => {
-    expect(queryStringToActions('a[]=p40&a[]=p04&a[]=p46')).to.eql([
+    expect(queryStringToActions('a[]=ti&a[]=p40&a[]=p04&a[]=p46')).to.eql([
+      toggleSpecialIcons(),
       playSquare(4, 0),
       playSquare(0, 4),
       playSquare(4, 6),

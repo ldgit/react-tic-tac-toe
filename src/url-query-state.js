@@ -1,4 +1,4 @@
-import { playSquare } from './actions';
+import { playSquare, toggleSpecialIcons, PLAY_SQUARE } from './actions';
 import { getInitialState, ultimateTicTacToe } from './ultimate-game';
 
 export function historyToActions(history) {
@@ -30,7 +30,11 @@ export function actionsToQueryString(actions) {
   }
 
   return actions
-    .map(action => `a[]=p${action.boardIndex}${action.squareIndex}`)
+    .map(action =>
+      action.type === PLAY_SQUARE
+        ? `a[]=p${action.boardIndex}${action.squareIndex}`
+        : 'a[]=ti',
+    )
     .join('&');
 }
 
@@ -43,7 +47,11 @@ export function queryStringToActions(queryString) {
     .split('&')
     .filter(queryItem => queryItem.indexOf('a[]=') === 0)
     .map(queryItem => queryItem.split('=')[1])
-    .map(queryItemValue => playSquare(queryItemValue[1], queryItemValue[2]));
+    .map(queryItemValue =>
+      queryItemValue === 'ti'
+        ? toggleSpecialIcons()
+        : playSquare(queryItemValue[1], queryItemValue[2]),
+    );
 }
 
 export function actionsToState(actions) {

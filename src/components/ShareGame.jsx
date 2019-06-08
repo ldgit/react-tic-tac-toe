@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { historyToActions, actionsToQueryString } from '../url-query-state';
+import { toggleSpecialIcons } from '../actions';
 
 export default function ShareGame({ gameState }) {
   const [urlToShare, setUrlToShare] = useState('');
   function displayUrlToShare() {
-    const query = actionsToQueryString(historyToActions(gameState.history));
+    const actions = historyToActions(gameState.history);
+    const query = actionsToQueryString(
+      gameState.specialIcons ? [toggleSpecialIcons(), ...actions] : actions,
+    );
     const { protocol, host, pathname } = window.location;
     const urlWithoutQuery = `${protocol}//${host}${pathname}`;
     setUrlToShare(`${urlWithoutQuery}?${query}`);
