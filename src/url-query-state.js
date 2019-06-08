@@ -23,7 +23,15 @@ export function historyToActions(history) {
   );
 }
 
-export function actionsToQueryString() {}
+export function actionsToQueryString(actions) {
+  if (actions.length === 0) {
+    return '';
+  }
+
+  return actions
+    .map(action => `a[]=p${action.boardIndex}${action.squareIndex}`)
+    .join('&');
+}
 
 function getHistoryItemsDiffAsAction(
   firstHistoryItemBoards,

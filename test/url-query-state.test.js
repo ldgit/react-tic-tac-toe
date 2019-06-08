@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import deepFreeze from 'deep-freeze';
 import deepcopy from 'deepcopy';
-import { historyToActions } from '../src/url-query-state';
+import { historyToActions, actionsToQueryString } from '../src/url-query-state';
 import { playSquare } from '../src/actions';
 import historiesJson from './fixtures/histories.json';
 
@@ -9,7 +9,6 @@ describe('historyToActions', () => {
   let histories;
 
   before(() => deepFreeze(historiesJson));
-
   beforeEach(() => {
     histories = deepcopy(historiesJson);
   });
@@ -88,7 +87,21 @@ describe('historyToActions', () => {
 });
 
 describe('actionsToQueryString', () => {
-  it.skip('should return empty string when given no actions', () => {});
+  it('should return empty string when given no actions', () => {
+    expect(actionsToQueryString([])).to.equal('');
+  });
+
+  it('should return correct string when given one action: p marks action type, first digit is board index, second is quare index', () => {
+    expect(actionsToQueryString([playSquare(1, 4)])).to.equal('a[]=p14');
+    expect(actionsToQueryString([playSquare(0, 8)])).to.equal('a[]=p08');
+    expect(actionsToQueryString([playSquare(8, 5)])).to.equal('a[]=p85');
+  });
+
+  it('should correctly convert multiple actions', () => {
+    expect(actionsToQueryString([playSquare(4, 0), playSquare(0, 4), playSquare(4, 6)])).to.equal(
+      'a[]=p40&a[]=p04&a[]=p46',
+    );
+  });
 });
 
 describe('queryStringToActions', () => {
