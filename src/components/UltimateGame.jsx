@@ -5,26 +5,21 @@ import SaveAndLoad from './SaveAndLoad';
 import TimeTravelButton from './TimeTravelButton';
 import { getColorClass } from '../helpers';
 import { ultimateTicTacToe, calculateUltimateWinner } from '../ultimate-game';
+import { playSquare, timeTravel, toggleSpecialIcons } from '../actions';
 
 export default function UltimateGame() {
   const [state, setState] = useState(ultimateTicTacToe(undefined, ''));
 
   function handleClick(boardIndex, squareIndex) {
-    setState(
-      ultimateTicTacToe(state, {
-        type: 'PLAY_SQUARE',
-        boardIndex,
-        squareIndex,
-      }),
-    );
+    setState(ultimateTicTacToe(state, playSquare(boardIndex, squareIndex)));
   }
 
   function jumpTo(pointInHistory) {
-    setState(ultimateTicTacToe(state, { type: 'TIME_TRAVEL', pointInHistory }));
+    setState(ultimateTicTacToe(state, timeTravel(pointInHistory)));
   }
 
-  function toggleSpecialIcons() {
-    setState(ultimateTicTacToe(state, { type: 'TOGGLE_SPECIAL_ICONS' }));
+  function toggleIcons() {
+    setState(ultimateTicTacToe(state, toggleSpecialIcons()));
   }
 
   function loadGame(gameStateToLoad) {
@@ -71,7 +66,7 @@ export default function UltimateGame() {
           specialIcons={specialIcons}
         />
         <br />
-        <button type="button" className="button" onClick={toggleSpecialIcons}>
+        <button type="button" className="button" onClick={toggleIcons}>
           Vue vs. React?
         </button>
         <br />
