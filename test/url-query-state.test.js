@@ -115,6 +115,7 @@ describe('queryStringToActions', () => {
   it('should return empty array when given empty string', () => {
     expect(queryStringToActions('')).to.eql([]);
     expect(queryStringToActions('   ')).to.eql([]);
+    expect(queryStringToActions(undefined)).to.eql([]);
   });
 
   it('should return empty array when given invalid string', () => {

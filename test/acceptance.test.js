@@ -14,6 +14,8 @@ import {
   assertNotFilledWith,
 } from './test-utils';
 
+const wait = seconds => new Promise(resolve => setTimeout(resolve, seconds));
+
 describe('Ultimate Tic-tac-toe game', () => {
   let app;
   let click;
@@ -421,8 +423,8 @@ describe('Ultimate Tic-tac-toe game', () => {
   });
 
   describe('share url functionality', () => {
-    it('should set all game actions as url query string', () => {
-      testUtils.changeWindowUrl('https://example.com?remove=this');
+    it('should setup a game from query string actions if provided', () => {
+      testUtils.changeWindowUrl('https://example.com/?remove=this');
       const topLeftBoard = sel(app, 'topLeftBoard');
       const topMiddleBoard = sel(app, 'topMiddleBoard');
       const bottomRightBoard = sel(app, 'bottomRightBoard');
@@ -439,6 +441,22 @@ describe('Ultimate Tic-tac-toe game', () => {
       expect(sel(app, 'urlShareInput').value).to.equal(
         'https://example.com/?a[]=p01&a[]=p10&a[]=p08&a[]=p84',
       );
+    });
+
+    it('should set all game actions as url query string when shareButton clicked', () => {
+      testUtils.changeWindowUrl('https://example.com/?a[]=p01&a[]=p10&a[]=p08&a[]=p84');
+      ReactDom.unmountComponentAtNode(app);
+      ReactDom.render(<UltimateGame />, app);
+      const topLeftBoard = sel(app, 'topLeftBoard');
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      const bottomRightBoard = sel(app, 'bottomRightBoard');
+
+      return wait(0).then(() => {
+        assertFilledWith(sel(topLeftBoard, 'topMiddleSquare'), 'X');
+        assertFilledWith(sel(topMiddleBoard, 'topLeftSquare'), 'O');
+        assertFilledWith(sel(topLeftBoard, 'bottomRightSquare'), 'X');
+        assertFilledWith(sel(bottomRightBoard, 'centerMiddleSquare'), 'O');
+      });
     });
   });
 

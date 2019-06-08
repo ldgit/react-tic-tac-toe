@@ -35,7 +35,7 @@ export function actionsToQueryString(actions) {
 }
 
 export function queryStringToActions(queryString) {
-  if (queryString === '') {
+  if (!queryString) {
     return [];
   }
 
