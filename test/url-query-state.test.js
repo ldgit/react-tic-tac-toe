@@ -50,6 +50,38 @@ describe('historyToActions', () => {
     ]);
   });
 
+  it('full game test', () => {
+    expect(historyToActions(histories.fullGameHistory)).to.eql([
+      playSquare(4, 0),
+      playSquare(0, 4),
+      playSquare(4, 6),
+      playSquare(6, 0),
+      playSquare(0, 3),
+      playSquare(3, 0),
+      playSquare(0, 6),
+      playSquare(6, 2),
+      playSquare(2, 0),
+      playSquare(0, 8),
+      playSquare(8, 0),
+      playSquare(0, 1),
+      playSquare(1, 0),
+      playSquare(0, 2),
+      playSquare(2, 5),
+      playSquare(5, 0),
+      playSquare(0, 5),
+      playSquare(5, 4),
+      playSquare(4, 3),
+      playSquare(3, 4), // Board 4 is won, can play anywhere else
+      playSquare(0, 7),
+      playSquare(7, 0),
+      playSquare(0, 0), // Board 0 is won, can play anywhere else
+      playSquare(5, 8),
+      playSquare(8, 4),
+      playSquare(3, 8),
+      playSquare(8, 8), // X wins
+    ]);
+  });
+
   function createEmptyBoardHistoryItem() {
     return deepcopy(historiesJson.twoItemHistory[0]);
   }
