@@ -1,7 +1,11 @@
 import { expect } from 'chai';
 import deepFreeze from 'deep-freeze';
 import deepcopy from 'deepcopy';
-import { historyToActions, actionsToQueryString } from '../src/url-query-state';
+import {
+  historyToActions,
+  actionsToQueryString,
+  queryStringToActions,
+} from '../src/url-query-state';
 import { playSquare } from '../src/actions';
 import historiesJson from './fixtures/histories.json';
 
@@ -105,8 +109,23 @@ describe('actionsToQueryString', () => {
 });
 
 describe('queryStringToActions', () => {
-  it.skip('should return empty array when given empty string', () => {});
-  it.skip('should return empty array when given invalid string', () => {});
+  it('should return empty array when given empty string', () => {
+    expect(queryStringToActions('')).to.eql([]);
+    expect(queryStringToActions('   ')).to.eql([]);
+  });
+
+  it('should return empty array when given invalid string', () => {
+    expect(queryStringToActions('not=the&correct=querystring')).to.eql([]);
+    expect(queryStringToActions('a=p40&a=p04&a=p46')).to.eql([]);
+  });
+
+  it('should return actions list when given correct query string', () => {
+    expect(queryStringToActions('a[]=p40&a[]=p04&a[]=p46')).to.eql([
+      playSquare(4, 0),
+      playSquare(0, 4),
+      playSquare(4, 6),
+    ]);
+  });
 });
 
 describe('actionsToHistory', () => {

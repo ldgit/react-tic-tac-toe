@@ -33,6 +33,18 @@ export function actionsToQueryString(actions) {
     .join('&');
 }
 
+export function queryStringToActions(queryString) {
+  if (queryString === '') {
+    return [];
+  }
+
+  return queryString
+    .split('&')
+    .filter(queryItem => queryItem.indexOf('a[]=') === 0)
+    .map(queryItem => queryItem.split('=')[1])
+    .map(queryItemValue => playSquare(queryItemValue[1], queryItemValue[2]));
+}
+
 function getHistoryItemsDiffAsAction(
   firstHistoryItemBoards,
   secondHistoryItemBoards,
