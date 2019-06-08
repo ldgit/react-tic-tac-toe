@@ -6,6 +6,7 @@ import TimeTravelButton from './TimeTravelButton';
 import { getColorClass } from '../helpers';
 import { ultimateTicTacToe, calculateUltimateWinner } from '../ultimate-game';
 import { playSquare, timeTravel, toggleSpecialIcons } from '../actions';
+import { historyToActions, actionsToQueryString } from '../url-query-state';
 
 export default function UltimateGame() {
   const [state, setState] = useState(ultimateTicTacToe(undefined, ''));
@@ -71,6 +72,9 @@ export default function UltimateGame() {
         </button>
         <br />
         <br />
+        <ShareGame gameState={state} />
+        <br />
+        <br />
         <SaveAndLoad gameState={state} onLoadGameClick={loadGame} />
         <br />
         <ol className="history">
@@ -79,6 +83,30 @@ export default function UltimateGame() {
           )}
         </ol>
       </div>
+    </>
+  );
+}
+
+function ShareGame({ gameState }) {
+  const [urlToShare, setUrlToShare] = useState('');
+  function displayUrlToShare() {
+    const query = actionsToQueryString(historyToActions(gameState.history));
+    const { protocol, host, pathname } = window.location;
+    const urlWithoutQuery = `${protocol}//${host}${pathname}`;
+    setUrlToShare(`${urlWithoutQuery}?${query}`);
+  }
+
+  return (
+    <>
+      <button type="button" className="button" onClick={displayUrlToShare}>
+        Share game
+      </button>
+      <input
+        type="text"
+        readOnly
+        data-testid="urlShareInput"
+        value={urlToShare}
+      />
     </>
   );
 }

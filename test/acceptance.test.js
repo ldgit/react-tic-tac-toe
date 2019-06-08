@@ -421,8 +421,8 @@ describe('Ultimate Tic-tac-toe game', () => {
   });
 
   describe('share url functionality', () => {
-    it.skip('should set all game actions as url query string', () => {
-      testUtils.changeWindowUrl('https://example.com');
+    it('should set all game actions as url query string', () => {
+      testUtils.changeWindowUrl('https://example.com?remove=this');
       const topLeftBoard = sel(app, 'topLeftBoard');
       const topMiddleBoard = sel(app, 'topMiddleBoard');
       const bottomRightBoard = sel(app, 'bottomRightBoard');
@@ -436,7 +436,9 @@ describe('Ultimate Tic-tac-toe game', () => {
       expect(shareButton, 'shareButton not found').to.not.be.null;
       click(shareButton);
 
-      expect(window.location.href).to.equal('https://example.com?a[]=p01;a[]=p03;a[]=p22&a[]=p88');
+      expect(sel(app, 'urlShareInput').value).to.equal(
+        'https://example.com/?a[]=p01&a[]=p10&a[]=p08&a[]=p84',
+      );
     });
   });
 
