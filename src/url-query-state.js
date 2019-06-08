@@ -10,26 +10,11 @@ export function historyToActions(history) {
       if (typeof fullHistory[historyItemIndex + 1] === 'undefined') {
         return actions;
       }
-      const firstItemBoards = historyItem.boards;
-      const secondItemBoards = fullHistory[historyItemIndex + 1].boards;
-      const action = firstItemBoards.reduce(
-        (previousAction, board, boardIndex) => {
-          if (previousAction !== null) {
-            return previousAction;
-          }
 
-          let newAction = null;
-          board.squares.forEach((square, squareIndex) => {
-            if (secondItemBoards[boardIndex].squares[squareIndex] !== square) {
-              newAction = playSquare(boardIndex, squareIndex);
-            }
-          });
-
-          return newAction;
-        },
-        null,
+      const action = getHistoryItemsDiffAsAction(
+        historyItem.boards,
+        fullHistory[historyItemIndex + 1].boards,
       );
-
       actions.push(action);
 
       return actions;
@@ -38,4 +23,24 @@ export function historyToActions(history) {
   );
 }
 
-export function foo() {}
+export function actionsToQueryString() {}
+
+function getHistoryItemsDiffAsAction(
+  firstHistoryItemBoards,
+  secondHistoryItemBoards,
+) {
+  return firstHistoryItemBoards.reduce((previousAction, board, boardIndex) => {
+    if (previousAction !== null) {
+      return previousAction;
+    }
+
+    let newAction = null;
+    board.squares.forEach((square, squareIndex) => {
+      if (secondHistoryItemBoards[boardIndex].squares[squareIndex] !== square) {
+        newAction = playSquare(boardIndex, squareIndex);
+      }
+    });
+
+    return newAction;
+  }, null);
+}
