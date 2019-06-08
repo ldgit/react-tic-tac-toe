@@ -9,7 +9,7 @@ module.exports = {
         command: 'npm',
         arguments: ['run', 'test:file', '--'],
       },
-      runAllTestsCommand: { command: 'npm', arguments: ['t'] },
+      runAllTestsCommand: { command: 'npm', arguments: ['t', '--silent'] },
     },
     {
       extension: 'jsx',
@@ -20,7 +20,7 @@ module.exports = {
         command: 'npm',
         arguments: ['run', 'test:file', '--'],
       },
-      runAllTestsCommand: { command: 'npm', arguments: ['t'] },
+      runAllTestsCommand: { command: 'npm', arguments: ['t', '--silent'] },
     },
   ],
 };
