@@ -3,4 +3,4 @@ node_js:
   - "10"
 script:
 - npm run test:all
-after_success: npm run coverage
+after_success: npx nyc --reporter=lcov npm test && npx codecov
