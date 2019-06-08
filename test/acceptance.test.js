@@ -265,7 +265,6 @@ describe('Ultimate Tic-tac-toe game', () => {
     playGameWhereOWins();
   });
 
-  // eslint-disable-next-line max-len
   it('time travel: all time travel buttons must be preserved after they are clicked until next move is played', () => {
     playGameWhereXWins();
     click(selectByText(app, 'button', 'Go to game start'));

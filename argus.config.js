@@ -7,7 +7,7 @@ module.exports = {
       sourceDir: 'src',
       testRunnerCommand: {
         command: 'npm',
-        arguments: ['run', 'test:file', '--'],
+        arguments: ['run', 'test:file', '--silent', '--'],
       },
       runAllTestsCommand: { command: 'npm', arguments: ['t', '--silent'] },
     },
@@ -18,7 +18,7 @@ module.exports = {
       sourceDir: 'src',
       testRunnerCommand: {
         command: 'npm',
-        arguments: ['run', 'test:file', '--'],
+        arguments: ['run', 'test:file', '--silent', '--'],
       },
       runAllTestsCommand: { command: 'npm', arguments: ['t', '--silent'] },
     },

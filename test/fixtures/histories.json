@@ -1,0 +1,194 @@
+{
+  "oneItemHistory": [
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        }
+      ]
+    }
+  ],
+  "twoItemHistory": [
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        }
+      ]
+    }
+  ],
+  "threeItemHistory": [
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": ["X", null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": ["X", "O", null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null]
+        }
+      ]
+    }
+  ]
+}
