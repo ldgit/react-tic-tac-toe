@@ -1,24 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Board from './Board';
 import Status from './Status';
 import SaveAndLoad from './SaveAndLoad';
 import ShareGame from './ShareGame';
 import TimeTravelButton from './TimeTravelButton';
+import useReadStateFromUrl from './useReadStateFromUrl';
 import { getColorClass } from '../helpers';
 import { ultimateTicTacToe, calculateUltimateWinner } from '../ultimate-game';
 import { playSquare, timeTravel, toggleSpecialIcons } from '../actions';
-import { queryStringToActions, actionsToState } from '../url-query-state';
 
 export default function UltimateGame() {
   const [state, setState] = useState(ultimateTicTacToe(undefined, ''));
 
-  useEffect(() => {
-    const [, queryString] = window.location.href.split('?');
-    const actions = queryStringToActions(queryString);
-    const newState = actionsToState(actions);
-
-    setState(newState);
-  }, []);
+  useReadStateFromUrl(setState);
 
   function handleClick(boardIndex, squareIndex) {
     setState(ultimateTicTacToe(state, playSquare(boardIndex, squareIndex)));
