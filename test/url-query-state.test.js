@@ -5,14 +5,17 @@ import {
   historyToActions,
   actionsToQueryString,
   queryStringToActions,
+  actionsToState,
 } from '../src/url-query-state';
-import { playSquare } from '../src/actions';
+import { playSquare, toggleSpecialIcons } from '../src/actions';
+import { getInitialState } from '../src/ultimate-game';
 import historiesJson from './fixtures/histories.json';
+
+deepFreeze(historiesJson);
 
 describe('historyToActions', () => {
   let histories;
 
-  before(() => deepFreeze(historiesJson));
   beforeEach(() => {
     histories = deepcopy(historiesJson);
   });
@@ -128,7 +131,33 @@ describe('queryStringToActions', () => {
   });
 });
 
-describe('actionsToHistory', () => {
-  it.skip('should return history with one empty board when given no actions', () => {});
-  it.skip('should return history with empty board and a board with action applied when given one action', () => {});
+describe('actionsToState', () => {
+  it('should return initialState when given no actions', () => {
+    expect(actionsToState([])).to.eql(getInitialState());
+  });
+
+  it('should return state with all actions applied in order (one action given)', () => {
+    const expectedState = getInitialState();
+    expectedState.nextPlayer = 'O';
+    const newHistoryItem = deepcopy(expectedState.history[0]);
+    newHistoryItem.boards = newHistoryItem.boards.map(board => ({ ...board, isActive: false }));
+    newHistoryItem.boards[4].squares[7] = 'X';
+    newHistoryItem.boards[7].isActive = true;
+    expectedState.history.push(newHistoryItem);
+    expectedState.pointInHistory = 1;
+    expectedState.specialIcons = true;
+
+    expect(actionsToState([playSquare(4, 7), toggleSpecialIcons()])).to.eql(expectedState);
+  });
+});
+
+describe('integration of all four', () => {
+  it('should work full circle', () => {
+    const actions = historyToActions(historiesJson.fullGameHistory);
+    const queryString = actionsToQueryString(actions);
+    const actionsAgain = queryStringToActions(queryString);
+    const newHistory = actionsToState(actionsAgain).history;
+
+    expect(newHistory).to.eql(historiesJson.fullGameHistory);
+  });
 });

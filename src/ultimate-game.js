@@ -109,7 +109,7 @@ function timeTravel(state, { pointInHistory }) {
   };
 }
 
-function getInitialState() {
+export function getInitialState() {
   const boards = Array(9)
     .fill()
     .map(() => ({ squares: Array(9).fill(null), isActive: true }));

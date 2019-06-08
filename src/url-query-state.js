@@ -1,4 +1,5 @@
 import { playSquare } from './actions';
+import { getInitialState, ultimateTicTacToe } from './ultimate-game';
 
 export function historyToActions(history) {
   if (history.length < 2) {
@@ -43,6 +44,14 @@ export function queryStringToActions(queryString) {
     .filter(queryItem => queryItem.indexOf('a[]=') === 0)
     .map(queryItem => queryItem.split('=')[1])
     .map(queryItemValue => playSquare(queryItemValue[1], queryItemValue[2]));
+}
+
+export function actionsToState(actions) {
+  const initialState = getInitialState();
+
+  return actions.length === 0
+    ? initialState
+    : actions.reduce(ultimateTicTacToe, initialState);
 }
 
 function getHistoryItemsDiffAsAction(
