@@ -17,6 +17,7 @@ export default function ShareGame({ gameState }) {
       </button>
       <input
         type="text"
+        className="urlShareInput"
         readOnly
         data-testid="urlShareInput"
         value={urlToShare}
