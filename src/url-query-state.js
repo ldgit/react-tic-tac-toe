@@ -55,11 +55,8 @@ export function queryStringToActions(queryString) {
 }
 
 export function actionsToState(actions) {
-  const initialState = getInitialState();
-
-  return actions.length === 0
-    ? initialState
-    : actions.reduce(ultimateTicTacToe, initialState);
+  // This is why they call them reducers ;)
+  return actions.reduce(ultimateTicTacToe, getInitialState());
 }
 
 function getHistoryItemsDiffAsAction(
