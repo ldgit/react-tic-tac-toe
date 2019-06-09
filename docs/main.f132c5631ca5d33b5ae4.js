@@ -121,7 +121,7 @@
         c +
         ');\n  background-repeat: no-repeat;\n  background-position: center;\n  background-size: contain;\n  text-indent: 100%;\n  white-space: nowrap;\n  overflow: hidden;\n  flex: 1;\n  justify-content: center;\n  align-items: center;\n  background-color: #fff;\n  border: none;\n  min-width: 30px;\n  min-height: 30px; }\n\nbutton.x-icon {\n  background-image: url(' +
         i +
-        ');\n  background-repeat: no-repeat;\n  background-position: center;\n  background-size: contain;\n  text-indent: 100%;\n  white-space: nowrap;\n  overflow: hidden;\n  flex: 1;\n  justify-content: center;\n  align-items: center;\n  background-color: #fff;\n  border: none;\n  min-width: 30px;\n  min-height: 30px; }\n\n.urlShareInput {\n  height: 24px;\n  width: 120px;\n  margin-left: 0.5em;\n  margin-right: 0.5em; }\n\n.copyInfo {\n  color: #19a974; }\n',
+        ');\n  background-repeat: no-repeat;\n  background-position: center;\n  background-size: contain;\n  text-indent: 100%;\n  white-space: nowrap;\n  overflow: hidden;\n  flex: 1;\n  justify-content: center;\n  align-items: center;\n  background-color: #fff;\n  border: none;\n  min-width: 30px;\n  min-height: 30px; }\n\n.urlShareInput {\n  height: 24px;\n  width: 60px;\n  margin-left: 0.5em;\n  margin-right: 0.5em; }\n\n.copyInfo {\n  color: #19a974; }\n',
       '',
     ]);
   },
@@ -150,7 +150,7 @@
       i = t.n(a);
     function c(n) {
       var e = n.name;
-      return o.a.createElement('h1', null, 'Ultimate tic-tac-toe (in ', e, ')');
+      return o.a.createElement('h1', null, 'Ultimate tic-tac-toe in ', e);
     }
     function u(n) {
       for (
@@ -772,7 +772,7 @@
         })()
       );
     }
-    function M(n) {
+    function _(n) {
       Object(r.useEffect)(
         function() {
           var e = (function(n) {
@@ -799,7 +799,7 @@
         [n],
       );
     }
-    function z(n, e) {
+    function M(n, e) {
       return (
         (function(n) {
           if (Array.isArray(n)) return n;
@@ -834,8 +834,8 @@
         })()
       );
     }
-    function H() {
-      var n = z(Object(r.useState)(q(void 0, '')), 2),
+    function R() {
+      var n = M(Object(r.useState)(q(void 0, '')), 2),
         e = n[0],
         t = n[1];
       function a(n, r, a) {
@@ -865,7 +865,7 @@
           specialIcons: l,
         });
       }
-      M(t);
+      _(t);
       var i = e.nextPlayer,
         c = e.history,
         l = e.pointInHistory,
@@ -956,21 +956,46 @@
               ),
             ),
           ),
+          o.a.createElement(
+            'p',
+            null,
+            o.a.createElement(
+              'a',
+              {
+                href: 'https://github.com/ldgit/react-tic-tac-toe/issues',
+                target: '_blank',
+                rel: 'noopener noreferrer',
+              },
+              'Report bugs here',
+            ),
+            ' ',
+            '|',
+            ' ',
+            o.a.createElement(
+              'a',
+              {
+                href: 'https://github.com/ldgit/react-tic-tac-toe',
+                target: '_blank',
+                rel: 'noopener noreferrer',
+              },
+              'Source on Github',
+            ),
+          ),
         ),
       );
     }
-    function R() {
+    function z() {
       return o.a.createElement(
         'div',
         { className: 'container' },
         o.a.createElement(c, { name: 'React' }),
-        o.a.createElement(H, null),
+        o.a.createElement(R, null),
       );
     }
     t(9);
     !(function(n) {
       var e = n.createElement('div');
-      n.body.appendChild(e), i.a.render(o.a.createElement(R, null), e);
+      n.body.appendChild(e), i.a.render(o.a.createElement(z, null), e);
     })(document);
   },
 ]);

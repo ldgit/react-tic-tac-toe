@@ -85,6 +85,23 @@ export default function UltimateGame() {
             renderTimeTravelButton.bind(null, jumpTo, pointInHistory),
           )}
         </ol>
+        <p>
+          <a
+            href="https://github.com/ldgit/react-tic-tac-toe/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Report bugs here
+          </a>{' '}
+          |{' '}
+          <a
+            href="https://github.com/ldgit/react-tic-tac-toe"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Source on Github
+          </a>
+        </p>
       </div>
     </>
   );
