@@ -21,6 +21,10 @@ describe('Ultimate Tic-tac-toe game', () => {
   let click;
 
   beforeEach(() => {
+    // Stuff needed to mock copy-to-clipboard functionality
+    document.getSelection = () => ({ rangeCount: 1, getRangeAt() {} });
+    document.execCommand = () => true;
+
     app = document.createElement('div');
     document.body.appendChild(app);
     click = clickOnElement.bind(null, window);
@@ -423,7 +427,7 @@ describe('Ultimate Tic-tac-toe game', () => {
   });
 
   describe('share url functionality', () => {
-    it('should setup a game from query string actions if provided', () => {
+    it('should create url for the game from query string actions if provided', () => {
       testUtils.changeWindowUrl('https://example.com/?remove=this');
       const topLeftBoard = sel(app, 'topLeftBoard');
       const topMiddleBoard = sel(app, 'topMiddleBoard');
@@ -465,6 +469,28 @@ describe('Ultimate Tic-tac-toe game', () => {
         assertFilledWith(sel(topLeftBoard, 'bottomRightSquare'), 'X');
         assertFilledWith(sel(bottomRightBoard, 'centerMiddleSquare'), 'O');
       });
+    });
+
+    it('should copy url contents to clipboard and notify user', () => {
+      testUtils.changeWindowUrl('https://example.com/');
+      const shareButton = selectByText(app, '*', 'Share game');
+      expect(selectByText(app, '*', 'Url copied'), 'No success info shown initially').to.be.null;
+      expect(
+        selectByText(app, '*', 'Copy the url from text input'),
+        'No success info shown initially',
+      ).to.be.null;
+
+      click(shareButton);
+
+      expect(selectByText(app, '*', 'Url copied'), 'Show success info').to.not.be.null;
+      expect(selectByText(app, '*', 'Copy the url from text input'), 'Do not show failure info').to
+        .be.null;
+
+      document.execCommand = () => false;
+      click(shareButton);
+      expect(selectByText(app, '*', 'Url copied'), 'Do not show success info').to.be.null;
+      expect(selectByText(app, '*', 'Copy the url from text input'), 'Show failure info to user').to
+        .not.be.null;
     });
   });
 

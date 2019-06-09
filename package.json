@@ -24,6 +24,7 @@
     "url": "https://github.com/ldgit/react-tic-tac-toe.git"
   },
   "dependencies": {
+    "copy-text-to-clipboard": "^2.1.0",
     "node-sass": "^4.12.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
