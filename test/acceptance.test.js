@@ -14,11 +14,17 @@ import {
   assertNotFilledWith,
 } from './test-utils';
 
+const wait = seconds => new Promise(resolve => setTimeout(resolve, seconds));
+
 describe('Ultimate Tic-tac-toe game', () => {
   let app;
   let click;
 
   beforeEach(() => {
+    // Stuff needed to mock copy-to-clipboard functionality
+    document.getSelection = () => ({ rangeCount: 1, getRangeAt() {} });
+    document.execCommand = () => true;
+
     app = document.createElement('div');
     document.body.appendChild(app);
     click = clickOnElement.bind(null, window);
@@ -265,7 +271,6 @@ describe('Ultimate Tic-tac-toe game', () => {
     playGameWhereOWins();
   });
 
-  // eslint-disable-next-line max-len
   it('time travel: all time travel buttons must be preserved after they are clicked until next move is played', () => {
     playGameWhereXWins();
     click(selectByText(app, 'button', 'Go to game start'));
@@ -418,6 +423,74 @@ describe('Ultimate Tic-tac-toe game', () => {
 
       clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertFilledWith('O');
       clickEmptySquare(sel(topLeftBoard, 'bottomLeftSquare')).assertFilledWith('X');
+    });
+  });
+
+  describe('share url functionality', () => {
+    it('should create url for the game from query string actions if provided', () => {
+      testUtils.changeWindowUrl('https://example.com/?remove=this');
+      const topLeftBoard = sel(app, 'topLeftBoard');
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      const bottomRightBoard = sel(app, 'bottomRightBoard');
+      // Play some moves
+      clickEmptySquare(sel(topLeftBoard, 'topMiddleSquare')).assertFilledWith('X');
+      clickEmptySquare(sel(topMiddleBoard, 'topLeftSquare')).assertFilledWith('O');
+      clickEmptySquare(sel(topLeftBoard, 'bottomRightSquare')).assertFilledWith('X');
+      clickEmptySquare(sel(bottomRightBoard, 'centerMiddleSquare')).assertFilledWith('O');
+
+      const shareButton = selectByText(app, '*', 'Share game');
+      expect(shareButton, 'shareButton not found').to.not.be.null;
+      click(shareButton);
+
+      expect(sel(app, 'urlShareInput').value).to.equal(
+        'https://example.com/?a[]=p01&a[]=p10&a[]=p08&a[]=p84',
+      );
+
+      // Test that special icons are also remembered as first item of query string
+      const specialModeToggle = selectByText(app, 'button', 'Vue vs. React?');
+      click(specialModeToggle);
+      click(shareButton);
+      expect(sel(app, 'urlShareInput').value).to.equal(
+        'https://example.com/?a[]=ti&a[]=p01&a[]=p10&a[]=p08&a[]=p84',
+      );
+    });
+
+    it('should set all game actions as url query string when shareButton clicked', () => {
+      testUtils.changeWindowUrl('https://example.com/?a[]=p01&a[]=p10&a[]=p08&a[]=p84');
+      ReactDom.unmountComponentAtNode(app);
+      ReactDom.render(<UltimateGame />, app);
+      const topLeftBoard = sel(app, 'topLeftBoard');
+      const topMiddleBoard = sel(app, 'topMiddleBoard');
+      const bottomRightBoard = sel(app, 'bottomRightBoard');
+
+      return wait(0).then(() => {
+        assertFilledWith(sel(topLeftBoard, 'topMiddleSquare'), 'X');
+        assertFilledWith(sel(topMiddleBoard, 'topLeftSquare'), 'O');
+        assertFilledWith(sel(topLeftBoard, 'bottomRightSquare'), 'X');
+        assertFilledWith(sel(bottomRightBoard, 'centerMiddleSquare'), 'O');
+      });
+    });
+
+    it('should copy url contents to clipboard and notify user', () => {
+      testUtils.changeWindowUrl('https://example.com/');
+      const shareButton = selectByText(app, '*', 'Share game');
+      expect(selectByText(app, '*', 'Url copied'), 'No success info shown initially').to.be.null;
+      expect(
+        selectByText(app, '*', 'Copy the url from text input'),
+        'No success info shown initially',
+      ).to.be.null;
+
+      click(shareButton);
+
+      expect(selectByText(app, '*', 'Url copied'), 'Show success info').to.not.be.null;
+      expect(selectByText(app, '*', 'Copy the url from text input'), 'Do not show failure info').to
+        .be.null;
+
+      document.execCommand = () => false;
+      click(shareButton);
+      expect(selectByText(app, '*', 'Url copied'), 'Do not show success info').to.be.null;
+      expect(selectByText(app, '*', 'Copy the url from text input'), 'Show failure info to user').to
+        .not.be.null;
     });
   });
 

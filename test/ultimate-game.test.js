@@ -2,6 +2,7 @@ import assert from 'assert';
 import { expect } from 'chai';
 import deepFreeze from 'deep-freeze';
 import { calculateUltimateWinner, ultimateTicTacToe } from '../src/ultimate-game';
+import { playSquare, timeTravel, toggleSpecialIcons } from '../src/actions';
 import drawSquareGameState from './fixtures/draw-square-game.json';
 import fullAndWonBoardState from './fixtures/full-won-board.json';
 
@@ -11,7 +12,7 @@ function getCurrentBoards(state) {
 
 function callPlaySquare(oldState, { boardIndex, squareIndex }) {
   deepFreeze(oldState);
-  const action = { type: 'PLAY_SQUARE', boardIndex, squareIndex };
+  const action = playSquare(boardIndex, squareIndex);
   deepFreeze(action);
 
   return ultimateTicTacToe(oldState, action);
@@ -19,7 +20,7 @@ function callPlaySquare(oldState, { boardIndex, squareIndex }) {
 
 function callTimeTravel(oldState, { pointInHistory }) {
   deepFreeze(oldState);
-  const action = { type: 'TIME_TRAVEL', pointInHistory };
+  const action = timeTravel(pointInHistory);
   deepFreeze(action);
 
   return ultimateTicTacToe(oldState, action);
@@ -277,7 +278,7 @@ describe('ultimate tic-tac-toe', () => {
     expect(currentlyActiveBoards, 'All boards are active except last played one').to.be.lengthOf(9);
   });
 
-  context('history and time travel', () => {
+  describe('history and time travel', () => {
     it('valid move should push new board state to history', () => {
       const newState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 8 });
 
@@ -316,7 +317,7 @@ describe('ultimate tic-tac-toe', () => {
       );
     });
 
-    context('jump to a point in history', () => {
+    describe('jump to a point in history', () => {
       it('should change pointInHistory property', () => {
         const newState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 8 });
         const stateAfterTimeTravel = callTimeTravel(newState, { pointInHistory: 0 });
@@ -413,13 +414,13 @@ describe('ultimate tic-tac-toe', () => {
     });
   });
 
-  context('special icons', () => {
+  describe('special icons', () => {
     [true, false].forEach(specialIcons => {
       it(`special icons action should toggle specialIcons state (${specialIcons})`, () => {
         initialState.specialIcons = specialIcons;
-
         deepFreeze(initialState);
-        const newState = ultimateTicTacToe(initialState, { type: 'TOGGLE_SPECIAL_ICONS' });
+
+        const newState = ultimateTicTacToe(initialState, toggleSpecialIcons());
 
         assert.strictEqual(newState.specialIcons, !specialIcons);
       });

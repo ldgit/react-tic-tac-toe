@@ -5,20 +5,22 @@ import { JSDOM } from 'jsdom';
 import { Simulate } from 'react-dom/test-utils';
 
 export function getBrowserEnvironment(html = '') {
-  const { window } = new JSDOM(
+  const dom = new JSDOM(
     html ||
       `<!DOCTYPE html>
-  <html>
+    <html>
     <head>
-      <meta charset="UTF-8">
-      <title>Tic-Tac-Toe</title>
+    <meta charset="UTF-8">
+    <title>Tic-Tac-Toe</title>
     </head>
     <body></body>
-  </html>`,
+    </html>`,
   );
+  const { window } = dom;
   const { document } = window;
+  const changeWindowUrl = newUrl => dom.reconfigure({ url: newUrl });
 
-  return { document, window };
+  return { document, window, changeWindowUrl };
 }
 
 export function sel(container, testId) {
@@ -33,10 +35,17 @@ export function find(container, testId) {
 }
 
 export function clickOnElement(window, element) {
-  const event = new window.MouseEvent('click', {
+  dispatchMouseEvent('mousedown', window, element);
+  dispatchMouseEvent('mouseup', window, element);
+  dispatchMouseEvent('click', window, element);
+}
+
+function dispatchMouseEvent(type, window, element) {
+  const event = new window.MouseEvent(type, {
     view: window,
     bubbles: true,
     cancelable: true,
+    which: 1, // Which button was pressed? First by default.
   });
 
   assert.ok(element, 'Element that should be clicked on does not exist');

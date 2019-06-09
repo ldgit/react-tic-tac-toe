@@ -3,6 +3,7 @@ $lightgreen: #EDFFEF
 $lightblue: #EDFEFF
 $gray: #AAA
 $almostblack: #111
+$relaxinggreen: #19a974
 
 @mixin hideText()
   text-indent: 100%
@@ -14,7 +15,7 @@ $almostblack: #111
   border: solid 1px
   border-color: $color
   color: $color
-  padding: 3px 30px
+  padding: 3px 25px
   margin-bottom: 3px
   text-align: center
   box-shadow: none
@@ -169,3 +170,12 @@ button.x-icon
   @include squareButton()
   min-width: 30px
   min-height: 30px
+
+.urlShareInput
+  height: 24px
+  width: 120px
+  margin-left: 0.5em
+  margin-right: 0.5em
+
+.copyInfo
+  color: $relaxinggreen
