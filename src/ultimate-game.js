@@ -1,15 +1,13 @@
 import { calculateWinner } from './helpers';
+import { PLAY_SQUARE, TIME_TRAVEL, TOGGLE_SPECIAL_ICONS } from './actions';
 
 export function ultimateTicTacToe(state = getInitialState(), action) {
   switch (action.type) {
-    case 'PLAY_SQUARE':
-      return playSquare(state, {
-        boardIndex: action.boardIndex,
-        squareIndex: action.squareIndex,
-      });
-    case 'TIME_TRAVEL':
-      return timeTravel(state, { pointInHistory: action.pointInHistory });
-    case 'TOGGLE_SPECIAL_ICONS':
+    case PLAY_SQUARE:
+      return playSquare(state, action);
+    case TIME_TRAVEL:
+      return timeTravel(state, action);
+    case TOGGLE_SPECIAL_ICONS:
       return {
         ...state,
         specialIcons: !state.specialIcons,
@@ -111,7 +109,7 @@ function timeTravel(state, { pointInHistory }) {
   };
 }
 
-function getInitialState() {
+export function getInitialState() {
   const boards = Array(9)
     .fill()
     .map(() => ({ squares: Array(9).fill(null), isActive: true }));

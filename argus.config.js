@@ -7,9 +7,9 @@ module.exports = {
       sourceDir: 'src',
       testRunnerCommand: {
         command: 'npm',
-        arguments: ['run', 'test:file', '--'],
+        arguments: ['run', 'test:file', '--silent', '--'],
       },
-      runAllTestsCommand: { command: 'npm', arguments: ['t'] },
+      runAllTestsCommand: { command: 'npm', arguments: ['t', '--silent'] },
     },
     {
       extension: 'jsx',
@@ -18,9 +18,9 @@ module.exports = {
       sourceDir: 'src',
       testRunnerCommand: {
         command: 'npm',
-        arguments: ['run', 'test:file', '--'],
+        arguments: ['run', 'test:file', '--silent', '--'],
       },
-      runAllTestsCommand: { command: 'npm', arguments: ['t'] },
+      runAllTestsCommand: { command: 'npm', arguments: ['t', '--silent'] },
     },
   ],
 };
