@@ -5,9 +5,9 @@
   "main": "index.js",
   "homepage": "https://ldgit.github.io/react-tic-tac-toe/",
   "scripts": {
-    "test:file": "mocha --require @babel/register --file test/bootstrap.js",
-    "test": "npm run test:file \"test/**/*.test.{js,jsx}\"",
-    "test:watch": "argus",
+    "test:file": "jest",
+    "test": "npm run test:file",
+    "test:watch": "npm run test -- --watch",
     "coverage": "nyc --all --require @babel/register npm t && nyc report --reporter=lcov",
     "build": "webpack --mode=development",
     "build:prod": "webpack --mode=production",
@@ -70,9 +70,9 @@
     "file-loader": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^2.4.0",
+    "jest": "^24.8.0",
     "jsdom": "^15.1.1",
     "lint-staged": "^8.2.0",
-    "mocha": "^6.1.4",
     "nyc": "^14.1.1",
     "prettier": "1.18.2",
     "style-loader": "^0.23.1",
@@ -125,6 +125,11 @@
     "*.{js,jsx}": [
       "eslint --fix",
       "git add"
+    ]
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/bootstrap.js"
     ]
   }
 }
