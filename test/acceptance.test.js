@@ -376,7 +376,7 @@ describe('Ultimate Tic-tac-toe game', () => {
     );
   });
 
-  context('save and load functionality', () => {
+  describe('save and load functionality', () => {
     it('can export current game state', () => {
       const topLeftBoard = sel(app, 'topLeftBoard');
       const topMiddleBoard = sel(app, 'topMiddleBoard');

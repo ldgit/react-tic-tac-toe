@@ -1,4 +1,4 @@
-import * as assert from 'assert';
+import assert from 'assert';
 import {
   calculateWinner,
   getColorClass,
@@ -54,7 +54,7 @@ describe('calculateWinner', () => {
     });
   });
 
-  it('should throw error for invalid squares configuration');
+  it.todo('should throw error for invalid squares configuration');
 
   function threeInLine(line, squareValue) {
     return squaresWithLine(line, Array(3).fill(squareValue));

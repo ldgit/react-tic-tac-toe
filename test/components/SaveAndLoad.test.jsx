@@ -2,7 +2,6 @@ import assert from 'assert';
 import React from 'react';
 import ReactDom from 'react-dom';
 import {
-  getBrowserEnvironment,
   find,
   sel,
   selectByText,
@@ -13,26 +12,16 @@ import {
 import SaveAndLoad from '../../src/components/SaveAndLoad';
 
 describe('SaveAndLoad component', () => {
-  let document;
-  let window;
   let app;
-  let originalGlobalWindow;
   let click;
   let gameState;
 
   beforeEach(() => {
-    ({ document, window } = getBrowserEnvironment());
     app = createAppElement();
     window.alert = createAlertSpy();
-    originalGlobalWindow = global.window;
-    global.window = window;
     click = clickOnElement.bind(null, window);
     ReactDom.render(<SaveAndLoad onLoadGameClick={() => {}} />, app);
     gameState = {};
-  });
-
-  afterEach(() => {
-    global.window = originalGlobalWindow;
   });
 
   it('textarea with exported state is hidden initially', () => {
@@ -43,7 +32,7 @@ describe('SaveAndLoad component', () => {
     assert.strictEqual(selectByText(app, 'button', 'Close'), null);
   });
 
-  context('click on "Save" button', () => {
+  describe('click on "Save" button', () => {
     beforeEach(() => {
       app = createAppElement();
       ReactDom.render(
@@ -112,7 +101,7 @@ describe('SaveAndLoad component', () => {
     });
   });
 
-  context('click on load button', () => {
+  describe('click on load button', () => {
     beforeEach(() => {
       app = createAppElement();
       ReactDom.render(

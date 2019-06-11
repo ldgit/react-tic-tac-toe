@@ -5,10 +5,9 @@
   "main": "index.js",
   "homepage": "https://ldgit.github.io/react-tic-tac-toe/",
   "scripts": {
-    "test:file": "mocha --require @babel/register --file test/bootstrap.js",
-    "test": "npm run test:file \"test/**/*.test.{js,jsx}\"",
+    "test": "jest --runTestsByPath",
     "test:watch": "argus",
-    "coverage": "nyc --all --require @babel/register npm t && nyc report --reporter=lcov",
+    "coverage": "npm test -- --coverage",
     "build": "webpack --mode=development",
     "build:prod": "webpack --mode=production",
     "start": "webpack-dev-server --open --mode=development",
@@ -29,21 +28,6 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "sass-loader": "^7.1.0"
-  },
-  "nyc": {
-    "extension": [
-      ".jsx"
-    ],
-    "exclude": [
-      "coverage/**",
-      "test/**",
-      "**/node_modules/**",
-      "dist/**",
-      "docs/**",
-      "*.config.js",
-      "src/polyfill/**",
-      ".eslintrc.js"
-    ]
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -70,10 +54,8 @@
     "file-loader": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^2.4.0",
-    "jsdom": "^15.1.1",
+    "jest": "^24.8.0",
     "lint-staged": "^8.2.0",
-    "mocha": "^6.1.4",
-    "nyc": "^14.1.1",
     "prettier": "1.18.2",
     "style-loader": "^0.23.1",
     "webpack": "^4.33.0",
@@ -125,6 +107,21 @@
     "*.{js,jsx}": [
       "eslint --fix",
       "git add"
+    ]
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/bootstrap.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/coverage/",
+      "/test/",
+      "/dist/",
+      "/docs/"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
     ]
   }
 }
