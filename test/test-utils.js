@@ -1,27 +1,6 @@
 import assert from 'assert';
 import { expect } from 'chai';
-import { JSDOM } from 'jsdom';
-
 import { Simulate } from 'react-dom/test-utils';
-
-export function getBrowserEnvironment(html = '') {
-  const dom = new JSDOM(
-    html ||
-      `<!DOCTYPE html>
-    <html>
-    <head>
-    <meta charset="UTF-8">
-    <title>Tic-Tac-Toe</title>
-    </head>
-    <body></body>
-    </html>`,
-  );
-  const { window } = dom;
-  const { document } = window;
-  const changeWindowUrl = newUrl => dom.reconfigure({ url: newUrl });
-
-  return { document, window, changeWindowUrl };
-}
 
 export function sel(container, testId) {
   const element = find(container, testId);
