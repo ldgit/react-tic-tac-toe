@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { expect } from 'chai';
 import deepFreeze from 'deep-freeze';
 import { calculateUltimateWinner, ultimateTicTacToe } from '../src/ultimate-game';
@@ -42,7 +41,7 @@ describe('ultimate tic-tac-toe', () => {
   it('should just return state unchanged if action not known', () => {
     initialState.specialIcons = true;
     deepFreeze(initialState);
-    assert.deepEqual(initialState, ultimateTicTacToe(initialState, { type: 'DOES_NOT_EXIST' }));
+    expect(ultimateTicTacToe(initialState, { type: 'DOES_NOT_EXIST' })).to.eql(initialState);
   });
 
   ['0', 0].forEach(squareIndex => {
@@ -50,34 +49,34 @@ describe('ultimate tic-tac-toe', () => {
       squareIndex,
     )})`, () => {
       const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex });
-      assert.equal(newState.nextPlayer, 'O');
+      expect(newState.nextPlayer).to.equal('O');
     });
 
     it(`playing a square on initial board should mark that square as played by current player (square ${JSON.stringify(
       squareIndex,
     )})`, () => {
       const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex });
-      assert.deepEqual(getCurrentBoards(newState)[0].squares, ['X', ...Array(8).fill(null)]);
+      expect(getCurrentBoards(newState)[0].squares).to.eql(['X', ...Array(8).fill(null)]);
     });
   });
 
   it('playing a square must handle square index as text', () => {
     // Otherwise this causes problems in, for example, .slice(), because '4' + 1 === '41' instead of 5
     const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: '5' });
-    assert.equal(getCurrentBoards(newState)[0].squares.length, 9);
+    expect(getCurrentBoards(newState)[0].squares.length).to.equal(9);
   });
 
   it('second move should correctly update next player', () => {
     const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: 0 });
     const finalState = callPlaySquare(newState, { boardIndex: 0, squareIndex: 4 });
-    assert.equal(finalState.nextPlayer, 'X');
+    expect(finalState.nextPlayer).to.equal('X');
   });
 
   it('second move should mark that square as played by first player', () => {
     const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: 0 });
     const finalState = callPlaySquare(newState, { boardIndex: 0, squareIndex: 4 });
-    assert.equal(getCurrentBoards(finalState)[0].squares[4], 'O');
-    assert.equal(getCurrentBoards(finalState)[0].squares[0], 'X', 'First move not lost');
+    expect(getCurrentBoards(finalState)[0].squares[4]).to.equal('O');
+    expect(getCurrentBoards(finalState)[0].squares[0]).to.equal('X', 'First move is not lost');
   });
 
   [0, 1, 3, 8, '2', '7'].forEach(squareIndex => {
@@ -85,15 +84,14 @@ describe('ultimate tic-tac-toe', () => {
       squareIndex,
     )})`, () => {
       const newState = callPlaySquare(initialState, { boardIndex: 0, squareIndex });
-      assert.strictEqual(
+      expect(
         getCurrentBoards(newState)[squareIndex].isActive,
-        true,
         `board ${squareIndex} must be active`,
-      );
+      ).to.be.true;
       getCurrentBoards(newState)
         .filter((board, index) => index !== parseInt(squareIndex, 10))
-        .forEach(board =>
-          assert.strictEqual(board.isActive, false, `board ${squareIndex} must be inactive`),
+        .forEach(
+          board => expect(board.isActive, `board ${squareIndex} must be inactive`).to.be.false,
         );
     });
   });
@@ -103,7 +101,7 @@ describe('ultimate tic-tac-toe', () => {
     const finalState = callPlaySquare(newState, { boardIndex: 1, squareIndex: 4 });
     expect(getCurrentBoards(finalState)[1].squares[4]).to.be.equal(null);
 
-    assert.deepEqual(newState, finalState);
+    expect(finalState).to.eql(newState);
   });
 
   [
@@ -128,17 +126,16 @@ describe('ultimate tic-tac-toe', () => {
       expect(getCurrentBoards(newState)[move.boardIndex].squares[move.squareIndex]).to.be.equal(
         squareContent,
       );
-      assert.deepEqual(newState, initialState);
+      expect(newState).to.eql(initialState);
     });
   });
 
   it('playing the same square twice will not advance to next player', () => {
     const midState = callPlaySquare(initialState, { boardIndex: 0, squareIndex: 0 });
     const finalState = callPlaySquare(midState, { boardIndex: 0, squareIndex: 0 });
-    assert.equal(finalState.nextPlayer, 'O');
+    expect(finalState.nextPlayer).to.equal('O');
 
-    assert.notDeepEqual(
-      getCurrentBoards(initialState),
+    expect(getCurrentBoards(initialState)).to.not.eql(
       getCurrentBoards(finalState),
       'old boards array changed',
     );
@@ -147,22 +144,20 @@ describe('ultimate tic-tac-toe', () => {
   it('playing the same square twice will not change the value of that square', () => {
     const midState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 1 });
     const finalState = callPlaySquare(midState, { boardIndex: 1, squareIndex: 1 });
-    assert.equal(
-      getCurrentBoards(finalState)[1].squares[1],
+    expect(getCurrentBoards(finalState)[1].squares[1]).to.equal(
       'X',
       'O played on square occupied by X',
     );
-    assert.equal(finalState.nextPlayer, 'O');
+    expect(finalState.nextPlayer).to.equal('O');
 
     const stateOne = callPlaySquare(initialState, { boardIndex: 0, squareIndex: 4 });
     const stateTwo = callPlaySquare(stateOne, { boardIndex: 4, squareIndex: 0 });
     const stateThree = callPlaySquare(stateTwo, { boardIndex: 0, squareIndex: 4 });
-    assert.equal(
-      getCurrentBoards(stateThree)[0].squares[4],
+    expect(getCurrentBoards(stateThree)[0].squares[4]).to.equal(
       'X',
       'X played on square occupied by X',
     );
-    assert.equal(stateThree.nextPlayer, 'X');
+    expect(stateThree.nextPlayer).to.equal('X');
   });
 
   [
@@ -197,7 +192,7 @@ describe('ultimate tic-tac-toe', () => {
       expect(getCurrentBoards(newState)[move.boardIndex].squares[move.squareIndex]).to.be.equal(
         squareContent,
       );
-      assert.deepEqual(newState, initialState);
+      expect(newState).to.eql(initialState);
     });
   });
 
@@ -212,15 +207,13 @@ describe('ultimate tic-tac-toe', () => {
       });
       const finalState = callPlaySquare(newState, { boardIndex: 1, squareIndex });
 
-      assert.strictEqual(
+      expect(
         getCurrentBoards(finalState)[indexOfBoardThatMustRemainActive].isActive,
-        true,
         `board ${indexOfBoardThatMustRemainActive} must be active`,
-      );
+      ).to.be.true;
       getBoardsExcept(getCurrentBoards(finalState), [indexOfBoardThatMustRemainActive]).forEach(
-        (board, boardIndex) => {
-          assert.strictEqual(board.isActive, false, `board ${boardIndex} must be inactive`);
-        },
+        (board, boardIndex) =>
+          expect(board.isActive, `board ${boardIndex} must be inactive`).to.be.false,
       );
     });
   });
@@ -229,7 +222,7 @@ describe('ultimate tic-tac-toe', () => {
     const midState = callPlaySquare(initialState, { boardIndex: 8, squareIndex: '4' });
     const finalState = callPlaySquare(midState, { boardIndex: 8, squareIndex: '4' });
 
-    assert.deepEqual(finalState, midState);
+    expect(finalState).to.eql(midState);
   });
 
   it('if move takes the player to won board, mark all boards as active (covers the case where move that takes the player to won board is also the one that won that board)', () => {
@@ -240,8 +233,7 @@ describe('ultimate tic-tac-toe', () => {
     // X wins board 0, O would otherwise need to play on that same board:
     const thirdXMoveState = callPlaySquare(secondOMoveState, { boardIndex: 0, squareIndex: 0 });
 
-    assert.deepEqual(
-      getCurrentBoards(thirdXMoveState).map(board => board.isActive),
+    expect(getCurrentBoards(thirdXMoveState).map(board => board.isActive)).to.eql(
       Array(9).fill(true),
     );
   });
@@ -257,7 +249,7 @@ describe('ultimate tic-tac-toe', () => {
 
     // Move that takes the player to won board:
     const fourthXMoveState = callPlaySquare(thirdOMoveState, { boardIndex: 7, squareIndex: 0 });
-    assert.deepEqual(fourthXMoveState, thirdOMoveState);
+    expect(fourthXMoveState).to.eql(thirdOMoveState);
   });
 
   it('should mark all boards as active when played square moves player to a full board', () => {
@@ -282,22 +274,21 @@ describe('ultimate tic-tac-toe', () => {
     it('valid move should push new board state to history', () => {
       const newState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 8 });
 
-      assert.deepEqual(
-        newState.history[0].boards,
+      expect(newState.history[0].boards).to.eql(
         getCurrentBoards(initialState),
         'initial boards are not the first element in history, did you deep copy the boards (and their squares) when creating latest history entry?',
       );
-      assert.deepEqual(newState.history.length, 2, 'new state boards missing from history');
-      assert.deepEqual(newState.history[1].boards, getCurrentBoards(newState));
+      expect(newState.history).to.have.lengthOf(2, 'new state boards missing from history');
+      expect(newState.history[1].boards).to.eql(getCurrentBoards(newState));
     });
 
     it('valid move should increment pointInHistory in state', () => {
       let currentState;
-      assert.equal(initialState.pointInHistory, 0);
+      expect(initialState.pointInHistory).to.equal(0);
       currentState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 8 });
-      assert.equal(currentState.pointInHistory, 1);
+      expect(currentState.pointInHistory).to.equal(1);
       currentState = callPlaySquare(currentState, { boardIndex: 8, squareIndex: 2 });
-      assert.equal(currentState.pointInHistory, 2);
+      expect(currentState.pointInHistory).to.equal(2);
     });
 
     it('invalid move should not add more entries to history', () => {
@@ -310,9 +301,8 @@ describe('ultimate tic-tac-toe', () => {
         squareIndex: 4,
       });
 
-      assert.equal(stateAfterInvalidMove.history.length, 2, 'expecting no new entries in history');
-      assert.deepEqual(
-        getCurrentBoards(stateAfterInvalidMove),
+      expect(stateAfterInvalidMove.history).to.be.lengthOf(2, 'expect no new entries in history');
+      expect(getCurrentBoards(stateAfterInvalidMove)).to.eql(
         getCurrentBoards(stateBeforeInvalidMove),
       );
     });
@@ -321,15 +311,15 @@ describe('ultimate tic-tac-toe', () => {
       it('should change pointInHistory property', () => {
         const newState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 8 });
         const stateAfterTimeTravel = callTimeTravel(newState, { pointInHistory: 0 });
-        assert.strictEqual(stateAfterTimeTravel.pointInHistory, 0);
+        expect(stateAfterTimeTravel.pointInHistory).to.equal(0);
       });
 
       it('should change next player accordingly', () => {
         const firstMoveState = callPlaySquare(initialState, { boardIndex: 1, squareIndex: 8 });
         const secondMoveState = callPlaySquare(firstMoveState, { boardIndex: 1, squareIndex: 8 });
 
-        assert.equal(callTimeTravel(secondMoveState, { pointInHistory: 0 }).nextPlayer, 'X');
-        assert.equal(callTimeTravel(secondMoveState, { pointInHistory: 1 }).nextPlayer, 'O');
+        expect(callTimeTravel(secondMoveState, { pointInHistory: 0 }).nextPlayer).to.equal('X');
+        expect(callTimeTravel(secondMoveState, { pointInHistory: 1 }).nextPlayer).to.equal('O');
       });
 
       it('when time traveling to past and then playing a move, should discard all history after that time travel point', () => {
@@ -343,13 +333,11 @@ describe('ultimate tic-tac-toe', () => {
           squareIndex: 3,
         });
 
-        assert.deepEqual(
-          finalState.history.slice(0, 2),
+        expect(finalState.history.slice(0, 2)).to.eql(
           moveOneState.history,
           'First to history entries equal to move one state',
         );
-        assert.deepEqual(
-          finalState.history.length,
+        expect(finalState.history).to.be.lengthOf(
           3,
           'History after time travel and one move should have only three entries',
         );
@@ -366,8 +354,7 @@ describe('ultimate tic-tac-toe', () => {
           squareIndex: 3,
         });
 
-        assert.deepEqual(
-          invalidMoveState,
+        expect(invalidMoveState).to.eql(
           stateAfterTimeTravelToMoveOne,
           'nothing must change after time travel followed by invalid move',
         );
@@ -381,7 +368,7 @@ describe('ultimate tic-tac-toe', () => {
           squareIndex: 0,
         });
 
-        assert.equal(repeatedMoveOneState.nextPlayer, 'O');
+        expect(repeatedMoveOneState.nextPlayer).to.equal('O');
       });
 
       it('should not delete history entries', () => {
@@ -389,8 +376,8 @@ describe('ultimate tic-tac-toe', () => {
         const stateBeforeTimeTravel = callPlaySquare(midState, { boardIndex: 8, squareIndex: '5' });
         const stateAfterTimeTravel = callTimeTravel(stateBeforeTimeTravel, { pointInHistory: 0 });
 
-        assert.equal(stateAfterTimeTravel.history.length, stateBeforeTimeTravel.history.length);
-        assert.deepEqual(stateAfterTimeTravel.history, stateBeforeTimeTravel.history);
+        expect(stateAfterTimeTravel.history.length).to.equal(stateBeforeTimeTravel.history.length);
+        expect(stateAfterTimeTravel.history).to.eql(stateBeforeTimeTravel.history);
       });
 
       it('after playing a new valid move, all history after that move is discarded', () => {
@@ -407,7 +394,7 @@ describe('ultimate tic-tac-toe', () => {
           squareIndex: '3',
         });
 
-        assert.equal(stateAfterValidMove.history.length, 2);
+        expect(stateAfterValidMove.history).to.be.lengthOf(2);
       });
 
       it('playing an invalid move, history is unchanged (already tested in tests marked with *)', () => {});
@@ -422,7 +409,7 @@ describe('ultimate tic-tac-toe', () => {
 
         const newState = ultimateTicTacToe(initialState, toggleSpecialIcons());
 
-        assert.strictEqual(newState.specialIcons, !specialIcons);
+        expect(newState.specialIcons).to.equal(!specialIcons);
       });
     });
   });
@@ -433,7 +420,7 @@ describe('calculateUltimateWinner', () => {
     const boards = Array(9)
       .fill()
       .map(() => ({ squares: emptySquares(), isActive: false }));
-    assert.strictEqual(callCalculateUltimateWinner(boards), null);
+    expect(callCalculateUltimateWinner(boards)).to.be.null;
   });
 
   it('should return null if ony two boards won', () => {
@@ -443,7 +430,7 @@ describe('calculateUltimateWinner', () => {
     boards[1].squares = ['O', 'O', 'O', ...Array(6).fill(null)];
     boards[3].squares = [...Array(6).fill(null), 'O', 'O', 'O'];
 
-    assert.strictEqual(callCalculateUltimateWinner(boards), null);
+    expect(callCalculateUltimateWinner(boards)).to.be.null;
   });
 
   it('should return null if top row of boards won, but by different players', () => {
@@ -454,7 +441,7 @@ describe('calculateUltimateWinner', () => {
     boards[1].squares = [...Array(6).fill(null), 'O', 'O', 'O'];
     boards[2].squares = ['X', null, null, null, 'X', null, null, null, 'X'];
 
-    assert.strictEqual(callCalculateUltimateWinner(boards), null);
+    expect(callCalculateUltimateWinner(boards)).to.be.null;
   });
 
   it('should return X if X won top row of boards', () => {
@@ -465,7 +452,7 @@ describe('calculateUltimateWinner', () => {
     boards[1].squares = [...Array(6).fill(null), 'X', 'X', 'X'];
     boards[2].squares = ['X', null, null, null, 'X', null, null, null, 'X'];
 
-    assert.strictEqual(callCalculateUltimateWinner(boards), 'X');
+    expect(callCalculateUltimateWinner(boards)).to.equal('X');
   });
 
   it('should return O if O won left column of boards', () => {
@@ -476,7 +463,7 @@ describe('calculateUltimateWinner', () => {
     boards[3].squares = [null, null, 'O', null, 'O', null, 'O', null, null];
     boards[6].squares = [null, 'O', null, null, 'O', null, null, 'O', null];
 
-    assert.strictEqual(callCalculateUltimateWinner(boards), 'O');
+    expect(callCalculateUltimateWinner(boards)).to.equal('O');
   });
 
   it('should return X if X won diagonal boards', () => {
@@ -487,7 +474,7 @@ describe('calculateUltimateWinner', () => {
     boards[4].squares = [null, null, 'X', null, 'X', null, 'X', null, null];
     boards[8].squares = [null, 'X', null, null, 'X', null, null, 'X', null];
 
-    assert.strictEqual(callCalculateUltimateWinner(boards), 'X');
+    expect(callCalculateUltimateWinner(boards)).to.equal('X');
   });
 
   it('should return O if O won reverse diagonal boards', () => {
@@ -498,7 +485,7 @@ describe('calculateUltimateWinner', () => {
     boards[4].squares = [null, null, 'O', null, 'O', null, 'O', null, null];
     boards[6].squares = [null, 'O', null, null, 'O', null, null, 'O', null];
 
-    assert.strictEqual(callCalculateUltimateWinner(boards), 'O');
+    expect(callCalculateUltimateWinner(boards)).to.equal('O');
   });
 
   it('should return X if X won diagonal, and one of won boards is full', () => {
@@ -514,7 +501,7 @@ describe('calculateUltimateWinner', () => {
       { squares: ['X', null, null, null, 'X', null, null, null, 'X'], isActive: true },
     ];
 
-    assert.strictEqual(callCalculateUltimateWinner(boards), 'X');
+    expect(callCalculateUltimateWinner(boards)).to.equal('X');
   });
 });
 
