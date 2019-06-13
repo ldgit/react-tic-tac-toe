@@ -411,7 +411,7 @@ describe('Ultimate Tic-tac-toe game', () => {
       const topRightBoard = sel(app, 'topRightBoard');
       click(selectByText(app, 'button', 'Load'));
       sel(app, 'importGameTextarea').value = fs.readFileSync(
-        path.join('test', 'exportedGame.json'),
+        path.join('test', 'fixtures', 'exportedGame.json'),
       );
       triggerChange(sel(app, 'importGameTextarea'));
 
