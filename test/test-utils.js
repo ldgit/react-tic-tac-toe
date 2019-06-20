@@ -68,3 +68,12 @@ export function assertNotFilledWith(square, symbol) {
     `square filled with unexpected symbol "${symbol}"`,
   );
 }
+
+export function clickEmptySquare(square) {
+  assert.equal(square.textContent, '', 'square that should be empty is not');
+  clickOnElement(window, square);
+
+  return {
+    assertFilledWith: symbol => assertFilledWith(square, symbol),
+  };
+}
