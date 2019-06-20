@@ -341,8 +341,8 @@ describe('Ultimate Tic-tac-toe game', () => {
     clickEmptySquare(sel(topLeftBoard, 'topLeftSquare')).assertFilledWith('X');
   });
 
-  it('clicking on "Vue vs. React?" button toggles special mode on and off', () => {
-    const specialModeToggle = selectByText(app, 'button', 'Vue vs. React?');
+  it('clicking on "Vue vs. React" button toggles special mode on and off', () => {
+    const specialModeToggle = selectByText(app, 'button', 'Vue vs. React');
     const topMiddleBoardCenterMiddleSquare = sel(sel(app, 'topMiddleBoard'), 'centerMiddleSquare');
     const topMiddleBoardBottomMiddleSquare = sel(
       sel(app, 'centerMiddleBoard'),
@@ -353,7 +353,9 @@ describe('Ultimate Tic-tac-toe game', () => {
 
     click(specialModeToggle);
     assertCorrectIconInGameStatus('react-icon');
+    expect(specialModeToggle.textContent).to.equal('X vs. O');
     click(specialModeToggle);
+    expect(specialModeToggle.textContent).to.equal('Vue vs. React');
 
     clickEmptySquare(topMiddleBoardBottomMiddleSquare).assertFilledWith('O');
     assertSpecialModeNotToggled(
@@ -448,7 +450,7 @@ describe('Ultimate Tic-tac-toe game', () => {
       );
 
       // Test that special icons are also remembered as first item of query string
-      const specialModeToggle = selectByText(app, 'button', 'Vue vs. React?');
+      const specialModeToggle = selectByText(app, 'button', 'Vue vs. React');
       click(specialModeToggle);
       click(shareButton);
       expect(sel(app, 'urlShareInput').value).to.equal(
@@ -502,11 +504,11 @@ describe('Ultimate Tic-tac-toe game', () => {
   ) {
     expect(topMiddleBoardCenterMiddleSquare.className).to.not.have.string(
       'square-vue-icon',
-      'No icons shows up until user clicks "Vue vs. React?" button',
+      'No icons shows up until user clicks "Vue vs. React" button',
     );
     expect(topMiddleBoardCenterMiddleSquare.className).to.not.have.string(
       'square-react-icon',
-      'No icons shows up until user clicks "Vue vs. React?" button',
+      'No icons shows up until user clicks "Vue vs. React" button',
     );
     expect(topMiddleBoardBottomMiddleSquare.className).to.not.have.string('square-vue-icon');
     expect(topMiddleBoardBottomMiddleSquare.className).to.not.have.string('square-react-icon');

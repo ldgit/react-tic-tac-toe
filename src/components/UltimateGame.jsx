@@ -70,8 +70,12 @@ export default function UltimateGame() {
           specialIcons={specialIcons}
         />
         <br />
-        <button type="button" className="button" onClick={toggleIcons}>
-          Vue vs. React?
+        <button
+          type="button"
+          className="button specialIconsButton"
+          onClick={toggleIcons}
+        >
+          {specialIcons ? 'X vs. O' : 'Vue vs. React'}
         </button>
         <br />
         <br />
