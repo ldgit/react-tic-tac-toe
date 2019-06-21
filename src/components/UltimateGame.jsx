@@ -1,16 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Board from './Board';
 import Status from './Status';
 import SaveAndLoad from './SaveAndLoad';
 import ShareGame from './ShareGame';
 import TimeTravelButton from './TimeTravelButton';
 import useReadStateFromUrl from './useReadStateFromUrl';
+import { historyToActions, actionsToState } from '../url-query-state';
 import { getColorClass } from '../helpers';
 import { ultimateTicTacToe, calculateUltimateWinner } from '../ultimate-game';
 import { playSquare, timeTravel, toggleSpecialIcons } from '../actions';
 
 export default function UltimateGame() {
   const [state, setState] = useState(ultimateTicTacToe(undefined, ''));
+  const [replayInProgress, setReplayInProgress] = useState(false);
+  const [currentAction, setCurrentAction] = useState(0);
+  const [historyToReplay, setHistoryToReplay] = useState(null);
+
+  useEffect(() => {
+    if (!replayInProgress) {
+      return;
+    }
+
+    setTimeout(() => {
+      const actions = historyToActions(historyToReplay).slice(0, currentAction);
+      if (currentAction >= historyToReplay.length) {
+        setReplayInProgress(false);
+        return;
+      }
+
+      setState(actionsToState(actions));
+      setCurrentAction(previousAction => previousAction + 1);
+    }, 1000);
+  }, [replayInProgress, currentAction, historyToReplay]);
 
   useReadStateFromUrl(setState);
 
@@ -28,6 +49,12 @@ export default function UltimateGame() {
 
   function loadGame(gameStateToLoad) {
     setState(gameStateToLoad);
+  }
+
+  function replayGame() {
+    setHistoryToReplay(state.history);
+    setReplayInProgress(true);
+    setCurrentAction(0);
   }
 
   function renderBoard(boardIndex, boards, testId) {
@@ -76,6 +103,9 @@ export default function UltimateGame() {
           onClick={toggleIcons}
         >
           {specialIcons ? 'X vs. O' : 'Vue vs. React'}
+        </button>
+        <button type="button" className="button" onClick={replayGame}>
+          Replay game
         </button>
         <br />
         <br />

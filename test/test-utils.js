@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { expect } from 'chai';
-import { Simulate } from 'react-dom/test-utils';
+import { Simulate, act } from 'react-dom/test-utils';
 
 export function sel(container, testId) {
   const element = find(container, testId);
@@ -14,9 +14,11 @@ export function find(container, testId) {
 }
 
 export function clickOnElement(window, element) {
-  dispatchMouseEvent('mousedown', window, element);
-  dispatchMouseEvent('mouseup', window, element);
-  dispatchMouseEvent('click', window, element);
+  act(() => {
+    dispatchMouseEvent('mousedown', window, element);
+    dispatchMouseEvent('mouseup', window, element);
+    dispatchMouseEvent('click', window, element);
+  });
 }
 
 function dispatchMouseEvent(type, window, element) {
@@ -36,7 +38,8 @@ export function triggerChange(element) {
     element,
     'Element that the change event should be triggered on does not exist',
   );
-  Simulate.change(element);
+
+  act(() => Simulate.change(element));
 }
 
 export function selectByText(container, selector, text) {
@@ -55,10 +58,11 @@ export function createAlertSpy() {
   return alertSpy;
 }
 
-export function assertFilledWith(square, symbol) {
+export function assertFilledWith(square, symbol, message = '') {
   expect(square.textContent).to.equal(
     symbol,
-    `square not filled with expected symbol "${symbol}"`,
+    `square not filled with expected symbol "${symbol}"
+    ${message}`,
   );
 }
 
