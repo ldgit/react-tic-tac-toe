@@ -1,38 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Board from './Board';
 import Status from './Status';
 import SaveAndLoad from './SaveAndLoad';
 import ShareGame from './ShareGame';
 import TimeTravelButton from './TimeTravelButton';
 import useReadStateFromUrl from './useReadStateFromUrl';
-import { historyToActions, actionsToState } from '../url-query-state';
+import useReplay from './useReplay';
 import { getColorClass } from '../helpers';
 import { ultimateTicTacToe, calculateUltimateWinner } from '../ultimate-game';
 import { playSquare, timeTravel, toggleSpecialIcons } from '../actions';
 
 export default function UltimateGame() {
   const [state, setState] = useState(ultimateTicTacToe(undefined, ''));
-  const [replayInProgress, setReplayInProgress] = useState(false);
-  const [currentAction, setCurrentAction] = useState(0);
-  const [historyToReplay, setHistoryToReplay] = useState(null);
 
-  useEffect(() => {
-    if (!replayInProgress) {
-      return;
-    }
-
-    setTimeout(() => {
-      const actions = historyToActions(historyToReplay).slice(0, currentAction);
-      if (currentAction >= historyToReplay.length) {
-        setReplayInProgress(false);
-        return;
-      }
-
-      setState(actionsToState(actions));
-      setCurrentAction(previousAction => previousAction + 1);
-    }, 1000);
-  }, [replayInProgress, currentAction, historyToReplay]);
-
+  const startReplay = useReplay(setState);
   useReadStateFromUrl(setState);
 
   function handleClick(boardIndex, squareIndex) {
@@ -52,9 +33,7 @@ export default function UltimateGame() {
   }
 
   function replayGame() {
-    setHistoryToReplay(state.history);
-    setReplayInProgress(true);
-    setCurrentAction(0);
+    startReplay(state.history);
   }
 
   function renderBoard(boardIndex, boards, testId) {
