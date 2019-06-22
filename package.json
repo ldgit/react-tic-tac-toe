@@ -100,13 +100,18 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,css,json,md}": [
-      "prettier --write",
-      "git add"
-    ],
-    "*.{js,jsx}": [
-      "eslint --fix",
-      "git add"
+    "linters": {
+      "*.{js,jsx,css,json,md}": [
+        "prettier --write",
+        "git add"
+      ],
+      "*.{js,jsx}": [
+        "eslint --fix",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "docs/**/*"
     ]
   },
   "jest": {
