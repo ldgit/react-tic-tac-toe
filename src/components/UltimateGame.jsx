@@ -5,6 +5,7 @@ import SaveAndLoad from './SaveAndLoad';
 import ShareGame from './ShareGame';
 import TimeTravelButton from './TimeTravelButton';
 import useReadStateFromUrl from './useReadStateFromUrl';
+import useReplay from './useReplay';
 import { getColorClass } from '../helpers';
 import { ultimateTicTacToe, calculateUltimateWinner } from '../ultimate-game';
 import { playSquare, timeTravel, toggleSpecialIcons } from '../actions';
@@ -12,6 +13,7 @@ import { playSquare, timeTravel, toggleSpecialIcons } from '../actions';
 export default function UltimateGame() {
   const [state, setState] = useState(ultimateTicTacToe(undefined, ''));
 
+  const { startReplay, replayInProgress } = useReplay(setState);
   useReadStateFromUrl(setState);
 
   function handleClick(boardIndex, squareIndex) {
@@ -28,6 +30,10 @@ export default function UltimateGame() {
 
   function loadGame(gameStateToLoad) {
     setState(gameStateToLoad);
+  }
+
+  function replayGame() {
+    startReplay(state.history, state.specialIcons);
   }
 
   function renderBoard(boardIndex, boards, testId) {
@@ -77,6 +83,10 @@ export default function UltimateGame() {
         >
           {specialIcons ? 'X vs. O' : 'Vue vs. React'}
         </button>
+        <ReplayButton
+          replayInProgress={replayInProgress}
+          onClick={replayGame}
+        />
         <br />
         <br />
         <ShareGame gameState={state} />
@@ -108,6 +118,18 @@ export default function UltimateGame() {
         </p>
       </div>
     </>
+  );
+}
+
+function ReplayButton({ onClick, replayInProgress }) {
+  if (replayInProgress) {
+    return <span className="replayInProgress">Replay in progress</span>;
+  }
+
+  return (
+    <button type="button" className="button" onClick={onClick}>
+      Replay game
+    </button>
   );
 }
 

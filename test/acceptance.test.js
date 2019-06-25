@@ -12,6 +12,7 @@ import {
   triggerChange,
   assertFilledWith,
   assertNotFilledWith,
+  clickEmptySquare,
 } from './test-utils';
 
 const wait = seconds => new Promise(resolve => setTimeout(resolve, seconds));
@@ -611,15 +612,6 @@ describe('Ultimate Tic-tac-toe game', () => {
     clickEmptySquare(sel(bottomRightBoard, 'centerMiddleSquare')).assertFilledWith(playerOne);
 
     assertGameStatus('Winner', playerOne);
-  }
-
-  function clickEmptySquare(square) {
-    assert.equal(square.textContent, '', 'square that should be empty is not');
-    click(square);
-
-    return {
-      assertFilledWith: symbol => assertFilledWith(square, symbol),
-    };
   }
 
   function clickSquare(square) {

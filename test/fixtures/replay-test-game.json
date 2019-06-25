@@ -1,0 +1,207 @@
+{
+  "nextPlayer": "X",
+  "history": [
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, "X", null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, "X", null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        }
+      ]
+    },
+    {
+      "boards": [
+        {
+          "squares": [null, null, null, null, null, null, null, "X", null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": ["O", null, null, null, "X", null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": true
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, "O", null, null, null],
+          "isActive": false
+        },
+        {
+          "squares": [null, null, null, null, null, null, null, null, null],
+          "isActive": false
+        }
+      ]
+    }
+  ],
+  "pointInHistory": 4,
+  "specialIcons": false
+}
