@@ -32,7 +32,7 @@ describe('Ultimate Tic-tac-toe game', () => {
   it('clicking on replay button changes it\'s text to "Replay in progress" until replay ends', () => {
     loadGame(path.join('test', 'fixtures', 'replay-test-game.json'));
 
-    act(() => click(selectByText(app, 'button', 'Replay game')));
+    clickStartReplayButton();
 
     assertReplayInProgressInsteadOfReplayButton();
 
@@ -71,7 +71,7 @@ describe('Ultimate Tic-tac-toe game', () => {
     assertFilledWith(sel(topLeftBoard, 'bottomMiddleSquare'), 'X');
     assertFilledWith(sel(bottomMiddleBoard, 'centerRightSquare'), 'O');
 
-    act(() => click(selectByText(app, 'button', 'Replay game')));
+    clickStartReplayButton();
     act(() => jest.advanceTimersByTime(1001));
 
     // Boards emptied
@@ -126,7 +126,7 @@ describe('Ultimate Tic-tac-toe game', () => {
     assertFilledWith(sel(topLeftBoard, 'bottomMiddleSquare'), 'X');
     assertFilledWith(sel(bottomMiddleBoard, 'centerRightSquare'), 'O');
 
-    act(() => click(selectByText(app, 'button', 'Replay game')));
+    clickStartReplayButton();
     // Boards emptied
     act(() => jest.advanceTimersByTime(1001));
     // First move played
@@ -157,7 +157,7 @@ describe('Ultimate Tic-tac-toe game', () => {
     const centerMiddleBoard = sel(app, 'centerMiddleBoard');
     clickEmptySquare(sel(topLeftBoard, 'centerMiddleSquare')).assertFilledWith('X');
 
-    click(selectByText(app, 'button', 'Replay game'));
+    clickStartReplayButton();
 
     act(() => jest.advanceTimersByTime(1001));
     assertFilledWith(sel(topLeftBoard, 'centerMiddleSquare'), '', 'Board should be emptied first');
@@ -181,7 +181,7 @@ describe('Ultimate Tic-tac-toe game', () => {
     const centerMiddleBoard = sel(app, 'centerMiddleBoard');
     const bottomMiddleBoard = sel(app, 'bottomMiddleBoard');
 
-    act(() => click(selectByText(app, 'button', 'Replay game')));
+    clickStartReplayButton();
     act(() => jest.advanceTimersByTime(1001));
     act(() => jest.advanceTimersByTime(1001));
     act(() => jest.advanceTimersByTime(1001));
@@ -194,7 +194,7 @@ describe('Ultimate Tic-tac-toe game', () => {
     assertFilledWith(sel(topLeftBoard, 'bottomMiddleSquare'), 'X');
     assertFilledWith(sel(bottomMiddleBoard, 'centerRightSquare'), 'O');
 
-    act(() => click(selectByText(app, 'button', 'Replay game')));
+    clickStartReplayButton();
     act(() => jest.advanceTimersByTime(1001));
     // Start replay from the beggining
     assertFilledWith(sel(centerMiddleBoard, 'centerMiddleSquare'), '');
@@ -202,6 +202,37 @@ describe('Ultimate Tic-tac-toe game', () => {
     assertFilledWith(sel(topLeftBoard, 'bottomMiddleSquare'), '');
     assertFilledWith(sel(bottomMiddleBoard, 'centerRightSquare'), '');
   });
+
+  it('should preserve currently toggled player icons', () => {
+    loadGame(path.join('test', 'fixtures', 'replay-test-game.json'));
+    act(() => click(selectByText(app, '*', 'Vue vs. React')));
+
+    clickStartReplayButton();
+
+    expect(selectByText(app, '*', 'X vs. O')).to.not.be.null;
+    expect(selectByText(app, '*', 'Vue vs. React')).to.be.null;
+
+    // Boards emptied
+    act(() => jest.advanceTimersByTime(1001));
+    expect(selectByText(app, '*', 'X vs. O')).to.not.be.null;
+    expect(selectByText(app, '*', 'Vue vs. React')).to.be.null;
+
+    // First move played
+    act(() => jest.advanceTimersByTime(1001));
+    // Second move played
+    act(() => jest.advanceTimersByTime(1001));
+    // Third move played
+    act(() => jest.advanceTimersByTime(1001));
+    // Fourth move played
+    act(() => jest.advanceTimersByTime(1001));
+
+    expect(selectByText(app, '*', 'X vs. O')).to.not.be.null;
+    expect(selectByText(app, '*', 'Vue vs. React')).to.be.null;
+  });
+
+  function clickStartReplayButton() {
+    act(() => click(selectByText(app, '*', 'Replay game')));
+  }
 
   function assertReplayInProgressInsteadOfReplayButton() {
     expect(selectByText(app, '*', 'Replay game')).to.be.null;

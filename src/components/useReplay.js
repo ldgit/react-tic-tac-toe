@@ -5,6 +5,7 @@ export default function useReplay(setState) {
   const [replayInProgress, setReplayInProgress] = useState(false);
   const [currentAction, setCurrentAction] = useState(0);
   const [historyToReplay, setHistoryToReplay] = useState(null);
+  const [specialIcons, setSpecialIcons] = useState(false);
 
   useEffect(() => {
     if (!replayInProgress) {
@@ -18,14 +19,21 @@ export default function useReplay(setState) {
     }
 
     setTimeout(() => {
-      setState(actionsToState(actions));
+      setState({ ...actionsToState(actions), specialIcons });
       setCurrentAction(previousAction => previousAction + 1);
     }, 1000);
-  }, [replayInProgress, currentAction, historyToReplay, setState]);
+  }, [
+    replayInProgress,
+    currentAction,
+    historyToReplay,
+    setState,
+    specialIcons,
+  ]);
 
   return {
-    startReplay(history) {
+    startReplay(history, useSpecialIcons) {
       setHistoryToReplay(history);
+      setSpecialIcons(useSpecialIcons);
       setReplayInProgress(true);
       setCurrentAction(0);
     },

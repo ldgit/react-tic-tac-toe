@@ -33,7 +33,7 @@ export default function UltimateGame() {
   }
 
   function replayGame() {
-    startReplay(state.history);
+    startReplay(state.history, state.specialIcons);
   }
 
   function renderBoard(boardIndex, boards, testId) {
