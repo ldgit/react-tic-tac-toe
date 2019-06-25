@@ -3,6 +3,7 @@ import ReactDom from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import fs from 'fs';
 import path from 'path';
+import { expect } from 'chai';
 import UltimateGame from '../src/components/UltimateGame';
 import {
   sel,
@@ -26,6 +27,36 @@ describe('Ultimate Tic-tac-toe game', () => {
       ReactDom.render(<UltimateGame />, app);
     });
     jest.useFakeTimers();
+  });
+
+  it('clicking on replay button changes it\'s text to "Replay in progress" until replay ends', () => {
+    loadGame(path.join('test', 'fixtures', 'replay-test-game.json'));
+
+    act(() => click(selectByText(app, 'button', 'Replay game')));
+
+    assertReplayInProgressInsteadOfReplayButton();
+
+    // Boards emptied
+    act(() => jest.advanceTimersByTime(1001));
+    assertReplayInProgressInsteadOfReplayButton();
+
+    // First move played
+    act(() => jest.advanceTimersByTime(1001));
+    assertReplayInProgressInsteadOfReplayButton();
+
+    // Second move played
+    act(() => jest.advanceTimersByTime(1001));
+    assertReplayInProgressInsteadOfReplayButton();
+
+    // Third move played
+    act(() => jest.advanceTimersByTime(1001));
+    assertReplayInProgressInsteadOfReplayButton();
+
+    // Fourth move played
+    act(() => jest.advanceTimersByTime(1001));
+    // Replay done
+    expect(selectByText(app, '*', 'Replay game')).to.not.be.null;
+    expect(selectByText(app, '*', 'Replay in progress')).to.be.null;
   });
 
   it('replays game played so far, one move every second', () => {
@@ -171,6 +202,11 @@ describe('Ultimate Tic-tac-toe game', () => {
     assertFilledWith(sel(topLeftBoard, 'bottomMiddleSquare'), '');
     assertFilledWith(sel(bottomMiddleBoard, 'centerRightSquare'), '');
   });
+
+  function assertReplayInProgressInsteadOfReplayButton() {
+    expect(selectByText(app, '*', 'Replay game')).to.be.null;
+    expect(selectByText(app, '*', 'Replay in progress')).to.not.be.null;
+  }
 
   function loadGame(gamePath) {
     click(selectByText(app, 'button', 'Load'));

@@ -11,21 +11,24 @@ export default function useReplay(setState) {
       return;
     }
 
-    setTimeout(() => {
-      const actions = historyToActions(historyToReplay).slice(0, currentAction);
-      if (currentAction >= historyToReplay.length) {
-        setReplayInProgress(false);
-        return;
-      }
+    const actions = historyToActions(historyToReplay).slice(0, currentAction);
+    if (currentAction >= historyToReplay.length) {
+      setReplayInProgress(false);
+      return;
+    }
 
+    setTimeout(() => {
       setState(actionsToState(actions));
       setCurrentAction(previousAction => previousAction + 1);
     }, 1000);
   }, [replayInProgress, currentAction, historyToReplay, setState]);
 
-  return history => {
-    setHistoryToReplay(history);
-    setReplayInProgress(true);
-    setCurrentAction(0);
+  return {
+    startReplay(history) {
+      setHistoryToReplay(history);
+      setReplayInProgress(true);
+      setCurrentAction(0);
+    },
+    replayInProgress,
   };
 }

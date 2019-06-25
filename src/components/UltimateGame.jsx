@@ -13,7 +13,7 @@ import { playSquare, timeTravel, toggleSpecialIcons } from '../actions';
 export default function UltimateGame() {
   const [state, setState] = useState(ultimateTicTacToe(undefined, ''));
 
-  const startReplay = useReplay(setState);
+  const { startReplay, replayInProgress } = useReplay(setState);
   useReadStateFromUrl(setState);
 
   function handleClick(boardIndex, squareIndex) {
@@ -83,9 +83,10 @@ export default function UltimateGame() {
         >
           {specialIcons ? 'X vs. O' : 'Vue vs. React'}
         </button>
-        <button type="button" className="button" onClick={replayGame}>
-          Replay game
-        </button>
+        <ReplayButton
+          replayInProgress={replayInProgress}
+          onClick={replayGame}
+        />
         <br />
         <br />
         <ShareGame gameState={state} />
@@ -117,6 +118,18 @@ export default function UltimateGame() {
         </p>
       </div>
     </>
+  );
+}
+
+function ReplayButton({ onClick, replayInProgress }) {
+  if (replayInProgress) {
+    return <span className="replayInProgress">Replay in progress</span>;
+  }
+
+  return (
+    <button type="button" className="button" onClick={onClick}>
+      Replay game
+    </button>
   );
 }
 
