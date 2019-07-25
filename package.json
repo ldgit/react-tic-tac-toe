@@ -39,7 +39,7 @@
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
     "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^2.1.1",
+    "css-loader": "^3.1.0",
     "deep-freeze": "git://github.com/ldgit/deep-freeze-2.git",
     "deepcopy": "^2.0.0",
     "eslint": "^5.16.0",
@@ -55,7 +55,7 @@
     "html-webpack-plugin": "^3.2.0",
     "husky": "^3.0.1",
     "jest": "^24.8.0",
-    "lint-staged": "^8.2.1",
+    "lint-staged": "^9.2.1",
     "prettier": "1.18.2",
     "style-loader": "^0.23.1",
     "webpack": "^4.37.0",
@@ -100,18 +100,13 @@
     }
   },
   "lint-staged": {
-    "linters": {
-      "*.{js,jsx,css,json,md}": [
-        "prettier --write",
-        "git add"
-      ],
-      "*.{js,jsx}": [
-        "eslint --fix",
-        "git add"
-      ]
-    },
-    "ignore": [
-      "docs/**/*"
+    "*.{js,jsx,css,json,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
     ]
   },
   "jest": {
