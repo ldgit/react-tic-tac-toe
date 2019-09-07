@@ -1,9 +1,13 @@
 import assert from 'assert';
 import { expect } from 'chai';
-import React from 'react';
-import ReactDom from 'react-dom';
 import Game from '../src/components/Game';
-import { sel, clickOnElement, selectByText, assertFilledWith } from './test-utils';
+import {
+  sel,
+  clickOnElement,
+  selectByText,
+  assertFilledWith,
+  renderReactComponent,
+} from './test-utils';
 
 describe('Classic Tic-tac-toe game', () => {
   let app;
@@ -13,8 +17,7 @@ describe('Classic Tic-tac-toe game', () => {
     app = document.createElement('div');
     document.body.appendChild(app);
     click = clickOnElement.bind(null, window);
-    // eslint-disable-next-line react/jsx-filename-extension
-    ReactDom.render(<Game />, app);
+    renderReactComponent(Game, app);
   });
 
   it('clicking on already played square does nothing', () => {

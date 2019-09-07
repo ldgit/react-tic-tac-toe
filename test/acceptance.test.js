@@ -1,7 +1,5 @@
 import assert from 'assert';
 import { expect } from 'chai';
-import React from 'react';
-import ReactDom from 'react-dom';
 import fs from 'fs';
 import path from 'path';
 import UltimateGame from '../src/components/UltimateGame';
@@ -13,6 +11,8 @@ import {
   assertFilledWith,
   assertNotFilledWith,
   clickEmptySquare,
+  renderReactComponent,
+  unmountReactComponentAtNode,
 } from './test-utils';
 
 const wait = seconds => new Promise(resolve => setTimeout(resolve, seconds));
@@ -29,8 +29,7 @@ describe('Ultimate Tic-tac-toe game', () => {
     app = document.createElement('div');
     document.body.appendChild(app);
     click = clickOnElement.bind(null, window);
-    // eslint-disable-next-line react/jsx-filename-extension
-    ReactDom.render(<UltimateGame />, app);
+    renderReactComponent(UltimateGame, app);
   });
 
   it("player can't play on already played square", () => {
@@ -460,8 +459,8 @@ describe('Ultimate Tic-tac-toe game', () => {
 
     it('should set all game actions as url query string when shareButton clicked', () => {
       testUtils.changeWindowUrl('https://example.com/?a[]=p01&a[]=p10&a[]=p08&a[]=p84');
-      ReactDom.unmountComponentAtNode(app);
-      ReactDom.render(<UltimateGame />, app);
+      unmountReactComponentAtNode(app);
+      renderReactComponent(UltimateGame, app);
       const topLeftBoard = sel(app, 'topLeftBoard');
       const topMiddleBoard = sel(app, 'topMiddleBoard');
       const bottomRightBoard = sel(app, 'bottomRightBoard');

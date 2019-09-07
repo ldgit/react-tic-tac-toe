@@ -1,6 +1,19 @@
 import assert from 'assert';
 import { expect } from 'chai';
 import { Simulate, act } from 'react-dom/test-utils';
+import ReactDom from 'react-dom';
+import React from 'react';
+
+export function renderReactComponent(Component, container) {
+  act(() => {
+    // eslint-disable-next-line react/jsx-filename-extension
+    ReactDom.render(<Component />, container);
+  });
+}
+
+export function unmountReactComponentAtNode(container) {
+  ReactDom.unmountComponentAtNode(container);
+}
 
 export function sel(container, testId) {
   const element = find(container, testId);
